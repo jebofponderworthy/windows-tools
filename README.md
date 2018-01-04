@@ -11,6 +11,6 @@ The tool is designed for Windows 10 down through XP. As of 2017-10-10, it is sel
 
 ## OWTAS: Optimize Service Work Items and Additional/Delayed Worker Threads
 
-This tool sets a number of additional critical and delayed worker threads, plus service work items. The changes are autocalculated according to a combination of RAM and OS bit-width (32 vs. 64). Performance will increase, more so with more RAM.  Available as [VBS](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/OWTAS.VBS) and as [PowerShell](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/OWTAS.VBS).  Future development will be in PowerShell.
+This tool sets a number of additional critical and delayed worker threads, plus service work items. The changes are autocalculated according to a combination of RAM and OS bit-width (32 vs. 64). Performance will increase, more so with more RAM.  Available as [VBS](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/OWTAS.VBS) and as [PowerShell](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/OWTAS.ps1).  Future development will be in PowerShell.
 
 The tool is designed for Windows 10 down through XP. As of 2017-10-10, it is self-elevating if run non-administratively.
