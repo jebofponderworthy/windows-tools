@@ -14,3 +14,7 @@ The tool is designed for Windows 10 down through XP. As of 2017-10-10, it is sel
 This tool sets a number of additional critical and delayed worker threads, plus service work items. The changes are autocalculated according to a combination of RAM and OS bit-width (32 vs. 64). Performance will increase, more so with more RAM.  Available as [VBS](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/OWTAS.VBS) and as [PowerShell](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/OWTAS.ps1).  Future development will be in PowerShell.
 
 The tool is designed for Windows 10 down through XP. As of 2017-10-10, it is self-elevating if run non-administratively.
+
+## RUNALL.CMD:  Download, verify by hash, and run the above in PowerShell
+
+[This is a CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD), which if run as administrator, will download, verify integrity by hash, and run both of the above.  It runs OWTAS first and then CATE, for a bit of a speed increment.
