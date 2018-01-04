@@ -1,5 +1,5 @@
 # ponderworthy-tools
-Some applets for Windows, courtesy of Ponderworthy folks and friends.
+Some applets for Windows, courtesy of Ponderworthy folks and friends.  Original site is https://notes.ponderworthy.com.
 
 ## CATE: (C)lean (A)ll system and user profile (T)emp folders, (E)tcetera
 
