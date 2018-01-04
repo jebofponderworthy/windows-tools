@@ -17,4 +17,4 @@ The tool is designed for Windows 10 down through XP. As of 2017-10-10, it is sel
 
 ## RUNALL.CMD:  Download, verify by hash, and run the above in PowerShell
 
-[This is a CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD), which if run as administrator, will download, verify integrity by hash, and run both of the above.  It runs OWTAS first and then CATE, for a bit of a speed increment.
+[This is a CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD), which if run as administrator, will download, verify integrity by hash, and run both of the above.  It runs OWTAS first and then CATE, for a bit of a speed increment.  It requires PowerShell to be present, though runs in administrative CMD.
