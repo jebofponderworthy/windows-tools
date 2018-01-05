@@ -1,5 +1,7 @@
 # ponderworthy-tools
+
 Some applets for Windows, courtesy of Ponderworthy folks and friends.  Original site is https://notes.ponderworthy.com.
+All PowerShell applets require version 2.0 (Windows 7 default) or later.
 
 ## CATE: (C)lean (A)ll system and user profile (T)emp folders, (E)tcetera
 
@@ -17,4 +19,6 @@ The tool is designed for Windows 10 down through XP. As of 2017-10-10, it is sel
 
 ## RUNALL.CMD:  Download, verify by hash, and run the above in PowerShell
 
-[This is a CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD), which if run as administrator, will download, verify integrity by hash, and run both of the above.  It runs OWTAS first and then CATE, for a bit of a speed increment.  It requires PowerShell to be present, though runs in administrative CMD.
+[This is a CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD), which if run as administrator, will download, verify integrity by hash, and run both of the above.  It runs OWTAS first and then CATE, for a bit of a speed increment.  
+
+This requires PowerShell to be present, though runs in administrative CMD.  It uses the command-line CERTUTIL tool and captures text output, instead of Get-FileHash, for compatibility.
