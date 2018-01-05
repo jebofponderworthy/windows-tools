@@ -3,7 +3,7 @@
 #############################
 
 #
-# version 3.0, the first PowerShell version
+# version 3.1
 #
 # by Jonathan E. Brickman
 #
@@ -92,6 +92,11 @@ $strOut = RptDriveSpace( $initialFreeSpace )
 $strOut = "Initial free space (all drives): " + $strOut + " megabytes."
 Write-Output $strOut
 
+# Here is an external variable to contain the "Status" text
+# for progress reporting.
+
+$reportStatus = "Working..."
+
 # Now we set up an array containing folders to be checked for and
 # cleaned out if present, for every profile.
 
@@ -120,8 +125,9 @@ $foldersToClean = @(
 # A quasiprimitive for PowerShell-style progress reporting.
 
 function ShowCATEProgress {
-	param( [string] $currentOp)
-    Write-Progress -Activity "Clean All Temp Etc" -Status 'Working...' -PercentComplete -1 -CurrentOperation $currentOp
+	param( [string]$currentOp )
+
+    Write-Progress -Activity "Clean All Temp Etc" -Status $reportStatus -PercentComplete -1 -CurrentOperation $currentOp
     }
 
 # Here's a special routine for deletes, with
@@ -177,6 +183,7 @@ function DeleteFolderContents {
 # Outer loop enumerates all user profiles
 Get-ChildItem -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\" | ForEach-Object {
     $profileItem = Get-ItemProperty $_.pspath
+    $reportStatus = "Working on " + $profileItem + " ..."
 
     # Inner loop enumerates all folder subpaths within profiles to be cleaned
     ForEach ($folderSubpath in $foldersToClean) {
@@ -201,6 +208,8 @@ Get-ChildItem -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileL
     }
 
 # Now empty certain folders in %SystemRoot%
+
+$reportStatus = "Working on other folders ..."
 
 DeleteFolderContents ($envSystemRoot + "\Temp"), $true
 
@@ -257,7 +266,7 @@ Write-Output ""
 # SPDX short identifier: BSD-3-Clause
 
 # Note: This license has also been called 
-# the New BSD License or Modified BSD License. 
+# the “New BSD License” or “Modified BSD License”. 
 # See also the 2-clause BSD License.
 
 # Copyright 2017 Jonathan E. Brickman
@@ -281,7 +290,7 @@ Write-Output ""
 # specific prior written permission.
 
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
-# CONTRIBUTORS *AS IS* AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+# CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, 
 # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
 # OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
 # ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER 
