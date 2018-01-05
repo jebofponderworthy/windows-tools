@@ -1,7 +1,7 @@
 # ponderworthy-tools
 
 Some applets for Windows, courtesy of Ponderworthy folks and friends.  Original site is https://notes.ponderworthy.com.
-PowerShell 3.0 or later is supported.
+PowerShell 3.0 and later are supported.
 
 ## RUNALL.CMD:  Download, verify by hash, and run all of the below
 
