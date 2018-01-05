@@ -3,6 +3,12 @@
 Some applets for Windows, courtesy of Ponderworthy folks and friends.  Original site is https://notes.ponderworthy.com.
 All PowerShell applets require version 2.0 (Windows 7 default) or later.
 
+## RUNALL.CMD:  Download, verify by hash, and run all of the below
+
+[This is a CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD), which if run as administrator, will download, verify integrity by hash, and run both of the below.  It runs OWTAS first and then CATE, for a bit of a speed increment.  
+
+This requires PowerShell to be present, though runs in administrative CMD.  Hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash, for compatibility.
+
 ## CATE: (C)lean (A)ll system and user profile (T)emp folders, (E)tcetera
 
 For quite a while I had been curious as to why a simple method to do this was not available. CCLEANER and others do not reach into every user profile, and on many machines this is crucial, e.g., terminal servers. CATE was originated as a .VBS by the excellent David Barrett ( http://www.cedit.biz ) and has been rewritten thoroughly by yours truly (JEB of Ponderworthy). The current VBS is [here.](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/CATE.vbs)  But [the most recent version](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/CATE.ps1) is a PowerShell script, which adds removal of Ask Partner Network folders from user profiles, and a good bit of speed and clean running; future development will be in PowerShell.
@@ -17,8 +23,3 @@ This tool sets a number of additional critical and delayed worker threads, plus 
 
 The tool is designed for Windows 10 down through XP. As of 2017-10-10, it is self-elevating if run non-administratively.
 
-## RUNALL.CMD:  Download, verify by hash, and run the above in PowerShell
-
-[This is a CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD), which if run as administrator, will download, verify integrity by hash, and run both of the above.  It runs OWTAS first and then CATE, for a bit of a speed increment.  
-
-This requires PowerShell to be present, though runs in administrative CMD.  It uses the command-line CERTUTIL tool and captures text output, instead of Get-FileHash, for compatibility.
