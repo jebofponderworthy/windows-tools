@@ -7,7 +7,7 @@ PowerShell 3.0 and later are supported.
 
 [This is a CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD), which if run as administrator, will download, verify integrity by hash, and run both of the below.  It runs OWTAS first and then CATE, for a bit of a speed increment.  
 
-Hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash, for compatibility.
+For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
 
 ## CATE: (C)lean (A)ll system and user profile (T)emp folders, (E)tcetera
 
