@@ -3,7 +3,7 @@
 #############################
 
 #
-# version 3.0, the first PowerShell version
+# version 3.2
 #
 # by Jonathan E. Brickman
 #
