@@ -3,7 +3,7 @@
 #############################
 
 #
-# version 3.1
+# version 3.0, the first PowerShell version
 #
 # by Jonathan E. Brickman
 #
@@ -183,7 +183,7 @@ function DeleteFolderContents {
 # Outer loop enumerates all user profiles
 Get-ChildItem -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\" | ForEach-Object {
     $profileItem = Get-ItemProperty $_.pspath
-    $reportStatus = "Working on " + $profileItem + " ..."
+    $reportStatus = "Working on " + $profileItem.ProfileImagePath + " ..."
 
     # Inner loop enumerates all folder subpaths within profiles to be cleaned
     ForEach ($folderSubpath in $foldersToClean) {
