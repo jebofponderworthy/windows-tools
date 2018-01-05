@@ -1,7 +1,7 @@
 # ponderworthy-tools
 
 Some applets for Windows, courtesy of Ponderworthy folks and friends.  Original site is https://notes.ponderworthy.com.
-All PowerShell applets require version 2.0 (Windows 7 default) or later.
+PowerShell 3.0 or later is supported.
 
 ## RUNALL.CMD:  Download, verify by hash, and run all of the below
 
