@@ -23,3 +23,6 @@ This tool sets a number of additional critical and delayed worker threads, plus 
 
 The tool is designed for Windows 10 down through XP. As of 2017-10-10, it is self-elevating if run non-administratively.
 
+## TOSC: Turn Off Share Caching
+
+By default in Windows since XP, if a folder is shared to the network via SMB, so-called "caching" is turned on.  This actually means that the Offline Files service on *other* machines accessing the share, are allowed to retrieve and store copies of files and folders on the machine acting as server.  Turning this off for all shares gives a speed bump for the server machine, and also improves reliability overall, dependence on Offline Files can lead to all sorts of issues including data loss when the server is not available or suddenly becomes available et cetera.
