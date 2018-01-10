@@ -3,9 +3,9 @@
 Some applets for Windows, courtesy of Ponderworthy folks and friends.  Original site is https://notes.ponderworthy.com.
 PowerShell 3.0 and later are supported.
 
-## RUNALL.CMD:  Download, verify by hash, and run all of the below
+## RUNMOST.CMD:  Download, verify by hash, and run all of the below
 
-[This is a CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD), which if run as administrator, will download, verify integrity by hash, and run both of the below.  It runs OWTAS first and then CATE, for a bit of a speed increment.  
+[This is a CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNMOST.CMD), which if run as administrator, will download, verify integrity by hash, and run both of the below.  It runs OWTAS first and then CATE.  It does not run TOSC.ps1, because some operations will be using Offline Files; RUNALL.CMD does that.
 
 For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
 
