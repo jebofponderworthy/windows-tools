@@ -5,7 +5,7 @@ PowerShell 3.0 and later are supported.
 
 ## RUNMOST.CMD:  Download, verify by hash, and run most of the below
 
-[This is a CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNMOST.CMD), which if run as administrator, will download, verify integrity by hash, and run both of the below.  It runs OWTAS first and then CATE.  It does not run TOSC.ps1, because some operations will be using Offline Files; RUNALL.CMD does that.
+[This is a CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNMOST.CMD), which if run as administrator, will download, verify integrity by hash, and run OWTAS first and then CATE.  It does not run TOSC.ps1, because some enterprises will be using Offline Files.
 
 For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
 
