@@ -1,8 +1,14 @@
-################################
-#           Optimize VSS       #
-#                              #
-# v1.0 by Jonathan E. Brickman #
-################################
+#################################
+#           Optimize VSS        #
+#                               #
+# v1.0 by Jonathan E. Brickman  #
+#                               #
+# Removes all orphan shadows,   #
+# and then preallocates 20%     #
+# of each hard drive for VSS    #
+# as many different tools' docs #
+# advise.                       #
+#################################
 
 "OVSS: Optimize VSS"
 "v1.0"
@@ -26,7 +32,7 @@ else {
 
 "Removing orphan shadows..."
 ""
-iex -Command 'vssadmin delete shadows /all /quiet'
+$out = (iex -Command 'vssadmin delete shadows /all /quiet')
 ""
 
 # Get list of VSS-related volumes, and run the appropriate command on each.
@@ -49,3 +55,5 @@ ForEach ($DataLine in $VSSVolumesData) {
         ""
         }
     }
+
+
