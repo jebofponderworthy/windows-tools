@@ -5,7 +5,7 @@
 #                               #
 # Removes all orphan shadows,   #
 # and then preallocates 20%     #
-# of each hard drive for VSS    #
+# of each drive volume for VSS  #
 # as many different tools' docs #
 # advise.                       #
 #################################
@@ -55,5 +55,3 @@ ForEach ($DataLine in $VSSVolumesData) {
         ""
         }
     }
-
-
