@@ -11,7 +11,7 @@ For compatibility, hashing is done using the command-line CERTUTIL tool (capturi
 
 ## RUNALL.CMD:  download, verify by hash, and run all of the below
 
-[RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run OWTAS first, OVSS, TOSC, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+[RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run OWTAS first, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
 For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
 
