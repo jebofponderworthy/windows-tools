@@ -7,9 +7,18 @@
 @del OWTAS.ps1
 
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
+"(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/OVSS.ps1') > OVSS.ps1"
+
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
+"$certrpt = (certutil -hashfile OVSS.ps1 SHA256) ; If ($certrpt[1] = '5c4cef29e3de52eaa2d9210ae0d29f83bd96c507406102c5a6965a312ba6cc4f') { iex .\OVSS.ps1 } Else { 'Hash fail on OVSS!' }"
+
+@del OVSS.ps1
+
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
 "(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/CATE.ps1') > CATE.ps1"
 
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
 "$certrpt = (certutil -hashfile CATE.ps1 SHA256) ; If ($certrpt[1] = 'F959C11ABA8524A307243604AB08D23CC63EED630A29AE52A3019F745BC4E3D5') { iex .\CATE.ps1 } Else { 'Hash fail on CATE!' }"
 
 @del CATE.ps1
+
