@@ -5,13 +5,13 @@ PowerShell 3.0 and later are supported.
 
 ## RUNMOST.CMD:  download, verify by hash, and run most of the below
 
-[This is a CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNMOST.CMD), which if run as administrator, will download, verify integrity by hash, and run OWTAS first and then CATE.  It does not run TOSC.ps1, because some enterprises will be using Offline Files.  The result is a distinct performance hike on any current Windows machine.
+[RUNMOST is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNMOST.CMD) which, if run as administrator, will download, verify integrity by hash, and run OWTAS, OVSS, and then CATE.  It does not run TOSC.ps1, because some enterprises will be using Offline Files.  The result is a distinct performance hike on any current Windows machine.
 
 For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
 
 ## RUNALL.CMD:  download, verify by hash, and run all of the below
 
-[This is a CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD), which if run as administrator, will download, verify integrity by hash, and run OWTAS first, then CATE, then TOSC.  The result is a distinct performance hike on any current Windows machine.
+[RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run OWTAS first, OVSS, TOSC, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
 For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
 
@@ -33,3 +33,7 @@ The tool is designed for Windows 10 down through XP. As of 2017-10-10, it is sel
 ## TOSC: Turn Off Share Caching
 
 By default in Windows since XP, if a folder is shared to the network via SMB, so-called "caching" is turned on.  This actually means that the Offline Files service on *other* machines accessing the share, are allowed to retrieve and store copies of files and folders on the machine acting as server.  Turning this off for all shares gives a speed bump for the server machine, and also improves reliability overall, dependence on Offline Files can lead to all sorts of issues including data loss when the server is not available or suddenly becomes available et cetera.
+
+## OVSS:  Optimize VSS
+
+By default, on Windows client OS systems, VSS is active on all VSS-aware volumes, but it is not optimized, which in this case means, there is an "association" or preallocation, of zero space.  On Windows server OS systems, VSS is likewise active, but there is no association/preallocation, at all, on any VSS-aware volumes.  Many different Windows backup tools make the same recommendation concerning this, stating that every volume to be backed up should have 20% of its space "associated" or preallocated for VSS.  OVSS does this, and also, removes all orphan shadows, shadow snapshots existing because of old aborted backups, taking space and drive bandwidth resources but not usable.
