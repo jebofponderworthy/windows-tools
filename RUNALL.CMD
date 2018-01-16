@@ -26,7 +26,7 @@
 "(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/CATE.ps1') > CATE.ps1"
 
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$certrpt = (certutil -hashfile CATE.ps1 SHA256) ; If ($certrpt[1] = 'F959C11ABA8524A307243604AB08D23CC63EED630A29AE52A3019F745BC4E3D5') { iex .\CATE.ps1 } Else { 'Hash fail on CATE!' }"
+"$certrpt = (certutil -hashfile CATE.ps1 SHA256) ; If ($certrpt[1] = '8efab331ecfcbc960bcbfeca9748f4d313bbf7b2d8bfcab1876945e97c521dc9') { iex .\CATE.ps1 } Else { 'Hash fail on CATE!' }"
 
 @del CATE.ps1
 
