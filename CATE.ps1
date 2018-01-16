@@ -164,15 +164,18 @@ function DeleteFolderContents {
                 # If $skipSpecial, attempt to remove it and everything under
                 # except folders named "Low", "1", and "2".
                 Try { Remove-Item $_ -Force -Recurse -Exclude "Low","1","2" -ErrorAction SilentlyContinue }
+                Catch {}
                 }
             else {
                 # Attempt to remove it and everything under.
                 Try { Remove-Item $_ -Force -Recurse -ErrorAction SilentlyContinue }
+                Catch {}
                 }
             } 
         else {
                 # Item is not a folder.
                 Try { Remove-Item $_ -Force -ErrorAction SilentlyContinue }
+                Catch {}
             }
         }
     }
@@ -266,7 +269,7 @@ Write-Output ""
 # SPDX short identifier: BSD-3-Clause
 
 # Note: This license has also been called 
-# the “New BSD License” or “Modified BSD License”. 
+# the â€œNew BSD Licenseâ€ or â€œModified BSD Licenseâ€. 
 # See also the 2-clause BSD License.
 
 # Copyright 2017 Jonathan E. Brickman
@@ -290,7 +293,7 @@ Write-Output ""
 # specific prior written permission.
 
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
-# CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+# CONTRIBUTORS â€œAS ISâ€ AND ANY EXPRESS OR IMPLIED WARRANTIES, 
 # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
 # OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
 # ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER 
