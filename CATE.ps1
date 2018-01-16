@@ -3,7 +3,7 @@
 #############################
 
 #
-# version 3.2
+# version 3.3
 #
 # by Jonathan E. Brickman
 #
@@ -163,16 +163,16 @@ function DeleteFolderContents {
             If ($skipSpecial) {
                 # If $skipSpecial, attempt to remove it and everything under
                 # except folders named "Low", "1", and "2".
-                Remove-Item $_ -Force -Recurse -Exclude "Low","1","2" -ErrorAction SilentlyContinue
+                Try { Remove-Item $_ -Force -Recurse -Exclude "Low","1","2" -ErrorAction SilentlyContinue }
                 }
             else {
                 # Attempt to remove it and everything under.
-                Remove-Item $_ -Force -Recurse -ErrorAction SilentlyContinue
+                Try { Remove-Item $_ -Force -Recurse -ErrorAction SilentlyContinue }
                 }
             } 
         else {
                 # Item is not a folder.
-                Remove-Item $_ -Force -ErrorAction SilentlyContinue
+                Try { Remove-Item $_ -Force -ErrorAction SilentlyContinue }
             }
         }
     }
