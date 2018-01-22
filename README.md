@@ -1,6 +1,6 @@
 # ponderworthy-tools
 
-Some applets for Windows, courtesy of Ponderworthy folks and friends.  Original site is https://notes.ponderworthy.com.
+Some applets to improve performance of Windows desktop and server operating systems.  Courtesy of Ponderworthy folks and friends.  Original site is https://notes.ponderworthy.com.
 PowerShell 3.0 and later are supported.
 
 ## RUNMOST.CMD:  download, verify by hash, and run most of the below
