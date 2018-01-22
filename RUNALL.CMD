@@ -10,7 +10,7 @@
 "(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/TOSC.ps1') > TOSC.ps1"
 
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$certrpt = (certutil -hashfile TOSC.ps1 SHA256) ; If ($certrpt[1] -eq '81f05fb4e0c34817510fd717aaa3d676cb4409a80365fba6f8fd8da6b1abf01c') { iex .\TOSC.ps1 } Else { 'Hash fail on TOSC!' }"
+"$certrpt = (certutil -hashfile TOSC.ps1 SHA256) ; If ($certrpt[1] -eq '24fb1a69b4bfa19696ad220c098aa3696b3f3414f6ad3764a43b44c1134fc945') { iex .\TOSC.ps1 } Else { 'Hash fail on TOSC!' }"
 
 @del TOSC.ps1
 
