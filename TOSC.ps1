@@ -4,8 +4,8 @@
 # v2.0 by Jonathan E. Brickman #
 ################################
 
+"
 "TOSC: Turn Off Share Caching"
-"v2.0"
 ""
 
 # Self-elevate if not already elevated.
