@@ -17,9 +17,8 @@
 # and is reprised at the end of this file
 #
 
-"Clean All Temp Etc."
 ""
-"by Jonathan E. Brickman"
+"Clean All Temp Etc."
 ""
 "Cleans all profiles' temp and IE cache folders,"
 "some other caches, and log files."
