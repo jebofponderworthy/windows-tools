@@ -21,10 +21,8 @@
 # and is reprised at the end of this file
 #
 
+""
 "Optimize Worker Threads and Service Requests"
-""
-"by Jonathan E. Brickman"
-""
 ""
 
 # Self-elevate if not already elevated.
@@ -149,7 +147,7 @@ setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\RpcXdr\Parameters" "MaxCmds"
 # SPDX short identifier: BSD-3-Clause
 
 # Note: This license has also been called 
-# the ìNew BSD Licenseî or ìModified BSD Licenseî. 
+# the ‚ÄúNew BSD License‚Äù or ‚ÄúModified BSD License‚Äù. 
 # See also the 2-clause BSD License.
 
 # Copyright 2017 Jonathan E. Brickman
@@ -173,7 +171,7 @@ setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\RpcXdr\Parameters" "MaxCmds"
 # specific prior written permission.
 
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
-# CONTRIBUTORS ìAS ISî AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+# CONTRIBUTORS ‚ÄúAS IS‚Äù AND ANY EXPRESS OR IMPLIED WARRANTIES, 
 # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
 # OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
 # ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER 
