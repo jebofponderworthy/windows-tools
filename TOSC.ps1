@@ -33,7 +33,7 @@ Get-SMBShare | ForEach {
             Set-SMBShare -Name $ShareName -CachingMode Programs -Confirm:$False -ErrorAction Stop
             }
         Catch {
-            "    Error for " + $ShareName
+            '    Error for ' + $ShareName
             }
         }
     Else 
@@ -44,7 +44,7 @@ Get-SMBShare | ForEach {
                 }
             Catch 
                 {
-                "    Not possible for " + $ShareName
+                '    Not possible for ' + $ShareName
                 }
         }
     }
