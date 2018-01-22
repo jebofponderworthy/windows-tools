@@ -4,9 +4,9 @@
 # v2.0 by Jonathan E. Brickman #
 ################################
 
-""
-"TOSC: Turn Off Share Caching"
-""
+''
+'TOSC: Turn Off Share Caching'
+''
 
 # Self-elevate if not already elevated.
 
