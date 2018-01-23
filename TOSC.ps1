@@ -1,7 +1,7 @@
 ################################
 #    Turn Off Share Caching    #
 #                              #
-# v2.0 by Jonathan E. Brickman #
+# v3.0 by Jonathan E. Brickman #
 ################################
 
 ''
@@ -22,29 +22,16 @@ else {
     ""
     }
 
-# Get it done.
-
-Get-SMBShare | ForEach { 
-    $ShareName = $_.Name
-    If ($ShareName -eq "print$") 
-        { 
-        "Setting caching to 'Programs' for: " + $ShareName
-        Try {
-            Set-SMBShare -Name $ShareName -CachingMode Programs -Confirm:$False -ErrorAction Stop
-            }
-        Catch {
-            '    Error for ' + $ShareName
-            }
-        }
-    Else 
-        {
-        "Setting no caching for: " + $ShareName
-            Try {
-                Set-SMBShare -Name $ShareName -CachingMode None -Confirm:$False -ErrorAction Stop
-                }
-            Catch 
-                {
-                '    Not possible for ' + $ShareName
-                }
-        }
-    }
+# Get list of shares with 'net view', parse, and set appropriately.
+$netview = iex ("net view " + $env:computername + " /all")
+for ($i=7; $i -lt ($netview.Count - 2); $i++)
+	{
+	$ShareName = $netview[$i].split(" ")[0]
+	""
+	"Turning off share caching for " + $ShareName
+	$result = iex ("net share " + $ShareName + " /CACHE:None") -ErrorAction SilentlyContinue
+	if ($result -eq $null)
+		{ "Not possible." }
+	else
+		{ "Done." }
+	}
