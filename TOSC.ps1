@@ -1,7 +1,7 @@
 ################################
 #    Turn Off Share Caching    #
 #                              #
-# v3.0 by Jonathan E. Brickman #
+# v3.1 by Jonathan E. Brickman #
 ################################
 
 ''
@@ -23,15 +23,13 @@ else {
     }
 
 # Get list of shares with 'net view', parse, and set appropriately.
-$netview = iex ("net view " + $env:computername + " /all")
-for ($i=7; $i -lt ($netview.Count - 2); $i++)
-	{
-	$ShareName = $netview[$i].split(" ")[0]
+get-WmiObject -class Win32_Share | foreach {
 	""
-	"Turning off share caching for " + $ShareName
-	$result = iex ("net share " + $ShareName + " /CACHE:None") -ErrorAction SilentlyContinue
+	"Turning off share caching for " + $_.Name
+	$result = iex ('net share "' + $_.Name + '" /CACHE:None') -ErrorAction SilentlyContinue
 	if ($result -eq $null)
 		{ "Not possible." }
 	else
 		{ "Done." }
 	}
+
