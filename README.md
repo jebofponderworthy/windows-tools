@@ -8,7 +8,9 @@ PowerShell 3.0 and later are supported, Windows 7 and up.  Please note that 7 sh
 
 ## RUNMOST.CMD:  download, verify by hash, and run most of the below
 
-[RUNMOST is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNMOST.CMD) which, if run as administrator, will download, verify integrity by hash, and run OWTAS, OVSS, and then CATE.  It does not run TOSC.ps1, because some enterprises will be using Offline Files.  The result is a distinct performance hike on any current Windows machine.
+[RUNMOST is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNMOST.CMD) which, if run as administrator, will download, verify integrity by hash, and run OWTAS, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+
+RUNMOST.CMD does not run TOSC.ps1, because some enterprises will be using Offline Files.
 
 For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
 
