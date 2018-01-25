@@ -12,7 +12,7 @@
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
 "$certrpt = (certutil -hashfile TOSC.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq '75ab9ed9d06bd4527f12c4a0f03dd49b340ab68b919c3cd1db01fe352374cc30') { iex .\TOSC.ps1 } Else { 'Hash fail on TOSC!' }"
 
-REM @del TOSC.ps1
+@del TOSC.ps1
 
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
 "(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/OVSS.ps1') > OVSS.ps1"
