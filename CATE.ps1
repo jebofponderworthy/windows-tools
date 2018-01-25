@@ -3,7 +3,7 @@
 #############################
 
 #
-# version 3.3
+# version 3.4
 #
 # by Jonathan E. Brickman
 #
@@ -183,9 +183,13 @@ function DeleteFolderContents {
 # as recorded in the registry, and delete temp files.
 
 # Outer loop enumerates all user profiles
-Get-ChildItem -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\" | ForEach-Object {
+$ProfileList = Get-ChildItem -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\"
+$ProfileCount = $ProfileList.Count
+$ProfileNumber = 1
+$ProfileList | ForEach-Object {
     $profileItem = Get-ItemProperty $_.pspath
-    $reportStatus = "Working on " + $profileItem.ProfileImagePath + " ..."
+    $reportStatus = "Working on (profile " + $ProfileNumber + "/" + $ProfileCount + ") " + $profileItem.ProfileImagePath + " ..."
+    $ProfileNumber += 1
 
     # Inner loop enumerates all folder subpaths within profiles to be cleaned
     ForEach ($folderSubpath in $foldersToClean) {
@@ -268,7 +272,7 @@ Write-Output ""
 # SPDX short identifier: BSD-3-Clause
 
 # Note: This license has also been called 
-# the â€œNew BSD Licenseâ€ or â€œModified BSD Licenseâ€. 
+# the Ã¢â‚¬Å“New BSD LicenseÃ¢â‚¬Â or Ã¢â‚¬Å“Modified BSD LicenseÃ¢â‚¬Â. 
 # See also the 2-clause BSD License.
 
 # Copyright 2017 Jonathan E. Brickman
@@ -292,7 +296,7 @@ Write-Output ""
 # specific prior written permission.
 
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
-# CONTRIBUTORS â€œAS ISâ€ AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+# CONTRIBUTORS Ã¢â‚¬Å“AS ISÃ¢â‚¬Â AND ANY EXPRESS OR IMPLIED WARRANTIES, 
 # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
 # OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
 # ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER 
