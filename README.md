@@ -24,7 +24,7 @@ TweakNTFS is separated, because unlike the others, it should not be run in RAM-s
 
 ## TweakNTFS: Tweak NTFS for Performance and Reliability
 
-FSUTIL is a Windows command with amazing abilities.  In TweakNTFS we have it used programmatically in PowerShell to produce a fairly well-balanced approach, performance increase with reliability increase too.
+FSUTIL is a Windows command with amazing abilities.  In [TweakNTFS](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/TweakNTFS.ps1) we have it used programmatically within PowerShell to produce a fairly well-balanced approach, performance increase with reliability increase too, for all NTFS volumes currently mounted.
 
 ## CATE: (C)lean (A)ll system and user profile (T)emp folders, (E)tcetera
 
