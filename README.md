@@ -14,12 +14,17 @@ RUNMOST.CMD does not run TOSC.ps1, because some enterprises will be using Offlin
 
 For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
 
-## RUNALL.CMD:  download, verify by hash, and run all of the below
+## RUNALL.CMD:  download, verify by hash, and run nearly all of the below
 
 [RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run OWTAS first, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
 For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
 
+TweakNTFS is separated, because unlike the others, it should not be run in RAM-stressed situations.
+
+## TweakNTFS: Tweak NTFS for Performance and Reliability
+
+FSUTIL is a Windows command with amazing abilities.  In TweakNTFS we have it used programmatically in PowerShell to produce a fairly well-balanced approach, performance increase with reliability increase too.
 
 ## CATE: (C)lean (A)ll system and user profile (T)emp folders, (E)tcetera
 
