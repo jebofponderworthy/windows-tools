@@ -22,7 +22,6 @@ else {
 
 "Tweaks for all drives..."
 $output = iex ('fsutil 8dot3name set 1') -ErrorAction SilentlyContinue
-$output = iex ('fsutil behavior set memoryusage 2') -ErrorAction SilentlyContinue
 $output = iex ('fsutil behavior set disablelastaccess 1') -ErrorAction SilentlyContinue
 
 Get-Volume | ForEach {
