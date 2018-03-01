@@ -8,7 +8,7 @@ PowerShell 3.0 and later are supported, Windows 7 and up.  Please note that 7 sh
 
 ## RUNMOST.CMD:  download, verify by hash, and run most of the below
 
-[RUNMOST is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNMOST.CMD) which, if run as administrator, will download, verify integrity by hash, and run OWTAS, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+[RUNMOST is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNMOST.CMD) which, if run as administrator, will download, verify integrity by hash, and run TweakNTFS, OWTAS, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
 RUNMOST.CMD does not run TOSC.ps1, because some enterprises will be using Offline Files.
 
@@ -16,15 +16,13 @@ For compatibility, hashing is done using the command-line CERTUTIL tool (capturi
 
 ## RUNALL.CMD:  download, verify by hash, and run nearly all of the below
 
-[RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run OWTAS first, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+[RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run TweakNTFS first, then OWTAS, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
 For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
 
-TweakNTFS is separated, because unlike the others, it should not be run in RAM-stressed situations.
-
 ## TweakNTFS: Tweak NTFS for Performance and Reliability
 
-FSUTIL is a Windows command with amazing abilities.  In [TweakNTFS](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/TweakNTFS.ps1) we have it used programmatically within PowerShell to produce a fairly well-balanced approach, performance increase with reliability increase too, for all NTFS volumes currently mounted.  We also have [RunTweakNTFS.CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RunTweakNTFS.CMD) to automatically download, verify by hash, and run it.
+FSUTIL is a Windows command with amazing abilities.  In [TweakNTFS](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/TweakNTFS.ps1) we have it used programmatically within PowerShell to produce a fairly well-balanced approach, performance increase with reliability increase too, for all NTFS volumes currently mounted.  
 
 ## CATE: (C)lean (A)ll system and user profile (T)emp folders, (E)tcetera
 
