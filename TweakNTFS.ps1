@@ -2,7 +2,6 @@
 # TweakNTFS: Tweak All NTFS Volumes #
 #   for Performance And Reliability #
 #####################################
-#         presumes ample RAM!       #
 
 
 # Self-elevate if not already elevated.
@@ -24,23 +23,17 @@ else {
 $output = iex ('fsutil 8dot3name set 1') -ErrorAction SilentlyContinue
 $output = iex ('fsutil behavior set disablelastaccess 1') -ErrorAction SilentlyContinue
 
-Get-Volume | ForEach {
-    If ($_.FileSystem -eq "NTFS")
-        {
-        $DriveLetter = $_.DriveLetter
+Get-WMIObject -Query "Select * FROM Win32_LogicalDisk WHERE DriveType=3" | ForEach {
+    $DriveID = $_.DeviceID
 
-        If ($DriveLetter -match "[A-Z]")
-            {
-            "Tweaking " + $DriveLetter + ":" + " ..."
-            $output = iex ('fsutil repair set ' + ($DriveLetter + ':') + ' 0x01') -ErrorAction SilentlyContinue
-            $output = iex ('fsutil resource setautoreset true ' + ($DriveLetter + ':\')) -ErrorAction SilentlyContinue
-            $output = iex ('fsutil resource setconsistent ' + ($DriveLetter + ':\')) -ErrorAction SilentlyContinue
-            $output = iex ('fsutil resource setlog shrink 10 ' + ($DriveLetter + ':\')) -ErrorAction SilentlyContinue
-            }
+    If ($DriveID -match "[A-Z]")
+        {
+        "Tweaking " + $DriveID + " ..."
+        $output = iex ('fsutil repair set ' + $DriveID + ' 0x01') -ErrorAction SilentlyContinue
+        $output = iex ('fsutil resource setautoreset true ' + ($DriveID + '\')) -ErrorAction SilentlyContinue
+        $output = iex ('fsutil resource setconsistent ' + ($DriveID + '\')) -ErrorAction SilentlyContinue
+        $output = iex ('fsutil resource setlog shrink 10 ' + ($DriveID + '\')) -ErrorAction SilentlyContinue
         }
     }
 
 "Done!"
-
-# Get-Volume -fl
-# has lots and lots of helpful detail.
