@@ -8,7 +8,9 @@ PowerShell 3.0 and later are supported, Windows 7 and up.  Please note that 7 sh
 
 ## Optimize1.1.EXE:  Verify by hash and run all of the PowerShell items described below
 
-[Optimize 1.1](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/Optimize1.1.EXE) is a self-executing .EXE which, if run as administrator, will extract, verify integrity by hash, and run TweakNTFS, OWTAS, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+[Optimize 1.1](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/Optimize1.1.EXE) is a self-executing .EXE which, if run as administrator, will extract, verify integrity by hash, and run TweakNTFS, OWTAS, TOSC, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.  
+
+Do not use this if you want Offline Files caching to be active.
 
 ## RUNMOST.CMD:  download, verify by hash, and run most of the below
 
@@ -18,9 +20,11 @@ RUNMOST.CMD does not run TOSC.ps1, because some enterprises will be using Offlin
 
 For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
 
-## RUNALL.CMD:  download, verify by hash, and run nearly all of the below
+## RUNALL.CMD:  download, verify by hash, and run all of the below
 
 [RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run TweakNTFS first, then OWTAS, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+
+Do not use this if you want Offline Files caching to be active, RUNMOST does everything except the Offline Files cache disabling.
 
 For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
 
