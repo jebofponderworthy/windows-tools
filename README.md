@@ -6,6 +6,10 @@ Courtesy of Ponderworthy folks and friends.  Original site is https://notes.pond
 
 PowerShell 3.0 and later are supported, Windows 7 and up.  Please note that 7 ships with older PowerShell by default.
 
+## Optimize1.1.EXE:  Verify by hash and run all of the PowerShell items described below.
+
+[Optimize 1.1](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/Optimize1.1.EXE) is a self-executing .EXE which, if run as administrator, will extract, verify integrity by hash, and run TweakNTFS, OWTAS, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+
 ## RUNMOST.CMD:  download, verify by hash, and run most of the below
 
 [RUNMOST is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNMOST.CMD) which, if run as administrator, will download, verify integrity by hash, and run TweakNTFS, OWTAS, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
