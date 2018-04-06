@@ -3,7 +3,7 @@
 #############################
 
 #
-# version 3.4
+# version 3.5
 #
 # by Jonathan E. Brickman
 #
@@ -45,9 +45,9 @@ $InitialLocation = Get-Location
 
 # Get environment variables.
 
+$envTEMP = [Environment]::GetEnvironmentVariable("TEMP", "Machine")
+$envTMP = [Environment]::GetEnvironmentVariable("TEMP", "Machine")
 $envSystemDrive = $env:SystemDrive
-$envTEMP = $env:TEMP
-$envTMP = $env:TMP
 $envSystemRoot = $env:SystemRoot
 $envProgramData = $env:ProgramData
 
@@ -213,9 +213,13 @@ $ProfileList | ForEach-Object {
     Remove-Item "AskPartnerNetwork" -Force -Recurse -ErrorAction SilentlyContinue
     }
 
-# Now empty certain folders in %SystemRoot%
+# Now empty certain folders
 
 $reportStatus = "Working on other folders ..."
+
+DeleteFolderContents ($envTEMP)
+
+DeleteFolderContents ($envTMP)
 
 DeleteFolderContents ($envSystemRoot + "\Temp"), $true
 
@@ -272,7 +276,7 @@ Write-Output ""
 # SPDX short identifier: BSD-3-Clause
 
 # Note: This license has also been called 
-# the Ã¢â‚¬Å“New BSD LicenseÃ¢â‚¬Â or Ã¢â‚¬Å“Modified BSD LicenseÃ¢â‚¬Â. 
+# the AŸA›A›ƒ?sAªA.ƒ?oNew BSD LicenseAŸA›A›ƒ?sAªA,A? or AŸA›A›ƒ?sAªA.ƒ?oModified BSD LicenseAŸA›A›ƒ?sAªA,A?. 
 # See also the 2-clause BSD License.
 
 # Copyright 2017 Jonathan E. Brickman
@@ -296,7 +300,7 @@ Write-Output ""
 # specific prior written permission.
 
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
-# CONTRIBUTORS Ã¢â‚¬Å“AS ISÃ¢â‚¬Â AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+# CONTRIBUTORS AŸA›A›ƒ?sAªA.ƒ?oAS ISAŸA›A›ƒ?sAªA,A? AND ANY EXPRESS OR IMPLIED WARRANTIES, 
 # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
 # OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
 # ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER 
@@ -309,3 +313,4 @@ Write-Output ""
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT 
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 # POSSIBILITY OF SUCH DAMAGE.
+
