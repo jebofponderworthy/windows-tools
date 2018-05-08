@@ -276,7 +276,7 @@ Write-Output ""
 # SPDX short identifier: BSD-3-Clause
 
 # Note: This license has also been called 
-# the AŸA›A›ƒ?sAªA.ƒ?oNew BSD LicenseAŸA›A›ƒ?sAªA,A? or AŸA›A›ƒ?sAªA.ƒ?oModified BSD LicenseAŸA›A›ƒ?sAªA,A?. 
+# the AYA>A>߿sAǁ.߿oNew BSD LicenseAYA>A>߿sAǁ,A? or AYA>A>߿sAǁ.߿oModified BSD LicenseAYA>A>߿sAǁ,A?. 
 # See also the 2-clause BSD License.
 
 # Copyright 2017 Jonathan E. Brickman
@@ -300,7 +300,7 @@ Write-Output ""
 # specific prior written permission.
 
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
-# CONTRIBUTORS AŸA›A›ƒ?sAªA.ƒ?oAS ISAŸA›A›ƒ?sAªA,A? AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+# CONTRIBUTORS AYA>A>߿sAǁ.߿oAS ISAYA>A>߿sAǁ,A? AND ANY EXPRESS OR IMPLIED WARRANTIES, 
 # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
 # OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
 # ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER 
@@ -313,4 +313,3 @@ Write-Output ""
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT 
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 # POSSIBILITY OF SUCH DAMAGE.
-
