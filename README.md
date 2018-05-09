@@ -4,7 +4,7 @@ Some applets to improve performance of Windows desktop and server operating syst
 
 Courtesy of Ponderworthy folks and friends.  Original site is https://notes.ponderworthy.com.
 
-PowerShell 3.0 and later are supported, Windows 7 and up.  Please note that 7 ships with older PowerShell by default.
+PowerShell 3.0 and later are supported, Windows 7 and up.  Please note that 7 ships with older PowerShell by default, installing the [WMF](https://www.microsoft.com/en-us/download/details.aspx?id=54616) will update it.
 
 ## RUNALL.CMD:  download, verify by hash, and run all of the below
 
