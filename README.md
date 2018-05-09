@@ -20,12 +20,6 @@ For compatibility, hashing is done using the command-line CERTUTIL tool (capturi
 
 For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
 
-## Optimize1.2.EXE:  Verify by hash and run several tools.
-
-[Optimize 1.2](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/MULTITOOLS/Optimize1.2.EXE) is a self-executing .EXE which, if run as administrator, will extract, verify integrity by hash, and run recent versions of TweakNTFS, OWTAS, TOSC, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.  
-
-Do not use this if you want Offline Files caching to be active.
-
 ## RunDevNodeClean
 
 DevNodeClean is a Microsoft-provided utility which clears certain registry items, ones which are created when USB flash drives are plugged in and removed, when machines are virtualized or devirtualized, and many other operations.  These registry items pile up over time, we have seen some older Windows 7 desktops with hundreds of them, and they slow down Windows File Explorer and file management in general quite a bit.  [RunDevNodeClean](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/tools/RunDevNodeClean.ps1) downloads the utility from Microsoft, unpacks it, runs the appropriate (32-bit or 64-bit) binary, and then cleans up after itself.
