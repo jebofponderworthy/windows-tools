@@ -2,7 +2,7 @@
 
 This is a toolset for improvement of performance of Windows desktop and server operating systems.  Much gratitude goes to Ponderworthy folks and friends for much input, a good bit of which can be read at [notes.ponderworthy.com](https://notes.ponderworthy.com).
 
-PowerShell 3.0 and later are supported, on Windows 7 and later.  Please note that 7 ships with more obsolescent PowerShell by default; installing the [WMF](https://www.microsoft.com/en-us/download/details.aspx?id=54616) will update it.
+PowerShell 3.0 and later are supported, on Windows 7 and later.  Please note that 7 ships with PowerShell 2.0 by default; installing the [WMF](https://www.microsoft.com/en-us/download/details.aspx?id=54616) will update it.
 
 ## RUNALL.CMD:  download, verify by hash, and run all of the below
 
