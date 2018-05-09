@@ -8,7 +8,7 @@ PowerShell 3.0 and later are supported, Windows 7 and up.  Please note that 7 sh
 
 ## RUNALL.CMD:  download, verify by hash, and run all of the below
 
-[RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/MULTITOOLS/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run TweakNTFS first, then OWTAS, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+[RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/MULTITOOLS/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run RunDevNodeClean first, then OWTAS, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
 Do not use this if you want Offline Files caching to be active, RUNMOST does everything except the Offline Files cache disabling.
 
@@ -16,7 +16,7 @@ For compatibility, hashing is done using the command-line CERTUTIL tool (capturi
 
 ## RUNMOST.CMD:  download, verify by hash, and run most of the below
 
-[RUNMOST is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/MULTITOOLS/RUNMOST.CMD) which, if run as administrator, will download, verify integrity by hash, and run TweakNTFS, OWTAS, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+[RUNMOST is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/MULTITOOLS/RUNMOST.CMD) which, if run as administrator, will download, verify integrity by hash, and run RunDevNodeClean, TweakNTFS, OWTAS, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
 *Do* use this if you want Offline Files caching to be active.  RUNMOST.CMD does not run TOSC.ps1.
 
@@ -30,7 +30,7 @@ Do not use this if you want Offline Files caching to be active.
 
 ## RunDevNodeClean
 
-DevNodeClean is a Microsoft-provided utility which clears certain registry items, ones which are created when USB flash drives are plugged in and removed, when machines are virtualized or devirtualized, and many other operations.  These registry items pile up over time, we have seen some older Windows 7 desktops with hundreds of them, and they slow down Windows File Explorer and file management in general quite a bit.  [DevNodeClean](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/tools/RunDevNodeClean.ps1) downloads the utility from Microsoft, unpacks it, runs the appropriate (32-bit or 64-bit) binary, and then cleans up after itself.
+RunDevNodeClean is a Microsoft-provided utility which clears certain registry items, ones which are created when USB flash drives are plugged in and removed, when machines are virtualized or devirtualized, and many other operations.  These registry items pile up over time, we have seen some older Windows 7 desktops with hundreds of them, and they slow down Windows File Explorer and file management in general quite a bit.  [RunDevNodeClean](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/tools/RunDevNodeClean.ps1) downloads the utility from Microsoft, unpacks it, runs the appropriate (32-bit or 64-bit) binary, and then cleans up after itself.
 
 ## TweakNTFS: Tweak NTFS for Performance and Reliability
 
