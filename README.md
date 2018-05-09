@@ -8,13 +8,13 @@ PowerShell 3.0 and later are supported, Windows 7 and up.  Please note that 7 sh
 
 ## Optimize1.1.EXE:  Verify by hash and run all of the PowerShell items described below
 
-[Optimize 1.1](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/Optimize1.1.EXE) is a self-executing .EXE which, if run as administrator, will extract, verify integrity by hash, and run TweakNTFS, OWTAS, TOSC, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.  
+[Optimize 1.2](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/MULTITOOLS/Optimize1.2.EXE) is a self-executing .EXE which, if run as administrator, will extract, verify integrity by hash, and run recent versions of TweakNTFS, OWTAS, TOSC, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.  
 
 Do not use this if you want Offline Files caching to be active.
 
 ## RUNMOST.CMD:  download, verify by hash, and run most of the below
 
-[RUNMOST is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNMOST.CMD) which, if run as administrator, will download, verify integrity by hash, and run TweakNTFS, OWTAS, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+[RUNMOST is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/MULTITOOLS/RUNMOST.CMD) which, if run as administrator, will download, verify integrity by hash, and run TweakNTFS, OWTAS, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
 *Do* use this if you want Offline Files caching to be active.  RUNMOST.CMD does not run TOSC.ps1.
 
@@ -22,7 +22,7 @@ For compatibility, hashing is done using the command-line CERTUTIL tool (capturi
 
 ## RUNALL.CMD:  download, verify by hash, and run all of the below
 
-[RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run TweakNTFS first, then OWTAS, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+[RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/MULTITOOLS/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run TweakNTFS first, then OWTAS, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
 Do not use this if you want Offline Files caching to be active, RUNMOST does everything except the Offline Files cache disabling.
 
@@ -30,11 +30,11 @@ For compatibility, hashing is done using the command-line CERTUTIL tool (capturi
 
 ## TweakNTFS: Tweak NTFS for Performance and Reliability
 
-FSUTIL is a Windows command with amazing abilities.  In [TweakNTFS](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/TweakNTFS.ps1) we have it used programmatically within PowerShell to produce a fairly well-balanced approach, performance increase with reliability increase too, for all NTFS volumes currently mounted.  
+FSUTIL is a Windows command with amazing abilities.  In [TweakNTFS](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/tools/TweakNTFS.ps1) we have it used programmatically within PowerShell to produce a fairly well-balanced approach, performance increase with reliability increase too, for all NTFS volumes currently mounted.  
 
 ## CATE: (C)lean (A)ll system and user profile (T)emp folders, (E)tcetera
 
-For quite a while I had been curious as to why a simple method to do this was not available. CCLEANER and others do not reach into every user profile, and on many machines this is crucial, e.g., terminal servers. CATE was originated as a .VBS by the excellent David Barrett ( http://www.cedit.biz ) and has been rewritten thoroughly by yours truly (JEB of Ponderworthy). The current VBS is [here.](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/CATE.vbs)  But [the most recent version](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/CATE.ps1) is a PowerShell script, which adds removal of Ask Partner Network folders from user profiles, and a good bit of speed and clean running; future development will be in PowerShell.
+For quite a while I had been curious as to why a simple method to do this was not available. CCLEANER and others do not reach into every user profile, and on many machines this is crucial, e.g., terminal servers. CATE was originated as a .VBS by the excellent David Barrett ( http://www.cedit.biz ) and has been rewritten thoroughly by yours truly (JEB of Ponderworthy). The current VBS is [here.](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/old-vbs/CATE.vbs)  But [the most recent version](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/tools/CATE.ps1) is a PowerShell script, which adds removal of Ask Partner Network folders from user profiles, and a good bit of speed and clean running; future development will be in PowerShell.
 
 One thing discovered along the way, is even in XP there was a user profile called the “System Profile” — XP had it in C:\WINDOWS\System32\config\systemprofile — and some malware dumps junk into it, and sometimes many gigs of unwanted files can be found in its temporary storage. CATE cleans all user profiles including those, as well as the Windows Error Reporting cache, and the .NET caches, and the system TEMP folders, and in recent versions, many Windows log files which are often found in many thousands of fragments.
 
@@ -42,7 +42,7 @@ The tool is designed for Windows 10 down through XP. As of 2017-10-10, it is sel
 
 ## OWTAS: Optimize Service Work Items and Additional/Delayed Worker Threads
 
-This tool sets a number of additional critical and delayed worker threads, plus service work items. The changes are autocalculated according to a combination of RAM and OS bit-width (32 vs. 64). Performance will increase, more so with more RAM.  Available as [VBS](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/OWTAS.VBS) and as [PowerShell](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/OWTAS.ps1).  Future development will be in PowerShell.
+This tool sets a number of additional critical and delayed worker threads, plus service work items. The changes are autocalculated according to a combination of RAM and OS bit-width (32 vs. 64). Performance will increase, more so with more RAM.  Available as [VBS](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/old-vbs/OWTAS.VBS) and as [PowerShell](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/tools/OWTAS.ps1).  Future development will be in PowerShell.
 
 The tool is designed for Windows 10 down through XP. As of 2017-10-10, it is self-elevating if run non-administratively.
 
