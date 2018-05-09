@@ -4,7 +4,7 @@ This is a toolset for improvement of performance of Windows desktop and server o
 
 PowerShell 3.0 and later are supported, on Windows 7 and later.  Please note that 7 ships with PowerShell 2.0 by default; installing the [WMF](https://www.microsoft.com/en-us/download/details.aspx?id=54616) will update it.
 
-## RUNALL.CMD:  download, verify by hash, and run all of the below
+## RUNALL.CMD:  download, verify by hash, and run all of the tools
 
 [RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/MULTITOOLS/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run RunDevNodeClean first, then OWTAS, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
@@ -12,7 +12,7 @@ Do not use this if you want Offline Files caching to be active, RUNMOST does eve
 
 For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
 
-## RUNMOST.CMD:  download, verify by hash, and run most of the below
+## RUNMOST.CMD:  download, verify by hash, and run most of the tools
 
 [RUNMOST is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/MULTITOOLS/RUNMOST.CMD) which, if run as administrator, will download, verify integrity by hash, and run RunDevNodeClean, TweakNTFS, OWTAS, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
@@ -20,7 +20,7 @@ For compatibility, hashing is done using the command-line CERTUTIL tool (capturi
 
 For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
 
-## Optimize1.2.EXE:  Verify by hash and run all of the PowerShell items described below
+## Optimize1.2.EXE:  Verify by hash and run several tools.
 
 [Optimize 1.2](https://github.com/jebofponderworthy/ponderworthy-tools/raw/master/MULTITOOLS/Optimize1.2.EXE) is a self-executing .EXE which, if run as administrator, will extract, verify integrity by hash, and run recent versions of TweakNTFS, OWTAS, TOSC, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.  
 
