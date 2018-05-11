@@ -3,7 +3,7 @@
 #############################
 
 #
-# version 3.5
+# version 3.51
 #
 # by Jonathan E. Brickman
 #
@@ -271,12 +271,14 @@ Write-Output ""
 Write-Output $strOut
 Write-Output ""
 
+Start-Sleep 3
+
 # The 3-Clause BSD License
 
 # SPDX short identifier: BSD-3-Clause
 
 # Note: This license has also been called 
-# the AYA>A>߿sAǁ.߿oNew BSD LicenseAYA>A>߿sAǁ,A? or AYA>A>߿sAǁ.߿oModified BSD LicenseAYA>A>߿sAǁ,A?. 
+# the AYA>A>??sA??.??oNew BSD LicenseAYA>A>??sA??,A? or AYA>A>??sA??.??oModified BSD LicenseAYA>A>??sA??,A?. 
 # See also the 2-clause BSD License.
 
 # Copyright 2017 Jonathan E. Brickman
@@ -300,7 +302,7 @@ Write-Output ""
 # specific prior written permission.
 
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
-# CONTRIBUTORS AYA>A>߿sAǁ.߿oAS ISAYA>A>߿sAǁ,A? AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+# CONTRIBUTORS AYA>A>??sA??.??oAS ISAYA>A>??sA??,A? AND ANY EXPRESS OR IMPLIED WARRANTIES, 
 # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
 # OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
 # ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER 
@@ -313,3 +315,4 @@ Write-Output ""
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT 
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 # POSSIBILITY OF SUCH DAMAGE.
+
