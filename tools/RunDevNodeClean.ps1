@@ -62,3 +62,4 @@ cd $StartupDir
 Remove-Item -Path $TempPath -Force -Recurse -ErrorAction SilentlyContinue
 
 "Done!"
+

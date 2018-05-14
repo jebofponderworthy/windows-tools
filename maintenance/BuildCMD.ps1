@@ -1,6 +1,7 @@
 ###########################################################################################################
 #
 # Run-script autobuilder 
+# v2.1
 #
 ##############################
 #
@@ -29,23 +30,31 @@
 # @del TweakNTFS.ps1
 
 # UTF-8 output, no BOM; necessary for .CMD batch.
+# Don't ask me why only ASCII registers as UTF-8 or I might scream.  Softly and miserably though.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'ASCII'
 
-$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/b14e595eae970db5a5f4b21ad4e26b46665bbeb9/"
+$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/b644ee4a0bb136e05ea38a5be6e7e37fbd061d7f/"
 
 $RUNALLps1List = @(
 	"RunDevNodeClean.ps1",
-    "TweakNTFS.ps1",
-    "OWTAS.ps1",
-    "TOSC.ps1",
-    "OVSS.ps1",
-    "CATE.ps1"
-    )
+	"TweakNTFS.ps1",
+	"OWTAS.ps1",
+	"TOSC.ps1",
+	"OVSS.ps1",
+	"CATE.ps1"
+	)
 
 ForEach ($cmd in @('RUNALL.CMD', 'DOWNLOAD.CMD', 'RUNMOST.CMD')) {
-	Remove-Item ".\$cmd" -Force > $null
-	New-Item -Name $cmd -ItemType File -Force > $null
+	Remove-Item "..\MULTITOOLS\$cmd" -Force -ErrorAction SilentlyContinue > $null
+	New-Item -Name "..\MULTITOOLS\$cmd" -ItemType File -Force > $null
 	}
+	
+echo '@echo off' > ..\MULTITOOLS\RUNALL.CMD
+echo '' >> ..\MULTITOOLS\RUNALL.CMD
+echo '@echo off' > ..\MULTITOOLS\DOWNLOAD.CMD
+echo '' >> ..\MULTITOOLS\DOWNLOAD.CMD
+echo '@echo off' > ..\MULTITOOLS\RUNMOST.CMD
+echo '' >> ..\MULTITOOLS\RUNMOST.CMD
 
 $WebClientObj = (New-Object System.Net.WebClient)
 $WebClientObj.Encoding = [System.Text.Encoding]::UTF8
@@ -54,18 +63,18 @@ ForEach ($ps1 in $RUNALLps1List) {
 
 	echo "Processing $ps1 ..."
 	
-	$DownloadURL = "$githubURL$ps1"
+	$DownloadURL = "$githubURL/tools/$ps1"
 
-	$WebClientObj.DownloadString("$githubURL$ps1") > $ps1
+	$WebClientObj.DownloadString($DownloadURL) > "..\tools\$ps1"
 	
 	# First get hash for the ps1 in study
-	$ps1Hash = (certutil -hashfile $ps1 SHA256)[1] -replace '\s',''
+	$ps1Hash = (certutil -hashfile "..\tools\$ps1" SHA256)[1] -replace '\s',''
 	
 	# First operative line in RUNALL.CMD, RUNMOST, and DOWNLOAD.CMD for this ps1 file
 	$line1 = '@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^' 
 	# Second operative line.  Substitutions necessary, which means double quotes.  Singles within doubles are marked single, double within doubles marked double.
 	$line2 = (	'"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString(''' +
-				$githubURL + $ps1 + ''') > ' + $ps1 + '"' 	) 
+				$DownloadURL + ''') > ' + $ps1 + '"' 	) 
 				
 	# Third.
 	$line3 = '@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^'
@@ -77,30 +86,43 @@ ForEach ($ps1 in $RUNALLps1List) {
 	# Fifth.
 	$line5 = "@del $ps1"
 
-	
-	echo $line1 >> RUNALL.CMD
-	echo $line2 >> RUNALL.CMD
-	echo "" >> RUNALL.CMD
-	echo $line3 >> RUNALL.CMD
-	echo $line4 >> RUNALL.CMD
-	echo "" >> RUNALL.CMD
-	echo $line5 >> RUNALL.CMD
-	echo "" >> RUNALL.CMD
+	echo 'echo:' >> ..\MULTITOOLS\RUNALL.CMD
+	echo "echo Downloading, verifying, and running $ps1 ..." >> ..\MULTITOOLS\RUNALL.CMD
+	echo 'echo ---' >> ..\MULTITOOLS\RUNALL.CMD
+	echo 'echo:' >> ..\MULTITOOLS\RUNALL.CMD
+	echo $line1 >> ..\MULTITOOLS\RUNALL.CMD
+	echo $line2 >> ..\MULTITOOLS\RUNALL.CMD
+	echo "" >> ..\MULTITOOLS\RUNALL.CMD
+	echo $line3 >> ..\MULTITOOLS\RUNALL.CMD
+	echo $line4 >> ..\MULTITOOLS\RUNALL.CMD
+	echo "" >> ..\MULTITOOLS\RUNALL.CMD
+	echo $line5 >> ..\MULTITOOLS\RUNALL.CMD
+	echo "" >> ..\MULTITOOLS\RUNALL.CMD
 
-	echo $line1 >> DOWNLOAD.CMD
-	echo $line2 >> DOWNLOAD.CMD
-	echo "" >> DOWNLOAD.CMD
+	echo 'echo:' >> ..\MULTITOOLS\DOWNLOAD.CMD
+	echo "echo Downloading $ps1 ..." >> ..\MULTITOOLS\DOWNLOAD.CMD
+	echo 'echo ---' >> ..\MULTITOOLS\DOWNLOAD.CMD
+	echo 'echo:' >> ..\MULTITOOLS\DOWNLOAD.CMD
+	echo $line1 >> ..\MULTITOOLS\DOWNLOAD.CMD
+	echo $line2 >> ..\MULTITOOLS\DOWNLOAD.CMD
+	echo "" >> ..\MULTITOOLS\DOWNLOAD.CMD
 	
 	if ($ps1 -ne 'TOSC.ps1') {
-		echo $line1 >> RUNMOST.CMD
-		echo $line2 >> RUNMOST.CMD
-		echo "" >> RUNMOST.CMD
-		echo $line3 >> RUNMOST.CMD
-		echo $line4 >> RUNMOST.CMD
-		echo "" >> RUNMOST.CMD
-		echo $line5 >> RUNMOST.CMD
-		echo "" >> RUNMOST.CMD
+		echo 'echo:' >> ..\MULTITOOLS\RUNMOST.CMD
+		echo "echo Downloading, verifying, and running $ps1 ..." >> ..\MULTITOOLS\RUNMOST.CMD
+		echo 'echo ---' >> ..\MULTITOOLS\RUNMOST.CMD
+		echo 'echo:' >> ..\MULTITOOLS\RUNMOST.CMD
+		echo $line1 >> ..\MULTITOOLS\RUNMOST.CMD
+		echo $line2 >> ..\MULTITOOLS\RUNMOST.CMD
+		echo "" >> ..\MULTITOOLS\RUNMOST.CMD
+		echo $line3 >> ..\MULTITOOLS\RUNMOST.CMD
+		echo $line4 >> ..\MULTITOOLS\RUNMOST.CMD
+		echo "" >> ..\MULTITOOLS\RUNMOST.CMD
+		echo $line5 >> ..\MULTITOOLS\RUNMOST.CMD
+		echo "" >> ..\MULTITOOLS\RUNMOST.CMD
 		}
+		
+	Remove-Item $ps1 -ErrorAction SilentlyContinue > $null
 		
     }
 
