@@ -1,39 +1,38 @@
 ###########################################################################################################
 #
 # Run-script autobuilder 
-# v2.1
+# v2.2
 #
 ##############################
 #
 # This script requires PowerShell 5.1 or higher.  
-# Its result is a CMD, which needs to call PowerShell 3.0 or higher.
+# Its result is CMD files, which require PowerShell 3.0 or higher.
 #
 # Github stores its files in treelevels, per history.  For instance this:
 # 
-# https://github.com/jebofponderworthy/ponderworthy-tools/tree/c4191d3d005d09dfe07e3139bc03a6dc8c047973
+# $githubURL = "https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/3c2c39050bfc55d307705dd1ed9863712bcc2dcc/"
 #
-# brings up the whole repository, all files, as they existed at a certain time, April 6, 2018.  Such
-# a URL can be had from any file page in the repository.
+# brings up the whole repository, all files, as they existed at a certain time, May 14, 2018.  Such
+# a URL can be had from any file page in the repository.  To get such a URL:
 #
-# As a result, we use much of that URL to pull down all .ps1 files for the building, 
-# if the April 6 version of the whole is what we want to use.  Then we build RUNALL.CMD
-# and RUNMOST.CMD, including building hashes for them.
+# 1. Open a file that has been updated on a day whose snapshot you want to see, by clicking its link.
+# 2. Click on History.
+# 3. In the rightmost column on the History page, there are links marked "<>" for each snapshot.
+#    If you hover over one of these, it will say "Browse the repository in this point in the history."
+#    Click the appropriate one.
+# 4. Github sends you to browse the root of the snapshot.  Browse to and open the file again, within
+#    the snapshot.
+# 5. Right-click the "Raw" button and copy to the clipboard.  That is the working snapshot URL for
+#    that file.  Take off the filename, and you get the operative URL for this script.
 #
-# This file builds sets like this:
-#
-# @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-# "(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/4a4e844b1aed1bcadc904c6ecd5a38fa25f6d667/TweakNTFS.ps1') > TweakNTFS.ps1"
-#
-# @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-# "$certrpt = (certutil -hashfile TweakNTFS.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq 'ae61337d69ebc8ed4666962c4d65574efb47df794b667a99c8d76bb7474deaa0') { iex .\TweakNTFS.ps1 } Else { 'Hash fail on TweakNTFS!' }"
+# This file builds RUNALL.CMD, DOWNLOAD.CMD, and RUNMOST.CMD.
 
-# @del TweakNTFS.ps1
 
 # UTF-8 output, no BOM; necessary for .CMD batch.
 # Don't ask me why only ASCII registers as UTF-8 or I might scream.  Softly and miserably though.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'ASCII'
 
-$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/b644ee4a0bb136e05ea38a5be6e7e37fbd061d7f/"
+$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/3c2c39050bfc55d307705dd1ed9863712bcc2dcc/"
 
 $RUNALLps1List = @(
 	"RunDevNodeClean.ps1",
