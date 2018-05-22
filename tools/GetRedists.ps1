@@ -12,9 +12,9 @@ else {
     ""
 }
 
-Install-Module -Name NuGet -Force
+Install-Module -Name NuGet -SkipPublisherCheck -Force
 Import-Module -Name NuGet
-Install-Module -Name VcRedist -Force
+Install-Module -Name VcRedist -SkipPublisherCheck -Force
 Import-Module -Name VcRedist
 New-Item C:\VcRedist -ItemType Directory
 Get-VcList | Get-VcRedist -Path C:\VcRedist
