@@ -1,4 +1,17 @@
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
+# Self-elevate if not already elevated.
+
+if (([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+    {    
+    "Running elevated; good."
+    ""
+    }
+else {
+    "Not running as elevated.  Starting elevated shell." 
+    Start-Process powershell -WorkingDirectory $PSScriptRoot -Verb runAs -ArgumentList "-noprofile -noexit -file $PSCommandPath" 
+    return "Done. This one will now exit."
+    ""
+}
+
 Install-Module -Name NuGet -Force
 Import-Module -Name NuGet
 Install-Module -Name VcRedist -Force
