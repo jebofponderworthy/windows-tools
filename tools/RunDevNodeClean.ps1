@@ -13,14 +13,13 @@ $TempFolderName = -join ((65..90) + (97..122) | Get-Random -Count 10 | % {[char]
 $envTEMP = [Environment]::GetEnvironmentVariable("TEMP")
 $TempPath = "$envTEMP\$TempFolderName"
 mkdir $TempPath > $null
-chdir $TempPath
 
 # Then download the zip file.
 
 "Downloading the binary from Microsoft..."
 
 $WebClientObj = (New-Object System.Net.WebClient)
-$WebClientObj.DownloadFile("https://download.microsoft.com/download/B/C/6/BC670519-7EA1-44BE-8B5C-6FF83A7FF96C/devnodeclean.zip","devnodeclean.zip") > $null
+$WebClientObj.DownloadFile("https://download.microsoft.com/download/B/C/6/BC670519-7EA1-44BE-8B5C-6FF83A7FF96C/devnodeclean.zip","$TempPath\devnodeclean.zip") > $null
 
 # Now unpack the zip file.
 
@@ -33,7 +32,7 @@ function Unzip {
     [System.IO.Compression.ZipFile]::ExtractToDirectory($zipfile, $outpath) > $null
 	}
 
-Unzip "devnodeclean.zip" "$TempPath" 
+Unzip "$TempPath\devnodeclean.zip" "$TempPath" 
 
 # Now get the bit-width of the operating system, and
 # run the appropriate binary.
@@ -42,14 +41,12 @@ if ([System.IntPtr]::Size -eq 4) {
     # 32-bit OS
 	"Running 32-bit binary..."
 	""
-	cd x86
-	.\DevNodeClean.exe
+	iex "$TempPath\x86\DevNodeClean.exe"
 	} else {
 	# 64-bit OS
 	"Running 64-bit binary..."
 	""
-	cd x64
-	.\DevNodeClean.exe
+	iex "$TempPath\x64\DevNodeClean.exe"
 	}
 	
 ""
@@ -58,7 +55,6 @@ if ([System.IntPtr]::Size -eq 4) {
 
 "Cleaning up..."
 
-cd $StartupDir
 Remove-Item -Path $TempPath -Force -Recurse -ErrorAction SilentlyContinue
 
 "Done!"
