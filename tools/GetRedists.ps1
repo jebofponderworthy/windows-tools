@@ -12,6 +12,8 @@ else {
     ""
 }
 
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force
+Install-PackageProvider -Name NuGet -Force
 Install-Module -Name NuGet -SkipPublisherCheck -Force
 Import-Module -Name NuGet
 Install-Module -Name VcRedist -SkipPublisherCheck -Force
