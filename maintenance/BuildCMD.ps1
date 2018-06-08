@@ -32,7 +32,7 @@
 # Don't ask me why only ASCII registers as UTF-8 or I might scream.  Softly and miserably though.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'ASCII'
 
-$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/2d0c66f40ee9d6c16e8e1ca7a72833074db85a61/"
+$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/windows-tools/5fd6bbef2893a91dfb5db9f96a3fbb6ea317267a"
 
 $RUNALLps1List = @(
 	"RunDevNodeClean.ps1",

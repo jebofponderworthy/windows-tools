@@ -40,3 +40,4 @@ Get-WMIObject -Query "Select * FROM Win32_LogicalDisk WHERE DriveType=3" | ForEa
 
 
 
+
