@@ -6,7 +6,7 @@ PowerShell 3.0 and later are supported, on Windows 7/2008R2 and later.  Please n
 
 ## RUNALL.CMD:  download, verify by hash, and run all of the tools
 
-[RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/master/MULTITOOLS/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run RunDevNodeClean first, then OWTAS, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+[RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/MULTITOOLS/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run RunDevNodeClean first, then OWTAS, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
 Do not use this if you want Offline Files caching to be active, RUNMOST does everything except the Offline Files cache disabling.
 
