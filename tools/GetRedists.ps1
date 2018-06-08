@@ -21,3 +21,4 @@ Import-Module -Name VcRedist
 New-Item C:\VcRedist -ItemType Directory
 Get-VcList | Get-VcRedist -Path C:\VcRedist
 Get-VcList | Install-VcRedist -Path C:\VcRedist
+Remove-Item C:\VcRedist -Recurse -Force
