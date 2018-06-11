@@ -34,7 +34,7 @@ ShowProgress("Preparing Powershell environment:","Installing VcRedist...")
 Install-Module -Name VcRedist -SkipPublisherCheck -Force
 ShowProgress("Preparing Powershell environment:","Importing VcRedist...")
 Import-Module -Name VcRedist
-ShowProgress("Preparing filesystem","")
+ShowProgress("Preparing repository folder","")
 New-Item C:\VcRedist -ItemType Directory | Out-Null
 ShowProgress("Retrieving all redistributables...","")
 Get-VcList | Get-VcRedist -Path C:\VcRedist | Out-Null
@@ -43,4 +43,5 @@ Get-VcList | Install-VcRedist -Path C:\VcRedist | Out-Null
 ShowProgress("Removing C:\VcRedist ...","")
 Remove-Item C:\VcRedist -Recurse -Force | Out-Null
 ShowProgress("Done!","")
+
 
