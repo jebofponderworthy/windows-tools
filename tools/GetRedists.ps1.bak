@@ -9,7 +9,7 @@
 
 # Items needing work:
 # - Command-line option for location of repo folder
-# - 
+# - Error handling; if errors occur at any stage, terminate and print.
 
 # Self-elevate if not already elevated.
 
