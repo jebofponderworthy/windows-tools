@@ -35,7 +35,7 @@ Install-Module -Name VcRedist -SkipPublisherCheck -Force
 ShowCATEProgress("Preparing Powershell environment:","Importing VcRedist...")
 Import-Module -Name VcRedist
 ShowCATEProgress("Preparing filesystem","")
-New-Item C:\VcRedist -ItemType Directory | Out-Null
+New-Item C:\VcRedist -ItemType Directory
 ShowCATEProgress("Retrieving all redistributables...","")
 Get-VcList | Get-VcRedist -Path C:\VcRedist | Out-Null
 ShowCATEProgress("Installing all redistributables...","")
