@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 3.51
+.VERSION 3.53
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -38,10 +38,18 @@
 
 
 
+
+
+
+
+
+
+
+
 <# 
 
 .DESCRIPTION 
-Clean All Temp Etc
+Clean All Temp Etc - cleans temporary files and folders from all user profiles, clears logs, and more
 
 #> 
 
