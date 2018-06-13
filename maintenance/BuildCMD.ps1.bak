@@ -32,7 +32,7 @@
 # Don't ask me why only ASCII registers as UTF-8 or I might scream.  Softly and miserably though.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'ASCII'
 
-$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/windows-tools/5fd6bbef2893a91dfb5db9f96a3fbb6ea317267a"
+$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/windows-tools/9904e67297606bc4f815d9655ea200e03e357e4f"
 
 $RUNALLps1List = @(
 	"RunDevNodeClean.ps1",
@@ -44,16 +44,16 @@ $RUNALLps1List = @(
 	)
 
 ForEach ($cmd in @('RUNALL.CMD', 'DOWNLOAD.CMD', 'RUNMOST.CMD')) {
-	Remove-Item "..\MULTITOOLS\$cmd" -Force -ErrorAction SilentlyContinue > $null
-	New-Item -Name "..\MULTITOOLS\$cmd" -ItemType File -Force > $null
+	Remove-Item "..\RUN\$cmd" -Force -ErrorAction SilentlyContinue > $null
+	New-Item -Name "..\RUN\$cmd" -ItemType File -Force > $null
 	}
 	
-echo '@echo off' > ..\MULTITOOLS\RUNALL.CMD
-echo '' >> ..\MULTITOOLS\RUNALL.CMD
-echo '@echo off' > ..\MULTITOOLS\DOWNLOAD.CMD
-echo '' >> ..\MULTITOOLS\DOWNLOAD.CMD
-echo '@echo off' > ..\MULTITOOLS\RUNMOST.CMD
-echo '' >> ..\MULTITOOLS\RUNMOST.CMD
+echo '@echo off' > ..\RUN\RUNALL.CMD
+echo '' >> ..\RUN\RUNALL.CMD
+echo '@echo off' > ..\RUN\DOWNLOAD.CMD
+echo '' >> ..\RUN\DOWNLOAD.CMD
+echo '@echo off' > ..\RUN\RUNMOST.CMD
+echo '' >> ..\RUN\RUNMOST.CMD
 
 $WebClientObj = (New-Object System.Net.WebClient)
 $WebClientObj.Encoding = [System.Text.Encoding]::UTF8

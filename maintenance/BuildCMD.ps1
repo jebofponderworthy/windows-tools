@@ -44,16 +44,16 @@ $RUNALLps1List = @(
 	)
 
 ForEach ($cmd in @('RUNALL.CMD', 'DOWNLOAD.CMD', 'RUNMOST.CMD')) {
-	Remove-Item "..\MULTITOOLS\$cmd" -Force -ErrorAction SilentlyContinue > $null
-	New-Item -Name "..\MULTITOOLS\$cmd" -ItemType File -Force > $null
+	Remove-Item "..\RUN\$cmd" -Force -ErrorAction SilentlyContinue > $null
+	New-Item -Name "..\RUN\$cmd" -ItemType File -Force > $null
 	}
 	
-echo '@echo off' > ..\MULTITOOLS\RUNALL.CMD
-echo '' >> ..\MULTITOOLS\RUNALL.CMD
-echo '@echo off' > ..\MULTITOOLS\DOWNLOAD.CMD
-echo '' >> ..\MULTITOOLS\DOWNLOAD.CMD
-echo '@echo off' > ..\MULTITOOLS\RUNMOST.CMD
-echo '' >> ..\MULTITOOLS\RUNMOST.CMD
+echo '@echo off' > ..\RUN\RUNALL.CMD
+echo '' >> ..\RUN\RUNALL.CMD
+echo '@echo off' > ..\RUN\DOWNLOAD.CMD
+echo '' >> ..\RUN\DOWNLOAD.CMD
+echo '@echo off' > ..\RUN\RUNMOST.CMD
+echo '' >> ..\RUN\RUNMOST.CMD
 
 $WebClientObj = (New-Object System.Net.WebClient)
 $WebClientObj.Encoding = [System.Text.Encoding]::UTF8
@@ -85,40 +85,40 @@ ForEach ($ps1 in $RUNALLps1List) {
 	# Fifth.
 	$line5 = "@del $ps1"
 
-	echo 'echo:' >> ..\MULTITOOLS\RUNALL.CMD
-	echo "echo Downloading, verifying, and running $ps1 ..." >> ..\MULTITOOLS\RUNALL.CMD
-	echo 'echo ---' >> ..\MULTITOOLS\RUNALL.CMD
-	echo 'echo:' >> ..\MULTITOOLS\RUNALL.CMD
-	echo $line1 >> ..\MULTITOOLS\RUNALL.CMD
-	echo $line2 >> ..\MULTITOOLS\RUNALL.CMD
-	echo "" >> ..\MULTITOOLS\RUNALL.CMD
-	echo $line3 >> ..\MULTITOOLS\RUNALL.CMD
-	echo $line4 >> ..\MULTITOOLS\RUNALL.CMD
-	echo "" >> ..\MULTITOOLS\RUNALL.CMD
-	echo $line5 >> ..\MULTITOOLS\RUNALL.CMD
-	echo "" >> ..\MULTITOOLS\RUNALL.CMD
+	echo 'echo:' >> ..\RUN\RUNALL.CMD
+	echo "echo Downloading, verifying, and running $ps1 ..." >> ..\RUN\RUNALL.CMD
+	echo 'echo ---' >> ..\RUN\RUNALL.CMD
+	echo 'echo:' >> ..\RUN\RUNALL.CMD
+	echo $line1 >> ..\RUN\RUNALL.CMD
+	echo $line2 >> ..\RUN\RUNALL.CMD
+	echo "" >> ..\RUN\RUNALL.CMD
+	echo $line3 >> ..\RUN\RUNALL.CMD
+	echo $line4 >> ..\RUN\RUNALL.CMD
+	echo "" >> ..\RUN\RUNALL.CMD
+	echo $line5 >> ..\RUN\RUNALL.CMD
+	echo "" >> ..\RUN\RUNALL.CMD
 
-	echo 'echo:' >> ..\MULTITOOLS\DOWNLOAD.CMD
-	echo "echo Downloading $ps1 ..." >> ..\MULTITOOLS\DOWNLOAD.CMD
-	echo 'echo ---' >> ..\MULTITOOLS\DOWNLOAD.CMD
-	echo 'echo:' >> ..\MULTITOOLS\DOWNLOAD.CMD
-	echo $line1 >> ..\MULTITOOLS\DOWNLOAD.CMD
-	echo $line2 >> ..\MULTITOOLS\DOWNLOAD.CMD
-	echo "" >> ..\MULTITOOLS\DOWNLOAD.CMD
+	echo 'echo:' >> ..\RUN\DOWNLOAD.CMD
+	echo "echo Downloading $ps1 ..." >> ..\RUN\DOWNLOAD.CMD
+	echo 'echo ---' >> ..\RUN\DOWNLOAD.CMD
+	echo 'echo:' >> ..\RUN\DOWNLOAD.CMD
+	echo $line1 >> ..\RUN\DOWNLOAD.CMD
+	echo $line2 >> ..\RUN\DOWNLOAD.CMD
+	echo "" >> ..\RUN\DOWNLOAD.CMD
 	
 	if ($ps1 -ne 'TOSC.ps1') {
-		echo 'echo:' >> ..\MULTITOOLS\RUNMOST.CMD
-		echo "echo Downloading, verifying, and running $ps1 ..." >> ..\MULTITOOLS\RUNMOST.CMD
-		echo 'echo ---' >> ..\MULTITOOLS\RUNMOST.CMD
-		echo 'echo:' >> ..\MULTITOOLS\RUNMOST.CMD
-		echo $line1 >> ..\MULTITOOLS\RUNMOST.CMD
-		echo $line2 >> ..\MULTITOOLS\RUNMOST.CMD
-		echo "" >> ..\MULTITOOLS\RUNMOST.CMD
-		echo $line3 >> ..\MULTITOOLS\RUNMOST.CMD
-		echo $line4 >> ..\MULTITOOLS\RUNMOST.CMD
-		echo "" >> ..\MULTITOOLS\RUNMOST.CMD
-		echo $line5 >> ..\MULTITOOLS\RUNMOST.CMD
-		echo "" >> ..\MULTITOOLS\RUNMOST.CMD
+		echo 'echo:' >> ..\RUN\RUNMOST.CMD
+		echo "echo Downloading, verifying, and running $ps1 ..." >> ..\RUN\RUNMOST.CMD
+		echo 'echo ---' >> ..\RUN\RUNMOST.CMD
+		echo 'echo:' >> ..\RUN\RUNMOST.CMD
+		echo $line1 >> ..\RUN\RUNMOST.CMD
+		echo $line2 >> ..\RUN\RUNMOST.CMD
+		echo "" >> ..\RUN\RUNMOST.CMD
+		echo $line3 >> ..\RUN\RUNMOST.CMD
+		echo $line4 >> ..\RUN\RUNMOST.CMD
+		echo "" >> ..\RUN\RUNMOST.CMD
+		echo $line5 >> ..\RUN\RUNMOST.CMD
+		echo "" >> ..\RUN\RUNMOST.CMD
 		}
 		
 	Remove-Item $ps1 -ErrorAction SilentlyContinue > $null
