@@ -1,3 +1,49 @@
+
+<#PSScriptInfo
+
+.VERSION 1.3
+
+.GUID 5c5fd85c-d2c9-4cc4-9fa4-42f214c2ba5c
+
+.AUTHOR Jonathan E. Brickman
+
+.COMPANYNAME Ponderworthy Music
+
+.COPYRIGHT (c) 2018 Jonathan E. Brickman
+
+.TAGS 
+
+.LICENSEURI 
+
+.PROJECTURI 
+
+.ICONURI 
+
+.EXTERNALMODULEDEPENDENCIES 
+
+.REQUIREDSCRIPTS 
+
+.EXTERNALSCRIPTDEPENDENCIES 
+
+.RELEASENOTES
+
+
+.PRIVATEDATA 
+
+#> 
+
+
+
+<# 
+
+.DESCRIPTION 
+OVSS - optimizes VSS preallocation to 20% for each NTFS volume, and clears orphan shadows
+
+#> 
+
+Param()
+
+
 #################################
 #           Optimize VSS        #
 #                               #
@@ -12,7 +58,7 @@
 
 ""
 "OVSS: Optimize VSS"
-"v1.3"
+"v1.0"
 ""
 
 # Self-elevate if not already elevated.

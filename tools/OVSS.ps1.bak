@@ -12,7 +12,7 @@
 
 ""
 "OVSS: Optimize VSS"
-"v1.3"
+"v1.0"
 ""
 
 # Self-elevate if not already elevated.
