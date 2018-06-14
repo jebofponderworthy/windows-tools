@@ -10,7 +10,7 @@
 # Cleans temp files from all user profiles and
 # several other locations.  Also clears log files.
 #
-# Copyright 2017 Jonathan E. Brickman
+# Copyright 2018 Jonathan E. Brickman
 # https://notes.ponderworthy.com/ 
 # This script is licensed under the 3-Clause BSD License
 # https://opensource.org/licenses/BSD-3-Clause
