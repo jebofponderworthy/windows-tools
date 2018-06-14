@@ -6,12 +6,12 @@ $ReleaseNotes = @(
 	"Adobe Flash caches, Java deployment caches, and Microsoft CryptnetURL caches."
 	)
 
-Update-ScriptFileInfo -Path .\CATE.ps1 -Version 3.53 `
+Update-ScriptFileInfo -Path .\CATE.ps1 -Version 3.54 `
 	-Author "Jonathan E. Brickman" `
 	-Description "Clean All Temp Etc - cleans temporary files and folders from all standard user and system temp folders, clears logs, and more" `
-	-ReleaseNotes $ReleaseNotes
+	-ReleaseNotes $ReleaseNotes `
 	-CompanyName "Ponderworthy Music" `
 	-Copyright "(c) 2018 Jonathan E. Brickman" `
 	-Force
 
-Publish-Script -Path .\CATE.ps1 -NuGetApiKey ff4b1024-6264-4e77-b672-88c5ebe0c10d
+Publish-Script -Path .\CATE.ps1 -NuGetApiKey 6f05b805-b551-403f-9b05-b45fb420c69b

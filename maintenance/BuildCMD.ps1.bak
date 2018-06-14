@@ -69,7 +69,7 @@ $WebClientObj.Encoding = [System.Text.Encoding]::UTF8
 function ProcessPSScript {
 	param( [string]$ps1, [string]$CMD, [string]$usermessage, [int]$lastline )
 	
-	"Processing $ps1 ..."
+	"Processing $ps1 for $CMD ..."
 	
 	$DownloadURL = "$githubURL/tools/$ps1"
 	

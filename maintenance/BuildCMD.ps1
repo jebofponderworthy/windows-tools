@@ -99,15 +99,15 @@ function ProcessPSScript {
 	echo 'echo ---' >> ..\RUN\$CMD
 	echo 'echo:' >> ..\RUN\$CMD
 	echo $line1 >> ..\RUN\$CMD
-	If ($lastline -le 2) { return }
+	If ($lastline -lt 2) { return }
 	echo $line2 >> ..\RUN\$CMD
 	echo "" >> ..\RUN\$CMD
-	If ($lastline -le 3) { return }
+	If ($lastline -lt 3) { return }
 	echo $line3 >> ..\RUN\$CMD
-	If ($lastline -le 4) { return }
+	If ($lastline -lt 4) { return }
 	echo $line4 >> ..\RUN\$CMD
 	echo "" >> ..\RUN\$CMD
-	If ($lastline -le 5) { return }
+	If ($lastline -lt 5) { return }
 	echo $line5 >> ..\RUN\$CMD
 	echo "" >> ..\RUN\$CMD
 
