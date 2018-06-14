@@ -6,7 +6,7 @@ $ReleaseNotes = @(
 	"Adobe Flash caches, Java deployment caches, and Microsoft CryptnetURL caches."
 	)
 
-Update-ScriptFileInfo -Path .\CATE.ps1 -Version 3.54 `
+Update-ScriptFileInfo -Path .\CATE.ps1 -Version 3.53 `
 	-Author "Jonathan E. Brickman" `
 	-Description "Clean All Temp Etc - cleans temporary files and folders from all standard user and system temp folders, clears logs, and more" `
 	-ReleaseNotes $ReleaseNotes
