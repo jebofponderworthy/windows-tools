@@ -1,8 +1,6 @@
 #####################################
 # TweakNTFS: Tweak All NTFS Volumes #
-#  for Performance And Reliability  #
-#                                   #
-# v2.1                              #
+#   for Performance And Reliability #
 #####################################
 
 

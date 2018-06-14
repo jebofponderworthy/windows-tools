@@ -1,7 +1,7 @@
 ###########################################################################################################
 #
 # Run-script autobuilder 
-# v2.2
+# v3.0
 #
 ##############################
 #
@@ -43,6 +43,14 @@ $RUNALLps1List = @(
 	"CATE.ps1"
 	)
 
+$RUNMOSTps1List = @(
+	"RunDevNodeClean.ps1",
+	"TweakNTFS.ps1",
+	"OWTAS.ps1",
+	"OVSS.ps1",
+	"CATE.ps1"
+	)
+
 ForEach ($cmd in @('RUNALL.CMD', 'DOWNLOAD.CMD', 'RUNMOST.CMD')) {
 	Remove-Item "..\RUN\$cmd" -Force -ErrorAction SilentlyContinue > $null
 	New-Item -Name "..\RUN\$cmd" -ItemType File -Force > $null
@@ -57,9 +65,10 @@ echo '' >> ..\RUN\RUNMOST.CMD
 
 $WebClientObj = (New-Object System.Net.WebClient)
 $WebClientObj.Encoding = [System.Text.Encoding]::UTF8
-	
-ForEach ($ps1 in $RUNALLps1List) {
 
+function ProcessPSScript {
+	param( [string]$ps1, [string]$CMD, [string]$usermessage, [int]$lastline )
+	
 	echo "Processing $ps1 ..."
 	
 	$DownloadURL = "$githubURL/tools/$ps1"
@@ -85,44 +94,40 @@ ForEach ($ps1 in $RUNALLps1List) {
 	# Fifth.
 	$line5 = "@del $ps1"
 
-	echo 'echo:' >> ..\RUN\RUNALL.CMD
-	echo "echo Downloading, verifying, and running $ps1 ..." >> ..\RUN\RUNALL.CMD
-	echo 'echo ---' >> ..\RUN\RUNALL.CMD
-	echo 'echo:' >> ..\RUN\RUNALL.CMD
-	echo $line1 >> ..\RUN\RUNALL.CMD
-	echo $line2 >> ..\RUN\RUNALL.CMD
-	echo "" >> ..\RUN\RUNALL.CMD
-	echo $line3 >> ..\RUN\RUNALL.CMD
-	echo $line4 >> ..\RUN\RUNALL.CMD
-	echo "" >> ..\RUN\RUNALL.CMD
-	echo $line5 >> ..\RUN\RUNALL.CMD
-	echo "" >> ..\RUN\RUNALL.CMD
+	echo 'echo:' >> ..\RUN\$CMD
+	echo $usermessage >> ..\RUN\$CMD
+	echo 'echo ---' >> ..\RUN\$CMD
+	echo 'echo:' >> ..\RUN\$CMD
+	echo $line1 >> ..\RUN\$CMD
+	If ($lastline -le 2) { return }
+	echo $line2 >> ..\RUN\$CMD
+	echo "" >> ..\RUN\$CMD
+	If ($lastline -le 3) { return }
+	echo $line3 >> ..\RUN\$CMD
+	If ($lastline -le 4) { return }
+	echo $line4 >> ..\RUN\$CMD
+	echo "" >> ..\RUN\$CMD
+	If ($lastline -le 5) { return }
+	echo $line5 >> ..\RUN\$CMD
+	echo "" >> ..\RUN\$CMD
 
-	echo 'echo:' >> ..\RUN\DOWNLOAD.CMD
-	echo "echo Downloading $ps1 ..." >> ..\RUN\DOWNLOAD.CMD
-	echo 'echo ---' >> ..\RUN\DOWNLOAD.CMD
-	echo 'echo:' >> ..\RUN\DOWNLOAD.CMD
-	echo $line1 >> ..\RUN\DOWNLOAD.CMD
-	echo $line2 >> ..\RUN\DOWNLOAD.CMD
-	echo "" >> ..\RUN\DOWNLOAD.CMD
-	
-	if ($ps1 -ne 'TOSC.ps1') {
-		echo 'echo:' >> ..\RUN\RUNMOST.CMD
-		echo "echo Downloading, verifying, and running $ps1 ..." >> ..\RUN\RUNMOST.CMD
-		echo 'echo ---' >> ..\RUN\RUNMOST.CMD
-		echo 'echo:' >> ..\RUN\RUNMOST.CMD
-		echo $line1 >> ..\RUN\RUNMOST.CMD
-		echo $line2 >> ..\RUN\RUNMOST.CMD
-		echo "" >> ..\RUN\RUNMOST.CMD
-		echo $line3 >> ..\RUN\RUNMOST.CMD
-		echo $line4 >> ..\RUN\RUNMOST.CMD
-		echo "" >> ..\RUN\RUNMOST.CMD
-		echo $line5 >> ..\RUN\RUNMOST.CMD
-		echo "" >> ..\RUN\RUNMOST.CMD
-		}
-		
 	Remove-Item $ps1 -ErrorAction SilentlyContinue > $null
-		
     }
+	
+ForEach ($ps1 in $RUNALLps1List) {
+	ProcessPSScript $ps1, "RUNALL.CMD", "echo Downloading, verifying, and running $ps1 ...", 5
+	}
+	
+ForEach ($ps1 in $RUNMOSTps1List) {
+	ProcessPSScript $ps1, "RUNMOST.CMD", "echo Downloading, verifying, and running $ps1 ...", 5
+	}
+	
+ForEach ($ps1 in $DDOWNLOADps1List) {
+	ProcessPSScript $ps1, "DOWNLOAD.CMD", "echo Downloading, verifying, and running $ps1 ...", 2
+	}
+
+ProcessPSScript "GetRedists.ps1", "echo Processing...", 5
+
+
 
 

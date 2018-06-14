@@ -1,7 +1,7 @@
 #################################
 #           Optimize VSS        #
 #                               #
-# v1.3 by Jonathan E. Brickman  #
+# v1.0 by Jonathan E. Brickman  #
 #                               #
 # Removes all orphan shadows,   #
 # and then preallocates 20%     #
@@ -12,7 +12,7 @@
 
 ""
 "OVSS: Optimize VSS"
-"v1.3"
+"v1.0"
 ""
 
 # Self-elevate if not already elevated.
