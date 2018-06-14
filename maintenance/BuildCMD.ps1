@@ -69,10 +69,10 @@ $WebClientObj.Encoding = [System.Text.Encoding]::UTF8
 function ProcessPSScript {
 	param( [string]$ps1, [string]$CMD, [string]$usermessage, [int]$lastline )
 	
-	echo "Processing $ps1 ..."
+	"Processing $ps1 ..."
 	
 	$DownloadURL = "$githubURL/tools/$ps1"
-
+	
 	$WebClientObj.DownloadString($DownloadURL) > "..\tools\$ps1"
 	
 	# First get hash for the ps1 in study
@@ -115,18 +115,18 @@ function ProcessPSScript {
     }
 	
 ForEach ($ps1 in $RUNALLps1List) {
-	ProcessPSScript $ps1, "RUNALL.CMD", "echo Downloading, verifying, and running $ps1 ...", 5
+	ProcessPSScript $ps1 "RUNALL.CMD" "echo Downloading, verifying, and running $ps1 ..." 5
 	}
 	
 ForEach ($ps1 in $RUNMOSTps1List) {
-	ProcessPSScript $ps1, "RUNMOST.CMD", "echo Downloading, verifying, and running $ps1 ...", 5
+	ProcessPSScript $ps1 "RUNMOST.CMD" "echo Downloading, verifying, and running $ps1 ..." 5
 	}
 	
 ForEach ($ps1 in $DDOWNLOADps1List) {
-	ProcessPSScript $ps1, "DOWNLOAD.CMD", "echo Downloading, verifying, and running $ps1 ...", 2
+	ProcessPSScript $ps1 "DOWNLOAD.CMD" "echo Downloading, verifying, and running $ps1 ..." 2
 	}
 
-ProcessPSScript "GetRedists.ps1", "echo Processing...", 5
+ProcessPSScript "GetRedists.ps1" "GETREDISTS.CMD" "echo Processing..." 5
 
 
 
