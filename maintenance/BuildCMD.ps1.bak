@@ -73,8 +73,6 @@ function ProcessPSScript {
 	
 	$DownloadURL = "$githubURL/tools/$ps1"
 	
-	"Trying to reach $DownloadURL ..."
-
 	$WebClientObj.DownloadString($DownloadURL) > "..\tools\$ps1"
 	
 	# First get hash for the ps1 in study
