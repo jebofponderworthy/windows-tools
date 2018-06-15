@@ -90,7 +90,7 @@ $Desc = "TOSC - Turn Off Share Caching"
 $ReleaseNotes = @(
 	"TOSC",
 	"By default in Windows since XP/2003, if a folder is shared to the network via SMB,",
-	"so-called "caching" is turned on. This actually means that the Offline Files service",
+	'so-called "caching" is turned on. This actually means that the Offline Files service',
 	"on other machines accessing the share, are allowed to retrieve and store copies of",
 	"files and folders on the machine acting as server. Turning this off for all shares",
 	"gives a speed bump for the server machine, and also improves reliability overall,",

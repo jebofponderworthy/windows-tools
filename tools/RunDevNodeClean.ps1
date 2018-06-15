@@ -1,3 +1,50 @@
+
+<#PSScriptInfo
+
+.VERSION 1.11
+
+.GUID 2f1b0fa1-c184-47e6-b65c-8ed5c92db371
+
+.AUTHOR Jonathan E. Brickman
+
+.COMPANYNAME Ponderworthy Music
+
+.COPYRIGHT (c) 2018 Jonathan E. Brickman
+
+.TAGS 
+
+.LICENSEURI 
+
+.PROJECTURI 
+
+.ICONURI 
+
+.EXTERNALMODULEDEPENDENCIES 
+
+.REQUIREDSCRIPTS 
+
+.EXTERNALSCRIPTDEPENDENCIES 
+
+.RELEASENOTES
+RunDevNodeClean
+Downloads the DevNodeClean package, chooses the binary appropriate to
+the bit-width of the current OS, and runs it.  This cleans unused
+device nodes in the registry, improving performance.
+
+.PRIVATEDATA 
+
+#>
+
+<# 
+
+.DESCRIPTION 
+ RunDevNodeClean - cleans unused device nodes in registry, improves performance 
+
+#> 
+
+Param()
+
+
 ###################################
 #  Download and Run DevNodeClean  #
 ###################################

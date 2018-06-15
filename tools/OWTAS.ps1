@@ -40,12 +40,14 @@ to work well on all.
 
 .PRIVATEDATA 
 
-#>
+#> 
+
+
 
 <# 
 
 .DESCRIPTION 
- OWTAS - enhances performance by adding threads. Optimizes critical and delayed worker threads and service work items. 
+OWTAS - enhances performance by adding threads. Optimizes critical and delayed worker threads and service work items.
 
 #> 
 
