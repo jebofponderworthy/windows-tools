@@ -4,7 +4,7 @@ This is a toolset for improvement of performance of Windows desktop and server o
 
 PowerShell 3.0 and later are supported, on Windows 7/2008R2 and later; the exception is GetRedist, which requires 5.1.  Please note that 7 and 2008R2 ship with PowerShell 2.0 by default; installing the [WMF](https://www.microsoft.com/en-us/download/details.aspx?id=54616) will update it to 5.1.  
 
-## RUNALL.CMD:  download, verify by hash, and run all of the tools
+## RUNALL.CMD:  download, verify by hash, and run almost all of the tools
 
 [RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run RunDevNodeClean first, then OWTAS, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
@@ -19,6 +19,10 @@ For compatibility, hashing is done using the command-line CERTUTIL tool (capturi
 *Do* use this if you want Offline Files caching to be active.  RUNMOST.CMD does not run TOSC.ps1.
 
 For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
+
+## GETREDISTS.CMD:  Get and update Microsoft VC++ redistributables using GetRedists.ps1
+
+Lots of software uses Microsoft VC++ redistributables.  They get updated fairly often and almost never automatically.  To bring all of yours up to date and install all the newers which Microsoft supports, run [GETREDISTS.CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/RUN.CMD) to call GetRedists.ps1.  Requires PowerShell 5.1.
 
 ## RunDevNodeClean
 
@@ -61,6 +65,4 @@ By default in Windows since XP/2003, if a folder is shared to the network via SM
 
 By default, on Windows client OS systems, VSS is active on all VSS-aware volumes, but it is not optimized, which in this case means, there is an "association" or preallocation, of zero space.  On Windows server OS systems, VSS is likewise active, but there is no association/preallocation, at all, on any VSS-aware volumes.  Many different (e.g., [StorageCraft](https://www.storagecraft.com/support/kb/article/289), [Carbonite](https://support.carbonite.com/articles/Server-Windows-How-to-Manage-VSS-Shadowstorage-Space), others) Windows tools make the same recommendation concerning this, stating that every volume to be backed up should have 20% of its space "associated" or preallocated for VSS.  [OVSS](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/OVSS.ps1) does this, and also, removes all orphan shadows.  Orphan shadows are VSS snapshots existing uselessly because of old aborted backups, adding OS volume-related overhead.  The manual steps of this script, with one additional optional step very useful in some server configurations, [are documented here](https://notes.ponderworthy.com/thorough-cleanup-of-vss).
 
-## GetRedists:  Get Microsoft VC++ Redistributables
 
-Lots of software uses these things, they get updated fairly often and almost never automatically, and new versions come.  To bring all of yours up to date, use GetRedists.ps1, or just run GETREDISTS.CMD.  Requires PowerShell 5.1.
