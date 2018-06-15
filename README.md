@@ -2,7 +2,7 @@
 
 This is a toolset for improvement of performance of Windows desktop and server operating systems.  Much gratitude goes to Ponderworthy folks and friends for much input, a good bit of which can be read at [notes.ponderworthy.com](https://notes.ponderworthy.com).
 
-PowerShell 3.0 and later are supported, on Windows 7/2008R2 and later; the exception is GetRedist, which requires 5.1.  Please note that 7 and 2008R2 ship with PowerShell 2.0 by default; installing the [WMF](https://www.microsoft.com/en-us/download/details.aspx?id=54616) will update it to 5.1.  
+PowerShell 3.0 and later are supported, on Windows 7/2008R2 and later; the exception is GetRedists, which requires 5.1.  Please note that 7 and 2008R2 ship with PowerShell 2.0 by default; installing the [WMF](https://www.microsoft.com/en-us/download/details.aspx?id=54616) will update it to 5.1.  
 
 ## RUNALL.CMD:  download, verify by hash, and run almost all of the tools
 
@@ -22,7 +22,7 @@ For compatibility, hashing is done using the command-line CERTUTIL tool (capturi
 
 ## GETREDISTS.CMD:  Get and update Microsoft VC++ redistributables using GetRedists.ps1
 
-Lots of software uses Microsoft VC++ redistributables.  They get updated fairly often and almost never automatically.  To bring all of yours up to date and install all the newers which Microsoft supports, run [GETREDISTS.CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/RUN.CMD) to call GetRedists.ps1.  Requires PowerShell 5.1.
+Lots of software uses Microsoft VC++ redistributables.  They get updated fairly often and almost never automatically.  To bring all of yours up to date and install all the newers which Microsoft supports, run [GETREDISTS.CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/RUN.CMD) to call GetRedists.ps1.  Requires PowerShell 5.1, and automatically pulls in the VcRedist module.
 
 ## RunDevNodeClean
 
