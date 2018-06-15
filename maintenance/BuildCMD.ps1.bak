@@ -51,17 +51,12 @@ $RUNMOSTps1List = @(
 	"CATE.ps1"
 	)
 
-ForEach ($cmd in @('RUNALL.CMD', 'DOWNLOAD.CMD', 'RUNMOST.CMD')) {
+ForEach ($cmd in @('RUNALL.CMD', 'DOWNLOAD.CMD', 'RUNMOST.CMD', 'GETREDISTS.CMD')) {
 	Remove-Item "..\RUN\$cmd" -Force -ErrorAction SilentlyContinue > $null
 	New-Item -Name "..\RUN\$cmd" -ItemType File -Force > $null
+	echo '@echo off' > ..\RUN\$cmd
+	echo '' >> ..\RUN\$cmd
 	}
-	
-echo '@echo off' > ..\RUN\RUNALL.CMD
-echo '' >> ..\RUN\RUNALL.CMD
-echo '@echo off' > ..\RUN\DOWNLOAD.CMD
-echo '' >> ..\RUN\DOWNLOAD.CMD
-echo '@echo off' > ..\RUN\RUNMOST.CMD
-echo '' >> ..\RUN\RUNMOST.CMD
 
 $WebClientObj = (New-Object System.Net.WebClient)
 $WebClientObj.Encoding = [System.Text.Encoding]::UTF8
@@ -94,20 +89,21 @@ function ProcessPSScript {
 	# Fifth.
 	$line5 = "@del $ps1"
 
+	echo '@CHDIR %TEMP%' >> ..\RUN\$CMD
 	echo 'echo:' >> ..\RUN\$CMD
 	echo $usermessage >> ..\RUN\$CMD
 	echo 'echo ---' >> ..\RUN\$CMD
 	echo 'echo:' >> ..\RUN\$CMD
 	echo $line1 >> ..\RUN\$CMD
-	If ($lastline -le 2) { return }
+	If ($lastline -lt 2) { return }
 	echo $line2 >> ..\RUN\$CMD
 	echo "" >> ..\RUN\$CMD
-	If ($lastline -le 3) { return }
+	If ($lastline -lt 3) { return }
 	echo $line3 >> ..\RUN\$CMD
-	If ($lastline -le 4) { return }
+	If ($lastline -lt 4) { return }
 	echo $line4 >> ..\RUN\$CMD
 	echo "" >> ..\RUN\$CMD
-	If ($lastline -le 5) { return }
+	If ($lastline -lt 5) { return }
 	echo $line5 >> ..\RUN\$CMD
 	echo "" >> ..\RUN\$CMD
 
@@ -123,7 +119,7 @@ ForEach ($ps1 in $RUNMOSTps1List) {
 	}
 	
 ForEach ($ps1 in $DDOWNLOADps1List) {
-	ProcessPSScript $ps1 "DOWNLOAD.CMD" "echo Downloading, verifying, and running $ps1 ..." 2
+	ProcessPSScript $ps1 "DOWNLOAD.CMD" "echo Downloading $ps1 ..." 2
 	}
 
 ProcessPSScript "GetRedists.ps1" "GETREDISTS.CMD" "echo Processing..." 5

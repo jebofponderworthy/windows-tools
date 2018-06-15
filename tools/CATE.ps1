@@ -1,16 +1,84 @@
+
+<#PSScriptInfo
+
+.VERSION 3.54
+
+.GUID f842f577-3f42-4cb0-91e7-97b499260a21
+
+.AUTHOR Jonathan E. Brickman
+
+.COMPANYNAME Ponderworthy Music
+
+.COPYRIGHT (c) 2018 Jonathan E. Brickman
+
+.TAGS 
+
+.LICENSEURI 
+
+.PROJECTURI 
+
+.ICONURI 
+
+.EXTERNALMODULEDEPENDENCIES 
+
+.REQUIREDSCRIPTS 
+
+.EXTERNALSCRIPTDEPENDENCIES 
+
+.RELEASENOTES
+CATE - Clean All Temp Etc
+Cleans temporary files and folders from all standard user temp folders,
+system profile temp folders, and system temp folders (they are not the same!);
+also clears logs, IE caches, Firefox caches, Chrome caches, Ask Partner Network data
+Adobe Flash caches, Java deployment caches, and Microsoft CryptnetURL caches.
+
+.PRIVATEDATA 
+
+#> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<# 
+
+.DESCRIPTION 
+Clean All Temp Etc - cleans temporary files and folders from all standard user and system temp folders, clears logs, and more
+
+#> 
+
+Param()
+
+
 #############################
 # CATE: Clean All Temp Etc. #
 #############################
 
-#
-# version 3.51
 #
 # by Jonathan E. Brickman
 #
 # Cleans temp files from all user profiles and
 # several other locations.  Also clears log files.
 #
-# Copyright 2017 Jonathan E. Brickman
+# Copyright 2018 Jonathan E. Brickman
 # https://notes.ponderworthy.com/ 
 # This script is licensed under the 3-Clause BSD License
 # https://opensource.org/licenses/BSD-3-Clause

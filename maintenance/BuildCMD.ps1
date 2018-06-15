@@ -51,17 +51,12 @@ $RUNMOSTps1List = @(
 	"CATE.ps1"
 	)
 
-ForEach ($cmd in @('RUNALL.CMD', 'DOWNLOAD.CMD', 'RUNMOST.CMD')) {
+ForEach ($cmd in @('RUNALL.CMD', 'DOWNLOAD.CMD', 'RUNMOST.CMD', 'GETREDISTS.CMD')) {
 	Remove-Item "..\RUN\$cmd" -Force -ErrorAction SilentlyContinue > $null
 	New-Item -Name "..\RUN\$cmd" -ItemType File -Force > $null
+	echo '@echo off' > ..\RUN\$cmd
+	echo '' >> ..\RUN\$cmd
 	}
-	
-echo '@echo off' > ..\RUN\RUNALL.CMD
-echo '' >> ..\RUN\RUNALL.CMD
-echo '@echo off' > ..\RUN\DOWNLOAD.CMD
-echo '' >> ..\RUN\DOWNLOAD.CMD
-echo '@echo off' > ..\RUN\RUNMOST.CMD
-echo '' >> ..\RUN\RUNMOST.CMD
 
 $WebClientObj = (New-Object System.Net.WebClient)
 $WebClientObj.Encoding = [System.Text.Encoding]::UTF8
@@ -123,7 +118,7 @@ ForEach ($ps1 in $RUNMOSTps1List) {
 	}
 	
 ForEach ($ps1 in $DDOWNLOADps1List) {
-	ProcessPSScript $ps1 "DOWNLOAD.CMD" "echo Downloading, verifying, and running $ps1 ..." 2
+	ProcessPSScript $ps1 "DOWNLOAD.CMD" "echo Downloading $ps1 ..." 2
 	}
 
 ProcessPSScript "GetRedists.ps1" "GETREDISTS.CMD" "echo Processing..." 5

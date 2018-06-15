@@ -3,8 +3,6 @@
 ######################################################
 
 #
-# version 3.0, the first PowerShell version
-#
 # by Jonathan E. Brickman
 #
 # Optimizes default and extra worker threads and
@@ -12,9 +10,11 @@
 #
 # Documentation on these settings has ranged from sparse to none over
 # many years.  The early Microsoft documents used in the 
-# calculations are completely gone.
+# calculations are completely gone.  The settings have undergone
+# testing over the last ten years, on a wide variety of Wintelamd platforms,
+# and appear to work well on all.
 #
-# Copyright 2017 Jonathan E. Brickman
+# Copyright 2018 Jonathan E. Brickman
 # https://notes.ponderworthy.com/ 
 # This script is licensed under the 3-Clause BSD License
 # https://opensource.org/licenses/BSD-3-Clause

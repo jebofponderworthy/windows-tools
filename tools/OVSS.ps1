@@ -1,14 +1,20 @@
 #################################
 #           Optimize VSS        #
-#                               #
-# v1.0 by Jonathan E. Brickman  #
-#                               #
-# Removes all orphan shadows,   #
-# and then preallocates 20%     #
-# of each drive volume for VSS  #
-# as many different tools' docs #
-# advise.                       #
 #################################
+
+#
+# by Jonathan E. Brickman
+#
+# Removes all orphan shadows, and then preallocates 20% 
+# of each drive volume for VSS as many different tools' 
+# docs advise.
+#
+# Copyright 2018 Jonathan E. Brickman
+# https://notes.ponderworthy.com/ 
+# This script is licensed under the 3-Clause BSD License
+# https://opensource.org/licenses/BSD-3-Clause
+# and is reprised at the end of this file
+#
 
 ""
 "OVSS: Optimize VSS"
