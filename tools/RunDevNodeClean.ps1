@@ -7,6 +7,8 @@
 #
 # Downloads the DevNodeClean package, chooses the binary
 # appropriate to the bit-width of the current OS, and runs it.
+# This cleans unused device nodes in the registry, 
+# improving performance
 #
 # Copyright 2018 Jonathan E. Brickman
 # https://notes.ponderworthy.com/ 

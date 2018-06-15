@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 3.02
+.VERSION 3.05
 
 .GUID ced41cc3-0763-4229-be97-4aac877c39e2
 
@@ -26,17 +26,10 @@
 .EXTERNALSCRIPTDEPENDENCIES 
 
 .RELEASENOTES
-OWTAS
-This tool sets a number of additional critical and delayed worker threads,
-plus service work items. The changes are autocalculated according to a
-combination of RAM and OS bit-width (32 vs. 64). Performance will increase,
-more so with more RAM.
-
-Documentation on these settings has ranged from sparse to none over many years. 
-The early Microsoft documents used in the calculations appear completely gone,
-there are some new ones. The settings produced by OWTAS have undergone testing
-over the last ten years, on a wide variety of Wintelamd platforms, and appear 
-to work well on all.
+OVSS
+Removes all orphan shadows, and then preallocates 20%
+of each drive volume for VSS as many different tools'
+docs advise.
 
 .PRIVATEDATA 
 
@@ -44,10 +37,28 @@ to work well on all.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <# 
 
 .DESCRIPTION 
-OWTAS - enhances performance by adding threads. Optimizes critical and delayed worker threads and service work items.
+OVSS - optimizes VSS preallocation to 20% for each NTFS volume, and clears orphan shadows
 
 #> 
 

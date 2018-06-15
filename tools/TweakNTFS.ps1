@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 2.12
+.VERSION 2.14
 
 .GUID 527423ef-dadd-45b1-a547-56d2fdb325d1
 
@@ -32,12 +32,22 @@ performance and reliability, using FSUTIL
 
 .PRIVATEDATA 
 
-#>
+#> 
+
+
+
+
+
+
+
+
+
+
 
 <# 
 
 .DESCRIPTION 
- TweakNTFS - optimizes NTFS volumes for performance and reliability 
+TweakNTFS - optimizes NTFS volumes for performance and reliability
 
 #> 
 

@@ -27,7 +27,7 @@ $ReleaseNotes = @(
 	"also clears logs, IE caches, Firefox caches, Chrome caches, Ask Partner Network data,",
 	"Adobe Flash caches, Java deployment caches, and Microsoft CryptnetURL caches."
 	)
-ToPSGallery "CATE.ps1" "3.55" $Desc $ReleaseNotes
+ToPSGallery "CATE.ps1" "3.57" $Desc $ReleaseNotes
 
 "GetRedists..."
 $Desc = "GetRedists - Get all current Microsoft VC++ redistributables"
@@ -37,7 +37,7 @@ $ReleaseNotes = @(
 	"currently being supported by Microsoft, using the excellent",
 	"VcRedist package."
 	)
-ToPSGallery "GetRedists.ps1" "1.32" $Desc $ReleaseNotes
+ToPSGallery "GetRedists.ps1" "1.34" $Desc $ReleaseNotes
 
 "OVSS..."
 $Desc = "OVSS - optimizes VSS preallocation to 20% for each NTFS volume, and clears orphan shadows"
@@ -47,7 +47,7 @@ $ReleaseNotes = @(
 	"of each drive volume for VSS as many different tools'",
 	"docs advise."
 	)
-ToPSGallery "OVSS.ps1" "1.01" $Desc $ReleaseNotes
+ToPSGallery "OVSS.ps1" "3.05" $Desc $ReleaseNotes
 
 "OWTAS..."
 $Desc = "OWTAS - enhances performance by adding threads. Optimizes critical and delayed worker threads and service work items."
@@ -64,7 +64,7 @@ $ReleaseNotes = @(
 	"over the last ten years, on a wide variety of Wintelamd platforms, and appear ",
 	"to work well on all."
 	)
-ToPSGallery "OVSS.ps1" "3.02" $Desc $ReleaseNotes
+ToPSGallery "OWTAS.ps1" "3.06" $Desc $ReleaseNotes
 
 "TweakNTFS..."
 $Desc = "TweakNTFS - optimizes NTFS volumes for performance and reliability"
@@ -73,5 +73,30 @@ $ReleaseNotes = @(
 	"Tweaks all NTFS volumes on a system for",
 	"performance and reliability, using FSUTIL"
 	)
-ToPSGallery "TweakNTFS.ps1" "2.12" $Desc $ReleaseNotes
+ToPSGallery "TweakNTFS.ps1" "2.14" $Desc $ReleaseNotes
 	
+"RunDevNodeClean..."
+$Desc = "RunDevNodeClean - cleans unused device nodes in registry, improves performance"
+$ReleaseNotes = @(
+	"RunDevNodeClean",
+	"Downloads the DevNodeClean package, chooses the binary appropriate to",
+	"the bit-width of the current OS, and runs it.  This cleans unused",
+	"device nodes in the registry, improving performance."
+	)
+ToPSGallery "RunDevNodeClean.ps1" "1.11" $Desc $ReleaseNotes
+
+"TOSC..."
+$Desc = "TOSC - Turn Off Share Caching"
+$ReleaseNotes = @(
+	"TOSC",
+	"By default in Windows since XP/2003, if a folder is shared to the network via SMB,",
+	"so-called "caching" is turned on. This actually means that the Offline Files service",
+	"on other machines accessing the share, are allowed to retrieve and store copies of",
+	"files and folders on the machine acting as server. Turning this off for all shares",
+	"gives a speed bump for the server machine, and also improves reliability overall,",
+	"dependence on Offline Files can lead to all sorts of issues including data loss",
+	"when the server is not available or suddenly becomes available et cetera. TOSC does",
+	"this turning off very well, for all file shares extant on the machine on which",
+	"it is run."
+	)
+ToPSGallery "TOSC.ps1" "1.11" $Desc $ReleaseNotes
