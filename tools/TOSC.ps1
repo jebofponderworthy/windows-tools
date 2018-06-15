@@ -23,7 +23,7 @@
 #
 
 ''
-'TOSC: Turn Off Share Caching'
+'Turn Off Share Caching'
 ''
 
 # Self-elevate if not already elevated.

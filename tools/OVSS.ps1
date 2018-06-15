@@ -1,3 +1,59 @@
+
+<#PSScriptInfo
+
+.VERSION 3.02
+
+.GUID ced41cc3-0763-4229-be97-4aac877c39e2
+
+.AUTHOR Jonathan E. Brickman
+
+.COMPANYNAME Ponderworthy Music
+
+.COPYRIGHT (c) 2018 Jonathan E. Brickman
+
+.TAGS 
+
+.LICENSEURI 
+
+.PROJECTURI 
+
+.ICONURI 
+
+.EXTERNALMODULEDEPENDENCIES 
+
+.REQUIREDSCRIPTS 
+
+.EXTERNALSCRIPTDEPENDENCIES 
+
+.RELEASENOTES
+OWTAS
+This tool sets a number of additional critical and delayed worker threads,
+plus service work items. The changes are autocalculated according to a
+combination of RAM and OS bit-width (32 vs. 64). Performance will increase,
+more so with more RAM.
+
+Documentation on these settings has ranged from sparse to none over many years. 
+The early Microsoft documents used in the calculations appear completely gone,
+there are some new ones. The settings produced by OWTAS have undergone testing
+over the last ten years, on a wide variety of Wintelamd platforms, and appear 
+to work well on all.
+
+.PRIVATEDATA 
+
+#> 
+
+
+
+<# 
+
+.DESCRIPTION 
+OWTAS - enhances performance by adding threads. Optimizes critical and delayed worker threads and service work items.
+
+#> 
+
+Param()
+
+
 #################################
 #           Optimize VSS        #
 #################################
@@ -17,8 +73,7 @@
 #
 
 ""
-"OVSS: Optimize VSS"
-"v1.0"
+"Optimize VSS"
 ""
 
 # Self-elevate if not already elevated.

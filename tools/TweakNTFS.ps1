@@ -1,3 +1,49 @@
+
+<#PSScriptInfo
+
+.VERSION 2.12
+
+.GUID 527423ef-dadd-45b1-a547-56d2fdb325d1
+
+.AUTHOR Jonathan E. Brickman
+
+.COMPANYNAME Ponderworthy Music
+
+.COPYRIGHT (c) 2018 Jonathan E. Brickman
+
+.TAGS 
+
+.LICENSEURI 
+
+.PROJECTURI 
+
+.ICONURI 
+
+.EXTERNALMODULEDEPENDENCIES 
+
+.REQUIREDSCRIPTS 
+
+.EXTERNALSCRIPTDEPENDENCIES 
+
+.RELEASENOTES
+TweakNTFS
+Tweaks all NTFS volumes on a system for
+performance and reliability, using FSUTIL
+
+.PRIVATEDATA 
+
+#>
+
+<# 
+
+.DESCRIPTION 
+ TweakNTFS - optimizes NTFS volumes for performance and reliability 
+
+#> 
+
+Param()
+
+
 #####################################
 # TweakNTFS: Tweak All NTFS Volumes #
 #  for Performance And Reliability  #
@@ -16,6 +62,9 @@
 # and is reprised at the end of this file
 #
 
+""
+"TweakNTFS"
+""
 
 # Self-elevate if not already elevated.
 

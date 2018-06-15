@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 3.54
+.VERSION 3.55
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -29,12 +29,14 @@
 CATE - Clean All Temp Etc
 Cleans temporary files and folders from all standard user temp folders,
 system profile temp folders, and system temp folders (they are not the same!);
-also clears logs, IE caches, Firefox caches, Chrome caches, Ask Partner Network data
+also clears logs, IE caches, Firefox caches, Chrome caches, Ask Partner Network data,
 Adobe Flash caches, Java deployment caches, and Microsoft CryptnetURL caches.
 
 .PRIVATEDATA 
 
 #> 
+
+
 
 
 
@@ -87,10 +89,6 @@ Param()
 
 ""
 "Clean All Temp Etc."
-""
-"Cleans all profiles' temp and IE cache folders,"
-"some other caches, and log files."
-"Also removes Ask Partner Network items."
 ""
 
 # Self-elevate if not already elevated.

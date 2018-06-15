@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 1.31
+.VERSION 1.32
 
 .GUID 03c695c0-bf45-4257-8156-89310e951140
 
@@ -33,12 +33,14 @@ VcRedist package.
 
 .PRIVATEDATA 
 
-#>
+#> 
+
+
 
 <# 
 
 .DESCRIPTION 
- GetRedists - Get all current Microsoft VC++ redistributables 
+GetRedists - Get all current Microsoft VC++ redistributables
 
 #> 
 
@@ -61,6 +63,10 @@ Param()
 # https://opensource.org/licenses/BSD-3-Clause
 # and is reprised at the end of this file
 #
+
+""
+"GetRedists"
+""
 
 # Items needing work:
 # - Command-line option for location of repo folder
