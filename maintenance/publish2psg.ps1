@@ -1,4 +1,4 @@
-$NuGetKey = "6f05b805-b551-403f-9b05-b45fb420c69b"
+$NuGetKey = "14648dfc-93d6-4036-a045-e15032f41cf1"
 
 Function ToPSGallery {
 	param( 	[string]$ps1, 

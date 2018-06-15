@@ -33,12 +33,14 @@ device nodes in the registry, improving performance.
 
 .PRIVATEDATA 
 
-#>
+#> 
+
+
 
 <# 
 
 .DESCRIPTION 
- RunDevNodeClean - cleans unused device nodes in registry, improves performance 
+RunDevNodeClean - cleans unused device nodes in registry, improves performance
 
 #> 
 
