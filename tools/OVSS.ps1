@@ -11,19 +11,19 @@
 
 .COPYRIGHT (c) 2018 Jonathan E. Brickman
 
-.TAGS 
+.TAGS
 
-.LICENSEURI 
+.LICENSEURI
 
-.PROJECTURI 
+.PROJECTURI
 
-.ICONURI 
+.ICONURI
 
-.EXTERNALMODULEDEPENDENCIES 
+.EXTERNALMODULEDEPENDENCIES
 
-.REQUIREDSCRIPTS 
+.REQUIREDSCRIPTS
 
-.EXTERNALSCRIPTDEPENDENCIES 
+.EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
 OVSS
@@ -31,11 +31,9 @@ Removes all orphan shadows, and then preallocates 20%
 of each drive volume for VSS as many different tools'
 docs advise.
 
-.PRIVATEDATA 
+.PRIVATEDATA
 
-#> 
-
-
+#>
 
 
 
@@ -59,12 +57,14 @@ docs advise.
 
 
 
-<# 
 
-.DESCRIPTION 
+
+<#
+
+.DESCRIPTION
 OVSS - optimizes VSS preallocation to 20% for each NTFS volume, and clears orphan shadows
 
-#> 
+#>
 
 Param()
 
@@ -76,12 +76,12 @@ Param()
 #
 # by Jonathan E. Brickman
 #
-# Removes all orphan shadows, and then preallocates 20% 
-# of each drive volume for VSS as many different tools' 
+# Removes all orphan shadows, and then preallocates 20%
+# of each drive volume for VSS as many different tools'
 # docs advise.
 #
 # Copyright 2018 Jonathan E. Brickman
-# https://notes.ponderworthy.com/ 
+# https://notes.ponderworthy.com/
 # This script is licensed under the 3-Clause BSD License
 # https://opensource.org/licenses/BSD-3-Clause
 # and is reprised at the end of this file
@@ -94,13 +94,13 @@ Param()
 # Self-elevate if not already elevated.
 
 if (([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
-    {    
+    {
     "Running elevated; good."
     ""
     }
 else {
-    "Not running as elevated.  Starting elevated shell." 
-    Start-Process powershell -WorkingDirectory $PSScriptRoot -Verb runAs -ArgumentList "-noprofile -noexit -file $PSCommandPath" 
+    "Not running as elevated.  Starting elevated shell."
+    Start-Process powershell -WorkingDirectory $PSScriptRoot -Verb runAs -ArgumentList "-noprofile -noexit -file $PSCommandPath"
     return "Done. This one will now exit."
     ""
     }

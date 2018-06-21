@@ -1,77 +1,11 @@
-
-<#PSScriptInfo
-
-.VERSION 1.34
-
-.GUID 03c695c0-bf45-4257-8156-89310e951140
-
-.AUTHOR Jonathan E. Brickman
-
-.COMPANYNAME Ponderworthy Music
-
-.COPYRIGHT (c) 2018 Jonathan E. Brickman
-
-.TAGS
-
-.LICENSEURI
-
-.PROJECTURI
-
-.ICONURI
-
-.EXTERNALMODULEDEPENDENCIES
-
-.REQUIREDSCRIPTS
-
-.EXTERNALSCRIPTDEPENDENCIES
-
-.RELEASENOTES
-GetRedists
-Retrieve and install all of the VC++ redistributable libraries
-currently being supported by Microsoft, using the excellent
-VcRedist package.
-
-.PRIVATEDATA
-
-#>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<#
-
-.DESCRIPTION
-GetRedists - Get all current Microsoft VC++ redistributables
-
-#>
-
-Param()
-
-
 #######################################################################
-# GetRedists                                                          #
+# windows-tools-all-cleaners                                          #
 #######################################################################
 
 #
 # by Jonathan E. Brickman
 #
-# Retrieves and installs all of the Microsoft redistributable libraries
-# currently being supported, using the excellent VcRedist package.
+# Retrieves, installs, and runs all cleaner tools from windows-tools.
 #
 # Copyright 2018 Jonathan E. Brickman
 # https://notes.ponderworthy.com/
@@ -81,12 +15,8 @@ Param()
 #
 
 ""
-"GetRedists"
+"windows-tools-all-cleaners"
 ""
-
-# Items needing work:
-# - Command-line option for location of repo folder
-# - Error handling; if errors occur at any stage, terminate and print.
 
 # Self-elevate if not already elevated.
 if (([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
@@ -106,27 +36,19 @@ $currentOp = ''
 function ShowProgress {
 	param( [string]$reportStatus, [string]$currentOp )
 
-    Write-Progress -Activity "Get Microsoft Redists" -Status $reportStatus -PercentComplete -1 -CurrentOperation $currentOp
+    Write-Progress -Activity "windows-tools-all-cleaners" -Status $reportStatus -PercentComplete -1 -CurrentOperation $currentOp
     }
 
-ShowProgress("Preparing Powershell environment:","Installing NuGet Package Provider (for VcRedist)...")
+ShowProgress("Preparing Powershell environment:","Installing NuGet Package Provider ...")
 Install-PackageProvider -Name NuGet -Force | Out-Null
-ShowProgress("Preparing Powershell environment:","Installing NuGet (for VcRedist)...")
+ShowProgress("Preparing Powershell environment:","Installing NuGet ...")
 Install-Module -Name NuGet -SkipPublisherCheck -Force
-ShowProgress("Preparing Powershell environment:","Importing NuGet (for VcRedist)...")
+ShowProgress("Preparing Powershell environment:","Importing NuGet ...")
 Import-Module -Name NuGet
-ShowProgress("Preparing Powershell environment:","Installing VcRedist...")
-Install-Module -Name VcRedist -SkipPublisherCheck -Force
-ShowProgress("Preparing Powershell environment:","Importing VcRedist...")
-Import-Module -Name VcRedist
-ShowProgress("Preparing repo folder...","")
-New-Item C:\VcRedist -ItemType Directory | Out-Null
-ShowProgress("Retrieving all redistributables to repo folder...","")
-Get-VcList | Get-VcRedist -Path C:\VcRedist | Out-Null
-ShowProgress("Installing all redistributables from repo folder...","")
-Get-VcList | Install-VcRedist -Path C:\VcRedist | Out-Null
-ShowProgress("Removing repo folder...","")
-Remove-Item C:\VcRedist -Recurse -Force | Out-Null
+ShowProgress("Preparing Powershell environment:","Installing RunDevNodeClean.ps1 ...")
+Install-Script -Name RunDevNodeClean.ps1 -SkipPublisherCheck -Force
+
+
 ShowProgress("Done!","")
 
 # The 3-Clause BSD License
