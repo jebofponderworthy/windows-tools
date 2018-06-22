@@ -123,12 +123,14 @@ else {
     ""
     }
 
-# Get environment variables.
+# Get environment variables etc.
 
 $envTEMP = [Environment]::GetEnvironmentVariable("TEMP", "Machine")
 $envTMP = [Environment]::GetEnvironmentVariable("TEMP", "Machine")
 $envSystemRoot = $env:SystemRoot
 $envProgramData = $env:ProgramData
+
+$originalLocation = Get-Location
 
 # Get initial free disk space.
 
@@ -237,19 +239,16 @@ function DeleteFolderContents {
             If ($skipSpecial) {
                 # If $skipSpecial, attempt to remove it and everything under
                 # except folders named "Low", "1", and "2".
-                Try { Remove-Item $_ -Force -Recurse -Exclude "Low","1","2" -ErrorAction SilentlyContinue }
-                Catch {}
+                Remove-Item $_ -Force -Recurse -Exclude "Low","1","2" -ErrorAction SilentlyContinue
                 }
             else {
                 # Attempt to remove it and everything under.
-                Try { Remove-Item $_ -Force -Recurse -ErrorAction SilentlyContinue }
-                Catch {}
+                Remove-Item $_ -Force -Recurse -ErrorAction SilentlyContinue
                 }
             }
         else {
                 # Item is not a folder.
-                Try { Remove-Item $_ -Force -ErrorAction SilentlyContinue }
-                Catch {}
+				Remove-Item $_ -Force -ErrorAction SilentlyContinue
             }
         }
     }
@@ -347,6 +346,8 @@ Write-Output $strOut
 Write-Output ""
 
 Start-Sleep 3
+
+Set-Location $originalLocation
 
 # The 3-Clause BSD License
 
