@@ -109,7 +109,7 @@ else {
 
 "Removing orphan shadows..."
 ""
-$out = (iex -Command 'vssadmin delete shadows /all /quiet')
+Invoke-Expression -Command 'vssadmin delete shadows /all /quiet'
 ""
 
 # Get list of VSS-related volumes, and run the appropriate command on each.
@@ -122,12 +122,12 @@ ForEach ($DataLine in $VSSVolumesData) {
         $VolumeID = (-join $DataLine[13..60])
         "Setting VSS preallocation to 20% for: " + $VolumeID
         ""
-        If (((Get-WmiObject Win32_OperatingSystem).Caption) -match "Server") {
-            $out = (iex -Command ('vssadmin add shadowstorage /For="' + $VolumeID + '" /On="' + $VolumeID + '" /MaxSize=20%'))
-            $out = (iex -Command ('vssadmin resize shadowstorage /For="' + $VolumeID + '" /On="' + $VolumeID + '" /MaxSize=20%'))
+        If (((Get-CimInstance Win32_OperatingSystem).Caption) -match "Server") {
+            Invoke-Expression -Command ('vssadmin add shadowstorage /For="' + $VolumeID + '" /On="' + $VolumeID + '" /MaxSize=20%')
+            Invoke-Expression -Command ('vssadmin resize shadowstorage /For="' + $VolumeID + '" /On="' + $VolumeID + '" /MaxSize=20%')
             }
         Else {
-            $out = (iex -Command ('vssadmin resize shadowstorage /For="' + $VolumeID + '" /On="' + $VolumeID + '" /MaxSize=20%'))
+            Invoke-Expression -Command ('vssadmin resize shadowstorage /For="' + $VolumeID + '" /On="' + $VolumeID + '" /MaxSize=20%')
             }
         ""
         }

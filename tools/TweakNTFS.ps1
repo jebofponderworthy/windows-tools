@@ -96,19 +96,32 @@ else {
 
 
 "Tweaks for all drives..."
-$output = iex ('fsutil 8dot3name set 1') -ErrorAction SilentlyContinue
-$output = iex ('fsutil behavior set disablelastaccess 1') -ErrorAction SilentlyContinue
+Invoke-Expression ('fsutil 8dot3name set 1') -ErrorAction SilentlyContinue
+Invoke-Expression ('fsutil behavior set disablelastaccess 1') -ErrorAction SilentlyContinue
 
-Get-WMIObject -Query "Select * FROM Win32_LogicalDisk WHERE DriveType=3" | ForEach {
+Get-CimInstance -Query "Select * FROM Win32_LogicalDisk WHERE DriveType=3" | ForEach-Object {
     $DriveID = $_.DeviceID
 
     If ($DriveID -match "[A-Z]")
         {
         "Tweaking " + $DriveID + " ..."
-        $output = iex ('fsutil repair set ' + $DriveID + ' 0x01') -ErrorAction SilentlyContinue
-        $output = iex ('fsutil resource setautoreset true ' + ($DriveID + '\')) -ErrorAction SilentlyContinue
-        $output = iex ('fsutil resource setconsistent ' + ($DriveID + '\')) -ErrorAction SilentlyContinue
-        $output = iex ('fsutil resource setlog shrink 10 ' + ($DriveID + '\')) -ErrorAction SilentlyContinue
+		""
+		"> fsutil repair ..."
+		""
+        Invoke-Expression ('fsutil repair set ' + $DriveID + ' 0x01') -ErrorAction SilentlyContinue
+		""
+		"> fsutil resource setautoreset true ..."
+		""
+        Invoke-Expression ('fsutil resource setautoreset true ' + ($DriveID + '\')) -ErrorAction SilentlyContinue
+		""
+		"> fsutil resource setconsistent ..."
+		""
+        Invoke-Expression ('fsutil resource setconsistent ' + ($DriveID + '\')) -ErrorAction SilentlyContinue
+		""
+		"> fsutil resource setlog shrink 10 ..."
+		""
+        Invoke-Expression ('fsutil resource setlog shrink 10 ' + ($DriveID + '\')) -ErrorAction SilentlyContinue
+		""
         }
     }
 

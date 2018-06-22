@@ -96,11 +96,11 @@ else {
     }
 
 # Get list of shares with 'net view', parse, and set appropriately.
-get-WmiObject -class Win32_Share | foreach {
+Get-CimInstance -class Win32_Share | ForEach-Object {
 	if ( $_.Name -ne 'IPC$' ) {
 		""
 		"Turning off share caching for " + $_.Name
-		$result = iex ('net share "' + $_.Name + '" /CACHE:None') -ErrorAction SilentlyContinue
+		$result = Invoke-Expression ('net share "' + $_.Name + '" /CACHE:None') -ErrorAction SilentlyContinue
 		if ($result -eq $null)
 			{ "Not possible." }
 		else

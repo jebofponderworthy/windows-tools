@@ -123,15 +123,10 @@ else {
     ""
     }
 
-# Get initial shell location.
-
-$InitialLocation = Get-Location
-
 # Get environment variables.
 
 $envTEMP = [Environment]::GetEnvironmentVariable("TEMP", "Machine")
 $envTMP = [Environment]::GetEnvironmentVariable("TEMP", "Machine")
-$envSystemDrive = $env:SystemDrive
 $envSystemRoot = $env:SystemRoot
 $envProgramData = $env:ProgramData
 
@@ -142,18 +137,14 @@ function DriveSpace {
 
 	# Does the server responds to a ping (otherwise the WMI queries will fail)
 
-	$query = "select * from win32_pingstatus where address = '$strComputer'"
-	$result = Get-WmiObject -query $query
+	$result = Get-CimInstance -query "select * from win32_pingstatus where address = '$strComputer'"
 	if ($result.protocoladdress) {
 
 		$totalFreeSpace = 0
 
-		# Get the Disks for this computer
-		$colDisks = get-wmiobject Win32_LogicalDisk -computername $strComputer -Filter "DriveType = 3"
-
-		# For each disk calculate the free space
-		foreach ($disk in $colDisks) {
-			$totalFreeSpace = $totalFreeSpace + $disk.freespace
+		# Get the disks for this computer, and total the free space
+		Get-CimInstance -Query "Select * FROM Win32_LogicalDisk WHERE DriveType=3" | ForEach-Object {
+			$totalFreeSpace = $totalFreeSpace + $_.freespace
 		    }
 
 		return $totalFreeSpace
@@ -178,7 +169,7 @@ Write-Output $strOut
 # Here is an external variable to contain the "Status" text
 # for progress reporting.
 
-$reportStatus = "Working..."
+$CATEStatus = "Working..."
 
 # Now we set up an array containing folders to be checked for and
 # cleaned out if present, for every profile.
@@ -208,7 +199,7 @@ $foldersToClean = @(
 # A quasiprimitive for PowerShell-style progress reporting.
 
 function ShowCATEProgress {
-	param( [string]$currentOp )
+	param( [string]$currentOp, [string]$reportStatus )
 
     Write-Progress -Activity "Clean All Temp Etc" -Status $reportStatus -PercentComplete -1 -CurrentOperation $currentOp
     }
@@ -220,7 +211,7 @@ function DeleteFolderContents {
 	param( [string]$strFolder,
            [bool]$skipSpecial = $false )
 
-    ShowCATEProgress ""
+    ShowCATEProgress "" "Working..."
 
     # If $strFolder is not a real folder, end function
     if ( !(Test-Path $strFolder) ) {
@@ -239,8 +230,8 @@ function DeleteFolderContents {
 
     # Enumerate all contents and delete.
     # For some reason, try/catch did not flag permissions errors when tested.
-    Get-ChildItem -path $strFolder -Force -ErrorAction SilentlyContinue | ForEach {
-        ShowCATEProgress $_
+    Get-ChildItem -path $strFolder -Force -ErrorAction SilentlyContinue | ForEach-Object {
+        ShowCATEProgress $_ $CATEStatus
         If ( $_.PSIsContainer ) {
             # Item is a folder.
             If ($skipSpecial) {
@@ -272,7 +263,7 @@ $ProfileCount = $ProfileList.Count
 $ProfileNumber = 1
 $ProfileList | ForEach-Object {
     $profileItem = Get-ItemProperty $_.pspath
-    $reportStatus = "Working on (profile " + $ProfileNumber + "/" + $ProfileCount + ") " + $profileItem.ProfileImagePath + " ..."
+    $CATEStatus = "Working on (profile " + $ProfileNumber + "/" + $ProfileCount + ") " + $profileItem.ProfileImagePath + " ..."
     $ProfileNumber += 1
 
     # Inner loop enumerates all folder subpaths within profiles to be cleaned
@@ -280,7 +271,7 @@ $ProfileList | ForEach-Object {
         $ToClean = $profileItem.ProfileImagePath+$folderSubpath
         If (Test-Path $ToClean) {
             # If the actual path exists, clean it
-            ShowCATEProgress $ToClean
+            ShowCATEProgress $ToClean $CATEStatus
             DeleteFolderContents $ToClean
             }
         }
@@ -289,7 +280,7 @@ $ProfileList | ForEach-Object {
     $ToClean = $profileItem.ProfileImagePath+"\AppData\Local\Temp"
     If (Test-Path $ToClean) {
         # If the actual path exists, clean it; the second parameter means skip folders named "Low", "1", or "2"
-        ShowCATEProgress $ToClean
+        ShowCATEProgress $ToClean $CATEStatus
         DeleteFolderContents $ToClean $True
         }
 
@@ -320,7 +311,7 @@ DeleteFolderContents ($envProgramData + "\Microsoft\Windows\WER\ReportQueue")
 function DeleteObjects {
     param( [string]$strPath  )
 
-    ShowCATEProgress $strPath
+    ShowCATEProgress $strPath $CATEStatus
     If ( !(Test-Path $strPath -ErrorAction SilentlyContinue) ) { return }
     Remove-Item -Path $strPath -Force -ErrorAction SilentlyContinue
     }

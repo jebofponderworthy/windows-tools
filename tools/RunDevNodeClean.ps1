@@ -76,7 +76,7 @@ $StartupDir = $pwd
 
 "Setting up..."
 
-$TempFolderName = -join ((65..90) + (97..122) | Get-Random -Count 10 | % {[char]$_})
+$TempFolderName = -join ((65..90) + (97..122) | Get-Random -Count 10 | ForEach-Object {[char]$_})
 
 $envTEMP = [Environment]::GetEnvironmentVariable("TEMP")
 $TempPath = "$envTEMP\$TempFolderName"
@@ -109,12 +109,12 @@ if ([System.IntPtr]::Size -eq 4) {
     # 32-bit OS
 	"Running 32-bit binary..."
 	""
-	iex $TempPath\x86\DevNodeClean.exe
+	Invoke-Expression $TempPath\x86\DevNodeClean.exe
 	} else {
 	# 64-bit OS
 	"Running 64-bit binary..."
 	""
-	iex $TempPath\x64\DevNodeClean.exe
+	Invoke-Expression $TempPath\x64\DevNodeClean.exe
 	}
 
 ""
@@ -123,7 +123,7 @@ if ([System.IntPtr]::Size -eq 4) {
 
 "Cleaning up..."
 
-cd $StartupDir
+Set-Location $StartupDir
 Remove-Item -Path $TempPath -Force -Recurse -ErrorAction SilentlyContinue
 
 "Done!"
