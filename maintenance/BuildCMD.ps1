@@ -8,11 +8,11 @@
 # This script requires PowerShell 5.1 or higher.  
 # Its result is CMD files, which require PowerShell 3.0 or higher.
 #
-# Github stores its files in treelevels, per history.  For instance this:
+# Github stores its files with history.
 # 
-# $githubURL = "https://raw.githubusercontent.com/jebofponderworthy/ponderworthy-tools/3c2c39050bfc55d307705dd1ed9863712bcc2dcc/"
+# $githubURL = "https://raw.githubusercontent.com/jebofponderworthy/windows-tools/a8e7b0635851d32f534b6b947830872e6ab6efa2/tools/CATE.ps1"
 #
-# brings up the whole repository, all files, as they existed at a certain time, May 14, 2018.  Such
+# brings up removeGhosts.ps1 as it was at a certain time, September 13, 2018.  Such
 # a URL can be had from any file page in the repository.  To get such a URL:
 #
 # 1. Open a file that has been updated on a day whose snapshot you want to see, by clicking its link.
@@ -32,10 +32,11 @@
 # Don't ask me why only ASCII registers as UTF-8 or I might scream.  Softly and miserably though.
 $PSDefaultParameterValues['Out-File:Encoding'] = 'ASCII'
 
-$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/windows-tools/e2f8388143cece2117aade126c23e178b07b5980"
+$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/windows-tools/d7baf14b98a1e6671139520a16e23d6258b2f710/"
 
 $RUNALLps1List = @(
 	"RunDevNodeClean.ps1",
+	"wt_removeGhosts.ps1",
 	"TweakNTFS.ps1",
 	"OWTAS.ps1",
 	"TOSC.ps1",
@@ -45,6 +46,7 @@ $RUNALLps1List = @(
 
 $RUNMOSTps1List = @(
 	"RunDevNodeClean.ps1",
+	"wt_removeGhosts.ps1",
 	"TweakNTFS.ps1",
 	"OWTAS.ps1",
 	"OVSS.ps1",

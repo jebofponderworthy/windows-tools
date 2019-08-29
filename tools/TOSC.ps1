@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 1.11
+.VERSION 1.13
 
 .GUID c5bed407-028e-4963-bfde-7fad2d640a1a
 
@@ -11,19 +11,19 @@
 
 .COPYRIGHT (c) 2018 Jonathan E. Brickman
 
-.TAGS
+.TAGS 
 
-.LICENSEURI
+.LICENSEURI https://opensource.org/licenses/BSD-3-Clause
 
-.PROJECTURI
+.PROJECTURI https://github.com/jebofponderworthy/windows-tools
 
-.ICONURI
+.ICONURI 
 
-.EXTERNALMODULEDEPENDENCIES
+.EXTERNALMODULEDEPENDENCIES 
 
-.REQUIREDSCRIPTS
+.REQUIREDSCRIPTS 
 
-.EXTERNALSCRIPTDEPENDENCIES
+.EXTERNALSCRIPTDEPENDENCIES 
 
 .RELEASENOTES
 TOSC
@@ -37,15 +37,25 @@ when the server is not available or suddenly becomes available et cetera. TOSC d
 this turning off very well, for all file shares extant on the machine on which
 it is run.
 
-.PRIVATEDATA
+.PRIVATEDATA 
 
-#>
+#> 
+
+
+
+
+
+
+
+
+
+
 
 
 
 <#
 
-.DESCRIPTION
+.DESCRIPTION 
 TOSC - Turn Off Share Caching
 
 #>
@@ -78,7 +88,11 @@ Param()
 #
 
 ''
-'Turn Off Share Caching'
+''
+'****************************'
+'   Turn Off Share Caching   '
+'****************************'
+''
 ''
 
 # Self-elevate if not already elevated.
@@ -151,6 +165,19 @@ Get-CimInstance -class Win32_Share | ForEach-Object {
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

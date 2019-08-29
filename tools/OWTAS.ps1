@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 3.06
+.VERSION 3.8
 
 .GUID 14025447-cf92-41ee-b735-3d99c9e2c4d5
 
@@ -11,19 +11,19 @@
 
 .COPYRIGHT (c) 2018 Jonathan E. Brickman
 
-.TAGS
+.TAGS 
 
-.LICENSEURI
+.LICENSEURI https://opensource.org/licenses/BSD-3-Clause
 
-.PROJECTURI
+.PROJECTURI https://github.com/jebofponderworthy/windows-tools
 
-.ICONURI
+.ICONURI 
 
-.EXTERNALMODULEDEPENDENCIES
+.EXTERNALMODULEDEPENDENCIES 
 
-.REQUIREDSCRIPTS
+.REQUIREDSCRIPTS 
 
-.EXTERNALSCRIPTDEPENDENCIES
+.EXTERNALSCRIPTDEPENDENCIES 
 
 .RELEASENOTES
 OWTAS
@@ -35,12 +35,28 @@ more so with more RAM.
 Documentation on these settings has ranged from sparse to none over many years.
 The early Microsoft documents used in the calculations appear completely gone,
 there are some new ones. The settings produced by OWTAS have undergone testing
-over the last ten years, on a wide variety of Wintelamd platforms, and appear
+over the last ten years, on a wide variety of Wintelamd platforms, and appear 
 to work well on all.
 
-.PRIVATEDATA
+.PRIVATEDATA 
 
-#>
+#> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -48,7 +64,7 @@ to work well on all.
 
 <#
 
-.DESCRIPTION
+.DESCRIPTION 
 OWTAS - enhances performance by adding threads. Optimizes critical and delayed worker threads and service work items.
 
 #>
@@ -80,7 +96,11 @@ Param()
 #
 
 ""
-"Optimize Worker Threads and Service Requests"
+""
+"**************************************************"
+"   Optimize Worker Threads and Service Requests   "
+"**************************************************"
+""
 ""
 
 # Self-elevate if not already elevated.
@@ -173,7 +193,12 @@ function setupDWORD {
     Write-Output ("New value is " + $valueforDWORD)
 
     ############
-    # Set new registry entry, or error out
+    # Report no changes to make, set new registry entry, or error out
+	If ($oldValue -eq $valueforDWORD) {
+		Write-Output "No change to make."
+		""
+		Return
+		}
     Try {
         New-ItemProperty -Path $regPath -Name $nameForDWORD -Value $valueForDWORD -PropertyType DWORD -Force -ErrorAction SilentlyContinue > $null
         }
@@ -242,6 +267,19 @@ setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\RpcXdr\Parameters" "MaxCmds"
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

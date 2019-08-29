@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 2.14
+.VERSION 3.2
 
 .GUID 527423ef-dadd-45b1-a547-56d2fdb325d1
 
@@ -11,28 +11,58 @@
 
 .COPYRIGHT (c) 2018 Jonathan E. Brickman
 
-.TAGS
+.TAGS 
 
-.LICENSEURI
+.LICENSEURI https://opensource.org/licenses/BSD-3-Clause
 
-.PROJECTURI
+.PROJECTURI https://github.com/jebofponderworthy/windows-tools
 
-.ICONURI
+.ICONURI 
 
-.EXTERNALMODULEDEPENDENCIES
+.EXTERNALMODULEDEPENDENCIES 
 
-.REQUIREDSCRIPTS
+.REQUIREDSCRIPTS 
 
-.EXTERNALSCRIPTDEPENDENCIES
+.EXTERNALSCRIPTDEPENDENCIES 
 
 .RELEASENOTES
 TweakNTFS
 Tweaks all NTFS volumes on a system for
 performance and reliability, using FSUTIL
 
-.PRIVATEDATA
+.PRIVATEDATA 
 
-#>
+#> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -50,7 +80,7 @@ performance and reliability, using FSUTIL
 
 <#
 
-.DESCRIPTION
+.DESCRIPTION 
 TweakNTFS - optimizes NTFS volumes for performance and reliability
 
 #>
@@ -77,8 +107,10 @@ Param()
 #
 
 ""
-"TweakNTFS"
 ""
+"***************"
+"   TweakNTFS   "
+"***************"
 
 # Self-elevate if not already elevated.
 
@@ -97,7 +129,91 @@ else {
 
 "Tweaks for all drives..."
 Invoke-Expression ('fsutil 8dot3name set 1') -ErrorAction SilentlyContinue
-Invoke-Expression ('fsutil behavior set disablelastaccess 1') -ErrorAction SilentlyContinue
+Invoke-Expression ('fsutil behavior set DisableLastAccess 1') -ErrorAction SilentlyContinue
+Invoke-Expression ('fsutil behavior set DisableDeleteNotify 0') -ErrorAction SilentlyContinue # Turn SSD TRIM on if SSD is present
+
+function Unzip {
+	param([string]$zipfile, [string]$outpath)
+
+	[System.IO.Compression.ZipFile]::ExtractToDirectory($zipfile, $outpath) > $null
+	}
+
+function Install-Contig {
+    
+	$StartupDir = $pwd
+
+	# First, set up temporary space and move there.
+
+	"Setting up to download Contig..."
+
+	$TempFolderName = -join ((65..90) + (97..122) | Get-Random -Count 10 | ForEach-Object {[char]$_})
+
+	$envTEMP = [Environment]::GetEnvironmentVariable("TEMP")
+	$TempPath = "$envTEMP\$TempFolderName"
+	mkdir $TempPath > $null
+
+	# Then download the zip file.
+
+	"Downloading the Contig zip file from Microsoft..."
+
+	Remove-Item "$TempPath\Contig.zip" -ErrorAction SilentlyContinue | Out-Null
+	$WebClientObj = (New-Object System.Net.WebClient)
+	$WebClientObj.DownloadFile("https://download.sysinternals.com/files/Contig.zip","$TempPath\Contig.zip") | Out-Null
+
+	# Now unpack the zip file.
+
+	"Unpacking..."
+
+	Add-Type -AssemblyName System.IO.Compression.FileSystem
+
+	$envWINDIR = [Environment]::GetEnvironmentVariable("WINDIR")
+	Remove-Item "$envWINDIR\Contig.exe" -ErrorAction SilentlyContinue | Out-Null
+	Remove-Item "$envWINDIR\Contig64.exe" -ErrorAction SilentlyContinue | Out-Null
+	Remove-Item "$envWINDIR\Eula.txt" -ErrorAction SilentlyContinue | Out-Null
+	Unzip "$TempPath\Contig.zip" "$envWINDIR" -Force
+
+    }
+	
+function Defrag-NTFS-Metafiles {
+	param([string]$DriveID)
+
+	""
+	"Defragmenting NTFS metafiles for " + $DriveID + " ..."
+	""
+	
+	if ([System.IntPtr]::Size -eq 4) {
+		# 32-bit OS
+		$cmdstr = "CONTIG"
+		} else {
+		$cmdstr = "CONTIG64"
+		}
+
+	'$Mft ...'
+	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$Mft') -ErrorAction SilentlyContinue | Out-Null
+	'$LogFile ...'
+	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$LogFile') -ErrorAction SilentlyContinue | Out-Null
+	'$Volume ...'
+	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$Volume') -ErrorAction SilentlyContinue | Out-Null
+	'$AttrDef ...'
+	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$AttrDef') -ErrorAction SilentlyContinue | Out-Null
+	'$Bitmap ...'
+	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$Bitmap') -ErrorAction SilentlyContinue | Out-Null
+	'$Boot ...'
+	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$Boot') -ErrorAction SilentlyContinue | Out-Null
+	'$BadClus ...'
+	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$BadClus') -ErrorAction SilentlyContinue | Out-Null
+	'$Secure ...'
+	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$Secure') -ErrorAction SilentlyContinue | Out-Null
+	'$Upcase ...'
+	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$Upcase') -ErrorAction SilentlyContinue | Out-Null
+	'$Extend ...'
+	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$Extend') -ErrorAction SilentlyContinue | Out-Null
+
+	}
+	
+"Get Contig to defragment NTFS metafiles..."
+
+Install-Contig
 
 Get-CimInstance -Query "Select * FROM Win32_LogicalDisk WHERE DriveType=3" | ForEach-Object {
     $DriveID = $_.DeviceID
@@ -106,28 +222,22 @@ Get-CimInstance -Query "Select * FROM Win32_LogicalDisk WHERE DriveType=3" | For
         {
         "Tweaking " + $DriveID + " ..."
 		""
-		"> fsutil repair ..."
+		
+		"fsutil repair ..."
+		Invoke-Expression ('fsutil repair set ' + $DriveID + ' 0x01') -ErrorAction SilentlyContinue | Out-Null
+		"fsutil resource setautoreset true ..."
+		Invoke-Expression ('fsutil resource setautoreset true ' + ($DriveID + '\')) -ErrorAction SilentlyContinue | Out-Null
+		"fsutil resource setconsistent ..."
+		Invoke-Expression ('fsutil resource setconsistent ' + ($DriveID + '\')) -ErrorAction SilentlyContinue | Out-Null
+		"fsutil resource setlog shrink 10 ..."
+		Invoke-Expression ('fsutil resource setlog shrink 10 ' + ($DriveID + '\')) -ErrorAction SilentlyContinue | Out-Null
 		""
-        Invoke-Expression ('fsutil repair set ' + $DriveID + ' 0x01') -ErrorAction SilentlyContinue
-		""
-		"> fsutil resource setautoreset true ..."
-		""
-        Invoke-Expression ('fsutil resource setautoreset true ' + ($DriveID + '\')) -ErrorAction SilentlyContinue
-		""
-		"> fsutil resource setconsistent ..."
-		""
-        Invoke-Expression ('fsutil resource setconsistent ' + ($DriveID + '\')) -ErrorAction SilentlyContinue
-		""
-		"> fsutil resource setlog shrink 10 ..."
-		""
-        Invoke-Expression ('fsutil resource setlog shrink 10 ' + ($DriveID + '\')) -ErrorAction SilentlyContinue
+		Defrag-NTFS-Metafiles($DriveID)
 		""
         }
     }
 
 "Done!"
-
-
 
 # The 3-Clause BSD License
 
@@ -171,7 +281,6 @@ Get-CimInstance -Query "Select * FROM Win32_LogicalDisk WHERE DriveType=3" | For
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
 
 
 

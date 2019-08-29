@@ -4,8 +4,8 @@
 ########################################
 
 #
-# Copied from a post by "BeowulfNode42" on server fault, 
-# no further info made available by her/him
+# Copied from a post by "BeowulfNode42" on Server Fault,
+# no further personal/ID/copyright info made available by her/him
 #
 # Helps any machine run better when its RAM
 # is pushed heavily, by keeping tighter control

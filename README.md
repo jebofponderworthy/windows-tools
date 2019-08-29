@@ -6,7 +6,7 @@ PowerShell 3.0 and later are supported, on Windows 7/2008R2 and later; the excep
 
 ## RUNALL.CMD:  download, verify by hash, and run almost all of the tools
 
-[RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run RunDevNodeClean first, then OWTAS, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+[RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run RunDevNodeClean first, then wt_removeGhosts, then TweakNTFS, then OWTAS, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
 Do not use this if you want Offline Files caching to be active, RUNMOST does everything except the Offline Files cache disabling.
 
@@ -14,7 +14,7 @@ For compatibility, hashing is done using the command-line CERTUTIL tool (capturi
 
 ## RUNMOST.CMD:  download, verify by hash, and run most of the tools
 
-[RUNMOST is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/RUN.CMD) which, if run as administrator, will download, verify integrity by hash, and run RunDevNodeClean, TweakNTFS, OWTAS, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+[RUNMOST is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/RUN.CMD) which, if run as administrator, will download, verify integrity by hash, and run RunDevNodeClean, wt_removeGhosts, TweakNTFS, OWTAS, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
 *Do* use this if you want Offline Files caching to be active.  RUNMOST.CMD does not run TOSC.ps1.
 
@@ -65,4 +65,6 @@ By default in Windows since XP/2003, if a folder is shared to the network via SM
 
 By default, on Windows client OS systems, VSS is active on all VSS-aware volumes, but it is not optimized, which in this case means, there is an "association" or preallocation, of zero space.  On Windows server OS systems, VSS is likewise active, but there is no association/preallocation, at all, on any VSS-aware volumes.  Many different (e.g., [StorageCraft](https://www.storagecraft.com/support/kb/article/289), [Carbonite](https://support.carbonite.com/articles/Server-Windows-How-to-Manage-VSS-Shadowstorage-Space), others) Windows tools make the same recommendation concerning this, stating that every volume to be backed up should have 20% of its space "associated" or preallocated for VSS.  [OVSS](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/OVSS.ps1) does this, and also, removes all orphan shadows.  Orphan shadows are VSS snapshots existing uselessly because of old aborted backups, adding OS volume-related overhead.  The manual steps of this script, with one additional optional step very useful in some server configurations, [are documented here](https://notes.ponderworthy.com/thorough-cleanup-of-vss).
 
+## wt_removeGhosts: remove ghost devices from Windows
 
+Over time, Windows accumulates 'ghost devices', devices which can show up in Device Manager as transparent because they aren't actually there, but things are set up if they are plugged in again.  This applies to anything and everything, including motherboard device objects replaced during driver updates, VSS items, USB sticks inserted and removed, really anything at all.  This contributes greatly to slowdown of an old OS install image.  And removeGhosts removes them all.  This is not Ponderworthy code, but it's great stuff, found on several web sites.  No author cited within, but thanks are deserved!  

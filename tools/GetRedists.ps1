@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 1.34
+.VERSION 2.6
 
 .GUID 03c695c0-bf45-4257-8156-89310e951140
 
@@ -9,31 +9,49 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2018 Jonathan E. Brickman
+.COPYRIGHT (c) 2019 Jonathan E. Brickman
 
-.TAGS
+.TAGS 
 
-.LICENSEURI
+.LICENSEURI https://opensource.org/licenses/BSD-3-Clause
 
-.PROJECTURI
+.PROJECTURI https://github.com/jebofponderworthy/windows-tools
 
-.ICONURI
+.ICONURI 
 
-.EXTERNALMODULEDEPENDENCIES
+.EXTERNALMODULEDEPENDENCIES 
 
-.REQUIREDSCRIPTS
+.REQUIREDSCRIPTS 
 
-.EXTERNALSCRIPTDEPENDENCIES
+.EXTERNALSCRIPTDEPENDENCIES 
 
 .RELEASENOTES
 GetRedists
-Retrieve and install all of the VC++ redistributable libraries
+Retrieve, and install/update, all missing VC++ redistributable libraries
 currently being supported by Microsoft, using the excellent
-VcRedist package.
+VcRedist module.
 
-.PRIVATEDATA
+.PRIVATEDATA 
 
-#>
+#> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -55,7 +73,7 @@ VcRedist package.
 
 <#
 
-.DESCRIPTION
+.DESCRIPTION 
 GetRedists - Get all current Microsoft VC++ redistributables
 
 #>
@@ -79,9 +97,21 @@ Param()
 # https://opensource.org/licenses/BSD-3-Clause
 # and is reprised at the end of this file
 #
+# GetRedists is entirely dependent upon VcRedist:
+# https://docs.stealthpuppy.com/vcredist/function-syntax/get-vclist
+# for which profound gratitude is!!!
+#
+# Starting with version 2, this script will retrieve the versions
+# already installed, and install only the supported versions
+# not already installed.
+#
 
 ""
-"GetRedists"
+""
+"****************"
+"   GetRedists   "
+"****************"
+""
 ""
 
 # Items needing work:
@@ -108,23 +138,93 @@ function ShowProgress {
 
     Write-Progress -Activity "Get Microsoft Redists" -Status $reportStatus -PercentComplete -1 -CurrentOperation $currentOp
     }
+	
+Function PrepareModule {
+	param( [string]$ModuleName )
+	
+	ShowProgress("Preparing Powershell environment:","Installing " + $ModuleName + " ...")
+	Install-Module -Name $ModuleName -Repository PSGallery -Force
+	ShowProgress("Preparing Powershell environment:","Importing " + $ModuleName + " ...")
+	Import-Module -Name $ModuleName -Force
+	}
 
-ShowProgress("Preparing Powershell environment:","Installing NuGet Package Provider (for VcRedist)...")
-Install-PackageProvider -Name NuGet -Force | Out-Null
-ShowProgress("Preparing Powershell environment:","Installing NuGet (for VcRedist)...")
-Install-Module -Name NuGet -SkipPublisherCheck -Force
-ShowProgress("Preparing Powershell environment:","Importing NuGet (for VcRedist)...")
-Import-Module -Name NuGet
-ShowProgress("Preparing Powershell environment:","Installing VcRedist...")
-Install-Module -Name VcRedist -SkipPublisherCheck -Force
-ShowProgress("Preparing Powershell environment:","Importing VcRedist...")
-Import-Module -Name VcRedist
-ShowProgress("Preparing repo folder...","")
-New-Item C:\VcRedist -ItemType Directory | Out-Null
-ShowProgress("Retrieving all redistributables to repo folder...","")
-Get-VcList | Get-VcRedist -Path C:\VcRedist | Out-Null
-ShowProgress("Installing all redistributables from repo folder...","")
-Get-VcList | Install-VcRedist -Path C:\VcRedist | Out-Null
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unrestricted -Force > $null
+
+ShowProgress("Preparing Powershell environment:","Preparing PackageProvider NuGet...")
+
+Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
+
+ShowProgress("Preparing Powershell environment...","Setting up to use Powershell Gallery...")
+
+Set-PSRepository -InstallationPolicy Trusted -Name PSGallery
+
+PrepareModule("NuGet")
+PrepareModule("VcRedist")
+
+if ($False -eq (Test-Path C:\VcRedist -PathType Container)) {
+	New-Item C:\VcRedist -ItemType Directory | Out-Null 
+	}
+	
+ShowProgress("Getting list of currently installed redistributables...","")
+$InstalledRedists = Get-InstalledVcRedist
+ShowProgress("Getting list of currently available supported redistributables...","")
+$AvailableRedists = Get-VcList
+
+ShowProgress("Checking and installing/upgrading as needed...","")
+
+# Create blank array of redists to install
+$RedistsToGet = @()
+
+# Cycle through all available redists
+ForEach ($OnlineRedist in $AvailableRedists) {
+
+	"Checking version " + $OnlineRedist.Version + "..."
+	
+	# Cycle through all redists currently installed,
+	# checking to see if the available one being checked is there,
+	# and if not, add it to the array of those to be installed.
+	$IsInstalled = $False
+	ForEach ($LocalRedist in $InstalledRedists) {
+		If ($OnlineRedist.Version -eq $LocalRedist.Version) {
+			$OnlineRedist.Version + " already installed!"
+			""
+			$IsInstalled = $True
+			break
+			}
+		}
+	If ($IsInstalled -eq $False) {
+		$OnlineRedist.Version + " needed."
+		""
+		$RedistsToGet += ,$OnlineRedist
+		$IsInstalled = $True
+		}
+	}
+	
+If ($RedistsToGet -eq @())
+	{
+	"No VC++ redistributables missing!"
+	""
+	Exit
+	}
+	
+ShowProgress("Retrieving all needed redistributables to repo folder...","")
+"Retrieving..."
+""
+$ListOfDownloads = Get-VcRedist -Verbose -VcList $RedistsToGet -Path C:\VcRedist
+
+ShowProgress("Installing all needed redistributables from repo folder...","")
+""
+"Installing..."
+""
+Install-VcRedist -Verbose -VcList $RedistsToGet -Path C:\VcRedist
+
+# The old brute force get-them-all code
+#
+# ShowProgress("Retrieving all redistributables to repo folder...","")
+# Get-VcList | Get-VcRedist -Verbose -Path C:\VcRedist | Out-Null
+# ShowProgress("Installing all redistributables from repo folder...","")
+# Get-VcList | Install-VcRedist -Verbose -Path C:\VcRedist | Out-Null
+
 ShowProgress("Removing repo folder...","")
 Remove-Item C:\VcRedist -Recurse -Force | Out-Null
 ShowProgress("Done!","")
@@ -171,6 +271,19 @@ ShowProgress("Done!","")
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

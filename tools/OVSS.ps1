@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 3.05
+.VERSION 3.8
 
 .GUID ced41cc3-0763-4229-be97-4aac877c39e2
 
@@ -11,29 +11,51 @@
 
 .COPYRIGHT (c) 2018 Jonathan E. Brickman
 
-.TAGS
+.TAGS 
 
-.LICENSEURI
+.LICENSEURI https://opensource.org/licenses/BSD-3-Clause
 
-.PROJECTURI
+.PROJECTURI https://github.com/jebofponderworthy/windows-tools
 
-.ICONURI
+.ICONURI 
 
-.EXTERNALMODULEDEPENDENCIES
+.EXTERNALMODULEDEPENDENCIES 
 
-.REQUIREDSCRIPTS
+.REQUIREDSCRIPTS 
 
-.EXTERNALSCRIPTDEPENDENCIES
+.EXTERNALSCRIPTDEPENDENCIES 
 
 .RELEASENOTES
 OVSS
 Removes all orphan shadows, and then preallocates 20%
-of each drive volume for VSS as many different tools'
-docs advise.
+of each drive volume for VSS, as docs for different tools
+advise.
 
-.PRIVATEDATA
+.PRIVATEDATA 
 
-#>
+#> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -61,7 +83,7 @@ docs advise.
 
 <#
 
-.DESCRIPTION
+.DESCRIPTION 
 OVSS - optimizes VSS preallocation to 20% for each NTFS volume, and clears orphan shadows
 
 #>
@@ -88,7 +110,11 @@ Param()
 #
 
 ""
-"Optimize VSS"
+""
+"******************"
+"   Optimize VSS   "
+"******************"
+""
 ""
 
 # Self-elevate if not already elevated.
@@ -109,7 +135,7 @@ else {
 
 "Removing orphan shadows..."
 ""
-Invoke-Expression -Command 'vssadmin delete shadows /all /quiet'
+Invoke-Expression -Command 'vssadmin delete shadows /all /quiet' | Out-Null
 ""
 
 # Get list of VSS-related volumes, and run the appropriate command on each.
@@ -120,18 +146,30 @@ $VSSVolumesData = (vssadmin list volumes)
 ForEach ($DataLine in $VSSVolumesData) {
     If ((-join $DataLine[0..12]) -eq "Volume path: ") {
         $VolumeID = (-join $DataLine[13..60])
-        "Setting VSS preallocation to 20% for: " + $VolumeID
+        "Setting VSS preallocation to 40% for: " + $VolumeID
         ""
         If (((Get-CimInstance Win32_OperatingSystem).Caption) -match "Server") {
-            Invoke-Expression -Command ('vssadmin add shadowstorage /For="' + $VolumeID + '" /On="' + $VolumeID + '" /MaxSize=20%')
-            Invoke-Expression -Command ('vssadmin resize shadowstorage /For="' + $VolumeID + '" /On="' + $VolumeID + '" /MaxSize=20%')
+            Invoke-Expression -Command ('vssadmin add shadowstorage /For="' + $VolumeID + '" /On="' + $VolumeID + '" /MaxSize=40%') | Out-Null
+            Invoke-Expression -Command ('vssadmin resize shadowstorage /For="' + $VolumeID + '" /On="' + $VolumeID + '" /MaxSize=40%') | Out-Null
             }
         Else {
-            Invoke-Expression -Command ('vssadmin resize shadowstorage /For="' + $VolumeID + '" /On="' + $VolumeID + '" /MaxSize=20%')
+            Invoke-Expression -Command ('vssadmin resize shadowstorage /For="' + $VolumeID + '" /On="' + $VolumeID + '" /MaxSize=40%') | Out-Null
             }
         ""
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

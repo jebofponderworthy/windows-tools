@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 1.11
+.VERSION 1.14
 
 .GUID 2f1b0fa1-c184-47e6-b65c-8ed5c92db371
 
@@ -11,19 +11,19 @@
 
 .COPYRIGHT (c) 2018 Jonathan E. Brickman
 
-.TAGS
+.TAGS 
 
-.LICENSEURI
+.LICENSEURI https://opensource.org/licenses/BSD-3-Clause
 
-.PROJECTURI
+.PROJECTURI https://github.com/jebofponderworthy/windows-tools
 
-.ICONURI
+.ICONURI 
 
-.EXTERNALMODULEDEPENDENCIES
+.EXTERNALMODULEDEPENDENCIES 
 
-.REQUIREDSCRIPTS
+.REQUIREDSCRIPTS 
 
-.EXTERNALSCRIPTDEPENDENCIES
+.EXTERNALSCRIPTDEPENDENCIES 
 
 .RELEASENOTES
 RunDevNodeClean
@@ -31,15 +31,25 @@ Downloads the DevNodeClean package, chooses the binary appropriate to
 the bit-width of the current OS, and runs it.  This cleans unused
 device nodes in the registry, improving performance.
 
-.PRIVATEDATA
+.PRIVATEDATA 
 
-#>
+#> 
+
+
+
+
+
+
+
+
+
+
 
 
 
 <#
 
-.DESCRIPTION
+.DESCRIPTION 
 RunDevNodeClean - cleans unused device nodes in registry, improves performance
 
 #>
@@ -67,7 +77,11 @@ Param()
 #
 
 ""
-"RunDevNodeClean"
+""
+"*********************"
+"   RunDevNodeClean   "
+"*********************"
+""
 ""
 
 $StartupDir = $pwd
@@ -105,15 +119,20 @@ Unzip "$TempPath\devnodeclean.zip" "$TempPath"
 # Now get the bit-width of the operating system, and
 # run the appropriate binary.
 
+# Runs it twice, for some reason the first run
+# often misses some.
+
 if ([System.IntPtr]::Size -eq 4) {
     # 32-bit OS
 	"Running 32-bit binary..."
 	""
 	Invoke-Expression $TempPath\x86\DevNodeClean.exe
+	Invoke-Expression $TempPath\x86\DevNodeClean.exe
 	} else {
 	# 64-bit OS
 	"Running 64-bit binary..."
 	""
+	Invoke-Expression $TempPath\x64\DevNodeClean.exe
 	Invoke-Expression $TempPath\x64\DevNodeClean.exe
 	}
 
@@ -170,5 +189,18 @@ Remove-Item -Path $TempPath -Force -Recurse -ErrorAction SilentlyContinue
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
