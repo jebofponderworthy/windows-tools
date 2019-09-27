@@ -14,6 +14,8 @@
 # 
 # 3. Turns off Game Mode.
 #
+# The latter two changes identified by the extraordinary Joe Busby.
+#
 # Copyright 2019 Jonathan E. Brickman
 # https://notes.ponderworthy.com/
 # This script is licensed under the 3-Clause BSD License
