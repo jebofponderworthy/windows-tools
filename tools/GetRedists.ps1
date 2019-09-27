@@ -237,7 +237,7 @@ ShowProgress("Done!","")
 # the AYA>A>??sA??.??oNew BSD LicenseAYA>A>??sA??,A? or AYA>A>??sA??.??oModified BSD LicenseAYA>A>??sA??,A?.
 # See also the 2-clause BSD License.
 
-# Copyright 2017 Jonathan E. Brickman
+# Copyright 2018 Jonathan E. Brickman
 
 # Redistribution and use in source and binary
 # forms, with or without modification, are
@@ -271,6 +271,7 @@ ShowProgress("Done!","")
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
 
 
 
