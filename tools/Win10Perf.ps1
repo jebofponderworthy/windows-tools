@@ -22,7 +22,7 @@
 # https://opensource.org/licenses/BSD-3-Clause
 # and is reprised at the end of this file
 #
-#
+
 
 if ([string][environment]::OSVersion.Version.major -lt 10)
 {
