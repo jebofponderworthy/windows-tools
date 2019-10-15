@@ -28,13 +28,13 @@
 # This file builds RUNALL.CMD, DOWNLOAD.CMD, and RUNMOST.CMD.
 
 
-# UTF-8 output, no BOM; necessary for .CMD batch.
-# Don't ask me why only ASCII registers as UTF-8 or I might scream.  Softly and miserably though.
-$PSDefaultParameterValues['Out-File:Encoding'] = 'ASCII'
+$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding =
+                    New-Object System.Text.UTF8Encoding
 
-$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/windows-tools/06bbd155322db73d9257a0ed07a14cdb7bff8770/"
+$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/windows-tools/21370ad0e7d367aac1e619620d188a073978a542"
 
 $RUNALLps1List = @(
+	"Win10perf.ps1",
 	"RunDevNodeClean.ps1",
 	"wt_removeGhosts.ps1",
 	"TweakNTFS.ps1",
@@ -70,7 +70,7 @@ function ProcessPSScript {
 	"Processing $ps1 for $CMD ..."
 	
 	$DownloadURL = "$githubURL/tools/$ps1"
-	
+	"Downloading $DownloadURL ..."
 	$WebClientObj.DownloadString($DownloadURL) > "..\tools\$ps1"
 	
 	# First get hash for the ps1 in study
