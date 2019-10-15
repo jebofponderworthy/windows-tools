@@ -45,23 +45,23 @@ Get-AppxPackage "Microsoft.BingWeather" | Remove-AppxPackage -allusers
 Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage -allusers
 
 CD HKCU:\Software\Policies\Microsoft\
-mkdir MicrosoftEdge
-mkdir MicrosoftEdge\Main
+mkdir MicrosoftEdge -Force
+mkdir MicrosoftEdge\Main -Force
 CD MicrosoftEdge\Main
 New-ItemProperty . -Name AllowPrelaunch -Value 0 -PropertyType "DWord" -Force
 
 CD HKLM:\Software\Policies\Microsoft\
-mkdir MicrosoftEdge
-mkdir MicrosoftEdge\Main
+mkdir MicrosoftEdge -Force
+mkdir MicrosoftEdge\Main -Force
 CD MicrosoftEdge\Main
 New-ItemProperty . -Name AllowPrelaunch -Value 0 -PropertyType "DWord" -Force
 
 CD HKCU:\Software\Microsoft\
-mkdir GameBar
+mkdir GameBar -Force
 New-ItemProperty . -Name AllowAutoGameMode -Value 0 -PropertyType "DWord" -Force
 
 CD HKLM:\Software\Microsoft\
-mkdir GameBar
+mkdir GameBar -Force
 New-ItemProperty . -Name AllowAutoGameMode -Value 0 -PropertyType "DWord" -Force
 
 # The 3-Clause BSD License
