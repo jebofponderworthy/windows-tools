@@ -31,10 +31,10 @@
 $OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding =
                     New-Object System.Text.UTF8Encoding
 
-$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/windows-tools/21370ad0e7d367aac1e619620d188a073978a542"
+$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/windows-tools/5392b0fc2ac013802f14aa54430e2e635f9df99a"
 
 $RUNALLps1List = @(
-	"Win10perf.ps1",
+	"Win10Perf.ps1",
 	"RunDevNodeClean.ps1",
 	"wt_removeGhosts.ps1",
 	"TweakNTFS.ps1",
@@ -45,7 +45,7 @@ $RUNALLps1List = @(
 	)
 
 $RUNMOSTps1List = @(
-	"Win10perf.ps1",
+	"Win10Perf.ps1",
 	"RunDevNodeClean.ps1",
 	"wt_removeGhosts.ps1",
 	"TweakNTFS.ps1",
@@ -71,7 +71,7 @@ function ProcessPSScript {
 	
 	$DownloadURL = "$githubURL/tools/$ps1"
 	"Downloading $DownloadURL ..."
-	$WebClientObj.DownloadString($DownloadURL) > "..\tools\$ps1"
+	$WebClientObj.DownloadString("$DownloadURL") > "..\tools\$ps1"
 	
 	# First get hash for the ps1 in study
 	$ps1Hash = (certutil -hashfile "..\tools\$ps1" SHA256)[1] -replace '\s',''
