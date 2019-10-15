@@ -45,6 +45,7 @@ $RUNALLps1List = @(
 	)
 
 $RUNMOSTps1List = @(
+	"Win10perf.ps1",
 	"RunDevNodeClean.ps1",
 	"wt_removeGhosts.ps1",
 	"TweakNTFS.ps1",

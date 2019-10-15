@@ -24,6 +24,12 @@
 #
 #
 
+if ([string][environment]::OSVersion.Version.major -lt 10)
+{
+	"OS is older than Windows 10.  Exiting."
+	exit 1
+}
+
 Get-AppxPackage "Microsoft.XboxApp" | Remove-AppxPackage
 Get-AppxPackage "Microsoft.XboxGameOverlay" | Remove-AppxPackage
 Get-AppxPackage "Microsoft.XboxIdentityProvider"  | Remove-AppxPackage
