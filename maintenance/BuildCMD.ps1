@@ -27,11 +27,13 @@
 #
 # This file builds RUNALL.CMD, DOWNLOAD.CMD, and RUNMOST.CMD.
 
-
+# These encoding settings appear to result in UTF-8.  Don't ask me why, there might be some screaming involved.
 $OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding =
-                    New-Object System.Text.UTF8Encoding
+                    New-Object System.Text.ASCIIEncoding
+$PSDefaultParameterValues['*:Encoding'] = 'ascii'
 
-$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/windows-tools/5392b0fc2ac013802f14aa54430e2e635f9df99a"
+
+$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/windows-tools/21a7e833167151d1e23fedefe14665876bd1f645"
 
 $RUNALLps1List = @(
 	"Win10Perf.ps1",

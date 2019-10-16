@@ -23,52 +23,69 @@
 # and is reprised at the end of this file
 #
 
-
 if ([string][environment]::OSVersion.Version.major -lt 10)
 {
 	"OS is older than Windows 10.  Exiting."
 	exit 1
 }
 
-Get-AppxPackage "Microsoft.XboxApp" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.XboxGameOverlay" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.XboxIdentityProvider"  | Remove-AppxPackage
-Get-AppxPackage "Microsoft.Xbox.TCUI" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.XboxSpeechToTextOverlay"  | Remove-AppxPackage 
-Get-AppxPackage "Microsoft.WindowsCommunicationsApps" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.BingNews" | Remove-AppxPackage 
-Get-AppxPackage "Microsoft.BingWeather" | Remove-AppxPackage 
-Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage
+""
+""
+"****************"
+"    Win10Perf   "
+"****************"
+""
+""
 
-Get-AppxPackage "Microsoft.XboxApp" | Remove-AppxPackage -allusers
-Get-AppxPackage "Microsoft.XboxGameOverlay" | Remove-AppxPackage -allusers
-Get-AppxPackage "Microsoft.XboxIdentityProvider"  | Remove-AppxPackage -allusers
-Get-AppxPackage "Microsoft.Xbox.TCUI" | Remove-AppxPackage -allusers
-Get-AppxPackage "Microsoft.XboxSpeechToTextOverlay"  | Remove-AppxPackage  -allusers
-Get-AppxPackage "Microsoft.WindowsCommunicationsApps" | Remove-AppxPackage -allusers
-Get-AppxPackage "Microsoft.BingNews" | Remove-AppxPackage  -allusers
-Get-AppxPackage "Microsoft.BingWeather" | Remove-AppxPackage -allusers
-Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage -allusers
+"Removing Windows 10 Appx's of gaming, entertainment, and consumer items..."
 
-CD HKCU:\Software\Policies\Microsoft\
-mkdir MicrosoftEdge -Force
-mkdir MicrosoftEdge\Main -Force
-CD MicrosoftEdge\Main
-New-ItemProperty . -Name AllowPrelaunch -Value 0 -PropertyType "DWord" -Force
+Get-AppxPackage "Microsoft.XboxApp" | Remove-AppxPackage | Out-Null
+Get-AppxPackage "Microsoft.XboxGameOverlay" | Remove-AppxPackage | Out-Null
+Get-AppxPackage "Microsoft.XboxIdentityProvider"  | Remove-AppxPackage | Out-Null
+Get-AppxPackage "Microsoft.Xbox.TCUI" | Remove-AppxPackage | Out-Null
+Get-AppxPackage "Microsoft.XboxSpeechToTextOverlay"  | Remove-AppxPackage | Out-Null
+Get-AppxPackage "Microsoft.WindowsCommunicationsApps" | Remove-AppxPackage | Out-Null
+Get-AppxPackage "Microsoft.BingNews" | Remove-AppxPackage | Out-Null
+Get-AppxPackage "Microsoft.BingWeather" | Remove-AppxPackage | Out-Null
+Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage | Out-Null
 
-CD HKLM:\Software\Policies\Microsoft\
-mkdir MicrosoftEdge -Force
-mkdir MicrosoftEdge\Main -Force
-CD MicrosoftEdge\Main
-New-ItemProperty . -Name AllowPrelaunch -Value 0 -PropertyType "DWord" -Force
+Get-AppxPackage "Microsoft.XboxApp" | Remove-AppxPackage -allusers | Out-Null
+Get-AppxPackage "Microsoft.XboxGameOverlay" | Remove-AppxPackage -allusers | Out-Null
+Get-AppxPackage "Microsoft.XboxIdentityProvider"  | Remove-AppxPackage -allusers | Out-Null
+Get-AppxPackage "Microsoft.Xbox.TCUI" | Remove-AppxPackage -allusers | Out-Null
+Get-AppxPackage "Microsoft.XboxSpeechToTextOverlay"  | Remove-AppxPackage  -allusers | Out-Null
+Get-AppxPackage "Microsoft.WindowsCommunicationsApps" | Remove-AppxPackage -allusers | Out-Null
+Get-AppxPackage "Microsoft.BingNews" | Remove-AppxPackage  -allusers | Out-Null
+Get-AppxPackage "Microsoft.BingWeather" | Remove-AppxPackage -allusers | Out-Null
+Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage -allusers | Out-Null
 
-CD HKCU:\Software\Microsoft\
-mkdir GameBar -Force
-New-ItemProperty . -Name AllowAutoGameMode -Value 0 -PropertyType "DWord" -Force
+"Disabling prelaunch/preload of Microsoft Edge browser..."
 
-CD HKLM:\Software\Microsoft\
-mkdir GameBar -Force
-New-ItemProperty . -Name AllowAutoGameMode -Value 0 -PropertyType "DWord" -Force
+pushd HKCU:\Software\Policies\Microsoft\ | Out-Null
+mkdir MicrosoftEdge -Force | Out-Null
+mkdir MicrosoftEdge\Main -Force | Out-Null
+CD MicrosoftEdge\Main | Out-Null
+New-ItemProperty . -Name AllowPrelaunch -Value 0 -PropertyType "DWord" -Force | Out-Null
+
+CD HKLM:\Software\Policies\Microsoft\ | Out-Null
+mkdir MicrosoftEdge -Force | Out-Null
+mkdir MicrosoftEdge\Main -Force | Out-Null
+CD MicrosoftEdge\Main | Out-Null
+New-ItemProperty . -Name AllowPrelaunch -Value 0 -PropertyType "DWord" -Force | Out-Null
+
+"Disabling AutoGameMode..."
+
+CD HKCU:\Software\Microsoft\ | Out-Null
+mkdir GameBar -Force | Out-Null
+New-ItemProperty . -Name AllowAutoGameMode -Value 0 -PropertyType "DWord" -Force | Out-Null
+
+CD HKLM:\Software\Microsoft\ | Out-Null
+mkdir GameBar -Force | Out-Null
+New-ItemProperty . -Name AllowAutoGameMode -Value 0 -PropertyType "DWord" -Force | Out-Null
+
+popd | Out-Null
+
+""
 
 # The 3-Clause BSD License
 
@@ -112,6 +129,7 @@ New-ItemProperty . -Name AllowAutoGameMode -Value 0 -PropertyType "DWord" -Force
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
 
 
 
