@@ -5,7 +5,7 @@
 #
 # by Jonathan E. Brickman
 #
-# Speeds up Windows 10.  Specifically:
+# Speeds up Windows 8 and 10.  Specifically:
 #
 # 1. Removes several AppX packages which Microsoft has preloaded, whose
 # contents often pop up without warning, eating resources.
@@ -23,21 +23,15 @@
 # and is reprised at the end of this file
 #
 
-if ([string][environment]::OSVersion.Version.major -lt 10)
-{
-	"OS is older than Windows 10.  Exiting."
-	exit 1
-}
-
 ""
 ""
-"****************"
-"    Win10Perf   "
-"****************"
+"*******************************"
+"    Win 8 and 10 Performance   "
+"*******************************"
 ""
 ""
 
-"Removing Windows 10 Appx's of gaming, entertainment, and consumer items..."
+"Removing Appx's of gaming, entertainment, and consumer items..."
 
 Get-AppxPackage "Microsoft.XboxApp" | Remove-AppxPackage | Out-Null
 Get-AppxPackage "Microsoft.XboxGameOverlay" | Remove-AppxPackage | Out-Null
@@ -58,6 +52,11 @@ Get-AppxPackage "Microsoft.WindowsCommunicationsApps" | Remove-AppxPackage -allu
 Get-AppxPackage "Microsoft.BingNews" | Remove-AppxPackage  -allusers | Out-Null
 Get-AppxPackage "Microsoft.BingWeather" | Remove-AppxPackage -allusers | Out-Null
 Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage -allusers | Out-Null
+
+if ([int]([string][environment]::OSVersion.Version.major) -lt 10)
+{
+	exit 0
+}
 
 "Disabling prelaunch/preload of Microsoft Edge browser..."
 
@@ -129,6 +128,7 @@ popd | Out-Null
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
 
 
 

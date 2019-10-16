@@ -4,6 +4,11 @@
 # Publishes all of the windows-tools to the Microsoft PowerShell Gallery. #
 ###########################################################################
 
+# These encoding settings appear to result in UTF-8.  Don't ask me why, there might be some screaming involved.
+$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding =
+                    New-Object System.Text.ASCIIEncoding
+$PSDefaultParameterValues['*:Encoding'] = 'ascii'
+
 $NuGetKey = "oy2m7hbiqjjz5w7mgd7qsi5hveiza3puri4hdj5as7jcwi"
 
 Function ShowProgress {

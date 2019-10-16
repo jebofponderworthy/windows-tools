@@ -33,7 +33,7 @@ $OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding =
 $PSDefaultParameterValues['*:Encoding'] = 'ascii'
 
 
-$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/windows-tools/21a7e833167151d1e23fedefe14665876bd1f645"
+$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/windows-tools/32f1b2b5b78ad4cecbec87e25961b02ccb341c63"
 
 $RUNALLps1List = @(
 	"Win10Perf.ps1",
