@@ -32,26 +32,40 @@
 ""
 
 $WinVersionStr = Get-CimInstance -Class Win32_OperatingSystem | ForEach-Object -MemberName Caption
-if ($WinVersionStr -Like "Windows 7")
+
+if ($WinVersionStr -Like "*Windows 7*")
 {
 	"Windows 7.  Exiting."
 	""
 	exit 0
 }
 
+# Using this to suppress all output:  *>&1 | Out-Null
+
+"Configuring and enabling many facets of Superfetch..."
+
+Enable-MMAgent -ApplicationLaunchPrefetching *>&1 | Out-Null
+Enable-MMAgent -ApplicationPreLaunch *>&1 | Out-Null
+Set-MMAgent -MaxOperationAPIFiles 8192 *>&1 | Out-Null
+Enable-MMAgent -MemoryCompression *>&1 | Out-Null
+Enable-MMAgent -OperationAPI *>&1 | Out-Null
+Enable-MMAgent -PageCombining *>&1 | Out-Null
+Set-Service sysmain -StartupType Automatic *>&1 | Out-Null
+Start-Service sysmain *>&1 | Out-Null
+
 "Removing Appx's of gaming, entertainment, and consumer items..."
 
-Get-AppxPackage "Microsoft.XboxApp" | Remove-AppxPackage | Out-Null
-Get-AppxPackage "Microsoft.XboxGameOverlay" | Remove-AppxPackage | Out-Null
-Get-AppxPackage "Microsoft.XboxIdentityProvider"  | Remove-AppxPackage | Out-Null
-Get-AppxPackage "Microsoft.Xbox.TCUI" | Remove-AppxPackage | Out-Null
-Get-AppxPackage "Microsoft.XboxSpeechToTextOverlay"  | Remove-AppxPackage | Out-Null
-Get-AppxPackage "Microsoft.WindowsCommunicationsApps" | Remove-AppxPackage | Out-Null
-Get-AppxPackage "Microsoft.BingNews" | Remove-AppxPackage | Out-Null
-Get-AppxPackage "Microsoft.BingWeather" | Remove-AppxPackage | Out-Null
-Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage | Out-Null
+Get-AppxPackage "Microsoft.XboxApp" | Remove-AppxPackage *>&1 | Out-Null
+Get-AppxPackage "Microsoft.XboxGameOverlay" | Remove-AppxPackage *>&1 | Out-Null
+Get-AppxPackage "Microsoft.XboxIdentityProvider"  | Remove-AppxPackage *>&1 | Out-Null
+Get-AppxPackage "Microsoft.Xbox.TCUI" | Remove-AppxPackage *>&1 | Out-Null
+Get-AppxPackage "Microsoft.XboxSpeechToTextOverlay"  | Remove-AppxPackage *>&1 | Out-Null
+Get-AppxPackage "Microsoft.WindowsCommunicationsApps" | Remove-AppxPackage *>&1 | Out-Null
+Get-AppxPackage "Microsoft.BingNews" | Remove-AppxPackage *>&1 | Out-Null
+Get-AppxPackage "Microsoft.BingWeather" | Remove-AppxPackage *>&1 | Out-Null
+Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage *>&1 | Out-Null
 
-if ( ($WinVersionStr -Like "*Windows Server 2012*") -Or ($WinVersionStr -Like "Windows 8") )
+if ( ($WinVersionStr -Like "*Windows Server 2012*") -Or ($WinVersionStr -Like "*Windows 8*") )
 {
 	""
 	"Windows 8 or 2012.  Exiting."
@@ -59,41 +73,41 @@ if ( ($WinVersionStr -Like "*Windows Server 2012*") -Or ($WinVersionStr -Like "W
 	exit 0
 }
 
-Get-AppxPackage "Microsoft.XboxApp" | Remove-AppxPackage -allusers | Out-Null
-Get-AppxPackage "Microsoft.XboxGameOverlay" | Remove-AppxPackage -allusers | Out-Null
-Get-AppxPackage "Microsoft.XboxIdentityProvider"  | Remove-AppxPackage -allusers | Out-Null
-Get-AppxPackage "Microsoft.Xbox.TCUI" | Remove-AppxPackage -allusers | Out-Null
-Get-AppxPackage "Microsoft.XboxSpeechToTextOverlay"  | Remove-AppxPackage  -allusers | Out-Null
-Get-AppxPackage "Microsoft.WindowsCommunicationsApps" | Remove-AppxPackage -allusers | Out-Null
-Get-AppxPackage "Microsoft.BingNews" | Remove-AppxPackage  -allusers | Out-Null
-Get-AppxPackage "Microsoft.BingWeather" | Remove-AppxPackage -allusers | Out-Null
-Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage -allusers | Out-Null
+Get-AppxPackage "Microsoft.XboxApp" | Remove-AppxPackage -allusers *>&1 | Out-Null
+Get-AppxPackage "Microsoft.XboxGameOverlay" | Remove-AppxPackage -allusers *>&1 | Out-Null
+Get-AppxPackage "Microsoft.XboxIdentityProvider"  | Remove-AppxPackage -allusers *>&1 | Out-Null
+Get-AppxPackage "Microsoft.Xbox.TCUI" | Remove-AppxPackage -allusers *>&1 | Out-Null
+Get-AppxPackage "Microsoft.XboxSpeechToTextOverlay"  | Remove-AppxPackage  -allusers *>&1 | Out-Null
+Get-AppxPackage "Microsoft.WindowsCommunicationsApps" | Remove-AppxPackage -allusers *>&1 | Out-Null
+Get-AppxPackage "Microsoft.BingNews" | Remove-AppxPackage  -allusers *>&1 | Out-Null
+Get-AppxPackage "Microsoft.BingWeather" | Remove-AppxPackage -allusers *>&1 | Out-Null
+Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage -allusers *>&1 | Out-Null
 
 "Disabling prelaunch/preload of Microsoft Edge browser..."
 
-pushd HKCU:\Software\Policies\Microsoft\ | Out-Null
-mkdir MicrosoftEdge -Force | Out-Null
-mkdir MicrosoftEdge\Main -Force | Out-Null
-CD MicrosoftEdge\Main | Out-Null
-New-ItemProperty . -Name AllowPrelaunch -Value 0 -PropertyType "DWord" -Force | Out-Null
+pushd HKCU:\Software\Policies\Microsoft\ *>&1 | Out-Null
+mkdir MicrosoftEdge -Force *>&1 | Out-Null
+mkdir MicrosoftEdge\Main -Force *>&1 | Out-Null
+CD MicrosoftEdge\Main *>&1 | Out-Null
+New-ItemProperty . -Name AllowPrelaunch -Value 0 -PropertyType "DWord" -Force *>&1 | Out-Null
 
-CD HKLM:\Software\Policies\Microsoft\ | Out-Null
-mkdir MicrosoftEdge -Force | Out-Null
-mkdir MicrosoftEdge\Main -Force | Out-Null
-CD MicrosoftEdge\Main | Out-Null
-New-ItemProperty . -Name AllowPrelaunch -Value 0 -PropertyType "DWord" -Force | Out-Null
+CD HKLM:\Software\Policies\Microsoft\ *>&1 | Out-Null
+mkdir MicrosoftEdge -Force *>&1 | Out-Null
+mkdir MicrosoftEdge\Main -Force *>&1 | Out-Null
+CD MicrosoftEdge\Main *>&1 | Out-Null
+New-ItemProperty . -Name AllowPrelaunch -Value 0 -PropertyType "DWord" -Force *>&1 | Out-Null
 
 "Disabling AutoGameMode..."
 
-CD HKCU:\Software\Microsoft\ | Out-Null
-mkdir GameBar -Force | Out-Null
-New-ItemProperty . -Name AllowAutoGameMode -Value 0 -PropertyType "DWord" -Force | Out-Null
+CD HKCU:\Software\Microsoft\ *>&1 | Out-Null
+mkdir GameBar -Force *>&1 | Out-Null
+New-ItemProperty . -Name AllowAutoGameMode -Value 0 -PropertyType "DWord" -Force *>&1 | Out-Null
 
-CD HKLM:\Software\Microsoft\ | Out-Null
-mkdir GameBar -Force | Out-Null
-New-ItemProperty . -Name AllowAutoGameMode -Value 0 -PropertyType "DWord" -Force | Out-Null
+CD HKLM:\Software\Microsoft\ *>&1 | Out-Null
+mkdir GameBar -Force *>&1 | Out-Null
+New-ItemProperty . -Name AllowAutoGameMode -Value 0 -PropertyType "DWord" -Force *>&1 | Out-Null
 
-popd | Out-Null
+popd *>&1 | Out-Null
 
 ""
 
@@ -139,6 +153,7 @@ popd | Out-Null
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
 
 
 
