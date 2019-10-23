@@ -31,6 +31,14 @@
 ""
 ""
 
+$WinVersionStr = Get-CimInstance -Class Win32_OperatingSystem | ForEach-Object -MemberName Caption
+if ($WinVersionStr -Like "Windows 7")
+{
+	"Windows 7.  Exiting."
+	""
+	exit 0
+}
+
 "Removing Appx's of gaming, entertainment, and consumer items..."
 
 Get-AppxPackage "Microsoft.XboxApp" | Remove-AppxPackage | Out-Null
@@ -43,6 +51,14 @@ Get-AppxPackage "Microsoft.BingNews" | Remove-AppxPackage | Out-Null
 Get-AppxPackage "Microsoft.BingWeather" | Remove-AppxPackage | Out-Null
 Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage | Out-Null
 
+if ( ($WinVersionStr -Like "*Windows Server 2012*") -Or ($WinVersionStr -Like "Windows 8") )
+{
+	""
+	"Windows 8 or 2012.  Exiting."
+	""
+	exit 0
+}
+
 Get-AppxPackage "Microsoft.XboxApp" | Remove-AppxPackage -allusers | Out-Null
 Get-AppxPackage "Microsoft.XboxGameOverlay" | Remove-AppxPackage -allusers | Out-Null
 Get-AppxPackage "Microsoft.XboxIdentityProvider"  | Remove-AppxPackage -allusers | Out-Null
@@ -52,11 +68,6 @@ Get-AppxPackage "Microsoft.WindowsCommunicationsApps" | Remove-AppxPackage -allu
 Get-AppxPackage "Microsoft.BingNews" | Remove-AppxPackage  -allusers | Out-Null
 Get-AppxPackage "Microsoft.BingWeather" | Remove-AppxPackage -allusers | Out-Null
 Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage -allusers | Out-Null
-
-if ([int]([string][environment]::OSVersion.Version.major) -lt 10)
-{
-	exit 0
-}
 
 "Disabling prelaunch/preload of Microsoft Edge browser..."
 
@@ -128,6 +139,7 @@ popd | Out-Null
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
 
 
 

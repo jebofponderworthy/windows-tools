@@ -5,10 +5,10 @@ echo Downloading, verifying, and running Win10Perf.ps1 ...
 echo ---
 echo:
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/32f1b2b5b78ad4cecbec87e25961b02ccb341c63/tools/Win10Perf.ps1') > Win10Perf.ps1"
+"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/dfd8af17f0648483b7306f53d1c278b34d741d2f/tools/Win10Perf.ps1') > Win10Perf.ps1"
 
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$certrpt = (certutil -hashfile Win10Perf.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq '854abd8f1f60774234012aecf906bdae9ee981b70eeaa38f0ba8339aa2e95d41') { iex .\Win10Perf.ps1 } Else { 'Hash fail on Win10Perf.ps1!' }"
+"$certrpt = (certutil -hashfile Win10Perf.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq '27ec665c07c861cea869f780cd2e3a2ebb6830dc9f315f8bd1ee7d35bdccbfc5') { iex .\Win10Perf.ps1 } Else { 'Hash fail on Win10Perf.ps1!' }"
 
 @del Win10Perf.ps1
 
@@ -17,10 +17,10 @@ echo Downloading, verifying, and running RunDevNodeClean.ps1 ...
 echo ---
 echo:
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/32f1b2b5b78ad4cecbec87e25961b02ccb341c63/tools/RunDevNodeClean.ps1') > RunDevNodeClean.ps1"
+"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/dfd8af17f0648483b7306f53d1c278b34d741d2f/tools/RunDevNodeClean.ps1') > RunDevNodeClean.ps1"
 
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$certrpt = (certutil -hashfile RunDevNodeClean.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq 'fb29e803720bfdc2502c86e917335daecb2b797478b6c28478bbdb3d91a27bd8') { iex .\RunDevNodeClean.ps1 } Else { 'Hash fail on RunDevNodeClean.ps1!' }"
+"$certrpt = (certutil -hashfile RunDevNodeClean.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq '3b54832d304687bbed57524830a69d72851e3b589d8bf090d102c5f7757a4e78') { iex .\RunDevNodeClean.ps1 } Else { 'Hash fail on RunDevNodeClean.ps1!' }"
 
 @del RunDevNodeClean.ps1
 
@@ -29,10 +29,10 @@ echo Downloading, verifying, and running wt_removeGhosts.ps1 ...
 echo ---
 echo:
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/32f1b2b5b78ad4cecbec87e25961b02ccb341c63/tools/wt_removeGhosts.ps1') > wt_removeGhosts.ps1"
+"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/dfd8af17f0648483b7306f53d1c278b34d741d2f/tools/wt_removeGhosts.ps1') > wt_removeGhosts.ps1"
 
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$certrpt = (certutil -hashfile wt_removeGhosts.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq 'f9c4f077658c7484f4a193ba6b0dd3b5a5e5db8927c1999250072ba4a9193709') { iex .\wt_removeGhosts.ps1 } Else { 'Hash fail on wt_removeGhosts.ps1!' }"
+"$certrpt = (certutil -hashfile wt_removeGhosts.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq 'd47993757685405b336b84fff1c3d8fa7ecf1c4ff5bf84a1cf869bf983f53218') { iex .\wt_removeGhosts.ps1 } Else { 'Hash fail on wt_removeGhosts.ps1!' }"
 
 @del wt_removeGhosts.ps1
 
@@ -41,10 +41,10 @@ echo Downloading, verifying, and running TweakNTFS.ps1 ...
 echo ---
 echo:
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/32f1b2b5b78ad4cecbec87e25961b02ccb341c63/tools/TweakNTFS.ps1') > TweakNTFS.ps1"
+"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/dfd8af17f0648483b7306f53d1c278b34d741d2f/tools/TweakNTFS.ps1') > TweakNTFS.ps1"
 
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$certrpt = (certutil -hashfile TweakNTFS.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq '2133de78ae5418aa0977f17472bc2f798ec626cf0f958fb942399e2289623f1a') { iex .\TweakNTFS.ps1 } Else { 'Hash fail on TweakNTFS.ps1!' }"
+"$certrpt = (certutil -hashfile TweakNTFS.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq 'f5a5192ee91161db224f3ee975a9ad1eeec0e7d6b2b7d9c28b9df919de0f2955') { iex .\TweakNTFS.ps1 } Else { 'Hash fail on TweakNTFS.ps1!' }"
 
 @del TweakNTFS.ps1
 
@@ -53,10 +53,10 @@ echo Downloading, verifying, and running OWTAS.ps1 ...
 echo ---
 echo:
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/32f1b2b5b78ad4cecbec87e25961b02ccb341c63/tools/OWTAS.ps1') > OWTAS.ps1"
+"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/dfd8af17f0648483b7306f53d1c278b34d741d2f/tools/OWTAS.ps1') > OWTAS.ps1"
 
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$certrpt = (certutil -hashfile OWTAS.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq '5939ffb14cd6561fb0999a7b956a693c88f171bbe8482f0db6d6ab8345b79fe9') { iex .\OWTAS.ps1 } Else { 'Hash fail on OWTAS.ps1!' }"
+"$certrpt = (certutil -hashfile OWTAS.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq '4691c491fbc3a4fdd48734aee9689265586c2a8c57f7cbd8051e3f41934acf03') { iex .\OWTAS.ps1 } Else { 'Hash fail on OWTAS.ps1!' }"
 
 @del OWTAS.ps1
 
@@ -65,10 +65,10 @@ echo Downloading, verifying, and running OVSS.ps1 ...
 echo ---
 echo:
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/32f1b2b5b78ad4cecbec87e25961b02ccb341c63/tools/OVSS.ps1') > OVSS.ps1"
+"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/dfd8af17f0648483b7306f53d1c278b34d741d2f/tools/OVSS.ps1') > OVSS.ps1"
 
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$certrpt = (certutil -hashfile OVSS.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq 'efbf1725f110008f890a830591cf486ecb8a424958dfbc6f0f2b8c5ac2dec2b7') { iex .\OVSS.ps1 } Else { 'Hash fail on OVSS.ps1!' }"
+"$certrpt = (certutil -hashfile OVSS.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq '07d80679ff12229c955ac26d2864a3274722e33d8de44f7de63b058e6f122176') { iex .\OVSS.ps1 } Else { 'Hash fail on OVSS.ps1!' }"
 
 @del OVSS.ps1
 
@@ -77,10 +77,10 @@ echo Downloading, verifying, and running CATE.ps1 ...
 echo ---
 echo:
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/32f1b2b5b78ad4cecbec87e25961b02ccb341c63/tools/CATE.ps1') > CATE.ps1"
+"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/dfd8af17f0648483b7306f53d1c278b34d741d2f/tools/CATE.ps1') > CATE.ps1"
 
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$certrpt = (certutil -hashfile CATE.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq 'c183a9cbf4ecb077715f1a945a1eba792f4a2de79544fb3ba3e488221944f5a0') { iex .\CATE.ps1 } Else { 'Hash fail on CATE.ps1!' }"
+"$certrpt = (certutil -hashfile CATE.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq 'ad9029d0c76301cad482922bb0ba780e3ce87c8336b4060085e8d4cc35e0fb45') { iex .\CATE.ps1 } Else { 'Hash fail on CATE.ps1!' }"
 
 @del CATE.ps1
 
