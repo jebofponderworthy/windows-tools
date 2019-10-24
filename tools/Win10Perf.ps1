@@ -42,7 +42,7 @@ if ($WinVersionStr -Like "*Windows 7*")
 
 # Using this to suppress all output:  *>&1 | Out-Null
 
-"Configuring and enabling many facets of Superfetch..."
+"Configuring and enabling facets of MMAgent..."
 
 Enable-MMAgent -ApplicationLaunchPrefetching *>&1 | Out-Null
 Enable-MMAgent -ApplicationPreLaunch *>&1 | Out-Null
@@ -153,6 +153,7 @@ popd *>&1 | Out-Null
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
 
 
 
