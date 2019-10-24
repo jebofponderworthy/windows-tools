@@ -1,5 +1,6 @@
 #######################################################################
 # Windows 10 Performance                                              #
+# v2.2                                                                #
 #######################################################################
 
 #
@@ -153,6 +154,7 @@ popd *>&1 | Out-Null
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
 
 
 

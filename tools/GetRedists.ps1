@@ -83,6 +83,7 @@ Param()
 
 #######################################################################
 # GetRedists                                                          #
+# v2.6                                                                #
 #######################################################################
 
 #
@@ -101,9 +102,6 @@ Param()
 # https://docs.stealthpuppy.com/vcredist/function-syntax/get-vclist
 # for which profound gratitude is!!!
 #
-# Starting with version 2, this script will retrieve the versions
-# already installed, and install only the supported versions
-# not already installed.
 #
 
 ""
@@ -271,6 +269,7 @@ ShowProgress("Done!","")
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
 
 
 
