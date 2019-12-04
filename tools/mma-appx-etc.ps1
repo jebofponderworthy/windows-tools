@@ -1,19 +1,24 @@
 #######################################################################
-# Windows 10 Performance                                              #
+# MMA, appx, and other 8+/2012+/10+/201* performance items            #
 # v2.2                                                                #
 #######################################################################
 
 #
 # by Jonathan E. Brickman
 #
-# Speeds up Windows 8 and 10.  Specifically:
+# Speeds up Windows 8+/2012+, with special attention to 10 and up.  Specifically:
 #
-# 1. Removes several AppX packages which Microsoft has preloaded, whose
-# contents often pop up without warning, eating resources.
+# 1. Set MMAgent for performance.  This includes Superfetch, prefetching,
+# memory compression, and page combining.  Far better to do these things,
+# than to just turn Superfetch off.
 #
-# 2. Turns off preloading of the Edge browser.
+# 2. Removes several AppX packages which Microsoft has preloaded, whose
+# contents may pop up without warning, eating resources.  This includes
+# the consumer-grade email/calendar/contacts apps.
+#
+# 4. Turns off preloading of the Edge browser.
 # 
-# 3. Turns off Game Mode.
+# 5. Turns off Game Mode.
 #
 # The latter two changes identified by the extraordinary Joe Busby.
 #
@@ -26,9 +31,9 @@
 
 ""
 ""
-"*******************************"
-"    Win 8 and 10 Performance   "
-"*******************************"
+"**************************************************************"
+"   MMA, appx, and other 8+/2012+/10+/201* performance items   "
+"**************************************************************"
 ""
 ""
 
@@ -52,8 +57,11 @@ $MMAgentSetup = Get-MMAgent
 
 If (-Not $MMAgentSetup.ApplicationLaunchPrefetching)
 	{ Enable-MMAgent -ApplicationLaunchPrefetching | Out-Null }
-If (-Not $MMAgentSetup.ApplicationPrelaunch)
-	{ Enable-MMAgent -ApplicationPreLaunch | Out-Null }
+If (-Not ($WinVersionStr -Like "*Windows Server 201*"))
+	{
+	If (-Not $MMAgentSetup.ApplicationPrelaunch)
+		{ Enable-MMAgent -ApplicationPreLaunch | Out-Null }
+	}	
 If (-Not $MMAgentSetup.MemoryCompression)
 	{ Enable-MMAgent -MemoryCompression | Out-Null }
 If (-Not $MMAgentSetup.OperationAPI)
@@ -160,6 +168,7 @@ popd | Out-Null
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
 
 
 

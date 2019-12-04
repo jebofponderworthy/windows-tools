@@ -33,10 +33,10 @@ $OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding =
 $PSDefaultParameterValues['*:Encoding'] = 'ascii'
 
 
-$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/windows-tools/4c323b8da18ff484efda30b58153e770960bd856"
+$githubURL = "https://raw.githubusercontent.com/jebofponderworthy/windows-tools/095e7315fd85ab787e7f4c69bdf6d469e53ee6ce"
 
 $RUNALLps1List = @(
-	"Win10Perf.ps1",
+	"mma-appx-etc.ps1",
 	"RunDevNodeClean.ps1",
 	"wt_removeGhosts.ps1",
 	"TweakNTFS.ps1",
@@ -47,7 +47,7 @@ $RUNALLps1List = @(
 	)
 
 $RUNMOSTps1List = @(
-	"Win10Perf.ps1",
+	"mma-appx-etc.ps1",
 	"RunDevNodeClean.ps1",
 	"wt_removeGhosts.ps1",
 	"TweakNTFS.ps1",
