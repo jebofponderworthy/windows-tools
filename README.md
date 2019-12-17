@@ -2,7 +2,7 @@
 
 This is a toolset for improvement of performance of Windows desktop and server operating systems.  Much gratitude goes to Ponderworthy folks and friends for much input, a good bit of which can be read at [notes.ponderworthy.com](https://notes.ponderworthy.com).
 
-PowerShell 3.0 and later are supported, on Windows 7/2008R2 and later; the exception is GetRedists, which requires 5.1.  Please note that 7 and 2008R2 ship with PowerShell 2.0 by default; installing the [WMF](https://www.microsoft.com/en-us/download/details.aspx?id=54616) will update it to 5.1.  
+PowerShell 3.0 and later are supported, on Windows 7/2008R2 and later; the exception is GetRedists, which requires 5.1.  Please note that 7 and 2008R2 ship with PowerShell 2.0 by default.  Installing the [WMF](https://www.microsoft.com/en-us/download/details.aspx?id=54616) will update to 5.1.  
 
 ## RUNALL.CMD:  download, verify by hash, and run almost all of the tools
 
@@ -23,6 +23,10 @@ For compatibility, hashing is done using the command-line CERTUTIL tool (capturi
 ## GETREDISTS.CMD:  Get and update Microsoft VC++ redistributables using GetRedists.ps1
 
 Lots of software uses Microsoft VC++ redistributables.  They get updated fairly often and almost never automatically.  To bring all of yours up to date and install all the newers which Microsoft supports, run [GETREDISTS.CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/RUN.CMD) to call GetRedists.ps1.  Requires PowerShell 5.1, and automatically pulls in the VcRedist module.
+
+## mma-appx-etc
+
+Lots of interesting things have been introduced as part of Windows 8/8.1 and 10.  There is something called MMAgent, lots of little applets called APPX's, the Edge browser, and something called Game Mode.  Application launch prefetching, page combining, memory compression, and application prelaunching have all been rolled into MMAgent, and properly configured, this can improve overall OS performance quite nicely: disabling Superfetch can sometimes give a bit of performance, but configuring it nicely often gains a lot, especially with an SSD.  There are many APPX items which eat resources and confuse end users; deleting these (e.g., the consumer-grade email app) can prevent many issues.  The Edge browser is preloaded at boot by default, taking RAM in hidden fashion; disabling this can help a good bit, and has not been noticeable to users so far.  And Game Mode is something hidden which, by default, runs all the time, sits in the background, tries to guess when any user is playing a game whose video is worth recording for sharing with other gamers, and does the recording whether its guess is correct or not...all of which takes resources, and is therefore well worth turning off!  The above are all implemented in [mma-appx-etc](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/mma-appx-etc.ps1) for your operating pleasure.
 
 ## RunDevNodeClean
 

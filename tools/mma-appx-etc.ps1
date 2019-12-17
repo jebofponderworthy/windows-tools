@@ -1,6 +1,6 @@
 #######################################################################
 # MMA, appx, and other 8+/2012+/10+/201* performance items            #
-# v2.2                                                                #
+# v2.3                                                                #
 #######################################################################
 
 #
@@ -14,11 +14,12 @@
 #
 # 2. Removes several AppX packages which Microsoft has preloaded, whose
 # contents may pop up without warning, eating resources.  This includes
-# the consumer-grade email/calendar/contacts apps.
+# the consumer-grade email/calendar/contacts apps, several Xbox gaming items,
+# et cetera.
 #
-# 4. Turns off preloading of the Edge browser.
+# 3. Turns off preloading of the Edge browser.
 # 
-# 5. Turns off Game Mode.
+# 4. Turns off Game Mode.
 #
 # The latter two changes identified by the extraordinary Joe Busby.
 #
@@ -49,7 +50,7 @@ if ($WinVersionStr -Like "*Windows 7*")
 # Using this to suppress much error output:
 $ErrorActionPreference= 'silentlycontinue'
 
-"Configuring and enabling facets of MMAgent..."
+"Configuring and enabling aspects of MMAgent..."
 
 Set-MMAgent -MaxOperationAPIFiles 8192 | Out-Null
 
@@ -72,7 +73,7 @@ If (-Not $MMAgentSetup.PageCombining)
 Set-Service sysmain -StartupType Automatic | Out-Null
 Start-Service sysmain | Out-Null
 
-"Removing Appx's of gaming, entertainment, and consumer items..."
+"Removing appx's..."
 
 Get-AppxPackage "Microsoft.XboxApp" | Remove-AppxPackage | Out-Null
 Get-AppxPackage "Microsoft.XboxGameOverlay" | Remove-AppxPackage | Out-Null

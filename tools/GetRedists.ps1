@@ -140,23 +140,25 @@ function ShowProgress {
 Function PrepareModule {
 	param( [string]$ModuleName )
 	
-	ShowProgress("Preparing Powershell environment:","Installing " + $ModuleName + " ...")
-	Install-Module -Name $ModuleName -Repository PSGallery -Force
-	ShowProgress("Preparing Powershell environment:","Importing " + $ModuleName + " ...")
-	Import-Module -Name $ModuleName -Force
+	If ((Find-Module -Name $ModuleName).Version -lt (Get-Module -Name $ModuleName -ListAvailable)) {
+		Install-Module -Name $ModuleName -Repository PSGallery -Force
+		}
 	}
 
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unrestricted -Force > $null
-
-ShowProgress("Preparing Powershell environment:","Preparing PackageProvider NuGet...")
-
-Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
 
 ShowProgress("Preparing Powershell environment...","Setting up to use Powershell Gallery...")
 
 Set-PSRepository -InstallationPolicy Trusted -Name PSGallery
 
+ShowProgress("Preparing Powershell environment:","Preparing PackageProvider NuGet...")
+If ((Find-PackageProvider -Name NuGet).Version -lt (Get-PackageProvider -Name Nuget)) {
+	Install-PackageProvider -Name NuGet -Force | Out-Null
+	}
+
+ShowProgress("Preparing Powershell environment...","Checking/preparing NuGet...")
 PrepareModule("NuGet")
+ShowProgress("Preparing Powershell environment...","Checking/preparing VcRedist...")
 PrepareModule("VcRedist")
 
 if ($False -eq (Test-Path C:\VcRedist -PathType Container)) {
