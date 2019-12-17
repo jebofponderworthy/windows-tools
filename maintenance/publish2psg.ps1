@@ -16,15 +16,28 @@ Function ShowProgress {
 
     Write-Progress -Activity "Get Microsoft Redists" -Status $reportStatus -PercentComplete -1 -CurrentOperation $currentOp
     }
+
+Function PrepareModule {
+	param( [string]$ModuleName )
 	
+	If ((Find-Module -Name $ModuleName).Version -lt (Get-Module -Name $ModuleName -ListAvailable)) {
+		Install-Module -Name $ModuleName -Repository PSGallery -Force
+		}
+	}
 
-"Preparing environment..."
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unrestricted -Force > $null
 
-ShowProgress("Preparing Powershell environment...","")
+ShowProgress("Preparing Powershell environment...","Setting up to use Powershell Gallery...")
+
+Set-PSRepository -InstallationPolicy Trusted -Name PSGallery
 
 ShowProgress("Preparing Powershell environment:","Preparing PackageProvider NuGet...")
-Install-PackageProvider -Name NuGet -Force | Out-Null
-Install-Module –Name PowerShellGet –Force | Out-Null
+If ((Find-PackageProvider -Name NuGet).Version -lt (Get-PackageProvider -Name Nuget)) {
+	Install-PackageProvider -Name NuGet -Force | Out-Null
+	}
+
+ShowProgress("Preparing Powershell environment...","Checking/preparing NuGet...")
+PrepareModule("NuGet")
 
 Function ToPSGallery {
 	param( 	[string]$psItem, 
@@ -47,7 +60,7 @@ Function ToPSGallery {
 	Update-ScriptFileInfo -Path ("..\tools\$psItem" + ".ps1") `
 		-Author 'Jonathan E. Brickman' `
 		-CompanyName 'Ponderworthy Music' `
-		-Copyright '(c) 2018 Jonathan E. Brickman' `
+		-Copyright '(c) ' + (Get-Date).year + ' Jonathan E. Brickman' `
 		-Description $psDescription `
 		-LicenseURI 'https://opensource.org/licenses/BSD-3-Clause' `
 		-ProjectURI 'https://github.com/jebofponderworthy/windows-tools' `
@@ -59,6 +72,22 @@ Function ToPSGallery {
 	
 	Publish-Script -Path ("..\tools\$psItem" + ".ps1") -NuGetApiKey $NuGetKey -Force
 }
+
+# ---------------------------------------
+
+'mma-appx-etc...'
+$Author = 'Jonathan E. Brickman'
+$Desc = 'mma-appx-etc - performance gains of several kinds new to Windows 8/10/201*'
+$Tags = @(
+	'Lean Computing', 'Lean', 'Speed', 'Performance', 'Windows 10', 'Windows 8'
+	)
+$ReleaseNotes = @(
+	'mma-appx-etc - performance gains of several kinds new to Windows 8/10/201*',
+	'Configures MMAgent (including Superfetch, Memory Compression, etc.) for performance,',
+	'removes several consumer-grade appx items, disables preload of Edge Browser,',
+	'and disables Game Mode.'
+	)
+ToPSGallery 'mma-appx-etc' $Desc $ReleaseNotes $Tags '2.3'
 
 # ---------------------------------------
 
