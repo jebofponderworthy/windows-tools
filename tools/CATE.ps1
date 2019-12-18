@@ -9,21 +9,21 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2018 Jonathan E. Brickman
+.COPYRIGHT (c) 2019 Jonathan E. Brickman
 
-.TAGS 
+.TAGS
 
 .LICENSEURI https://opensource.org/licenses/BSD-3-Clause
 
 .PROJECTURI https://github.com/jebofponderworthy/windows-tools
 
-.ICONURI 
+.ICONURI
 
 .EXTERNALMODULEDEPENDENCIES 
 
-.REQUIREDSCRIPTS 
+.REQUIREDSCRIPTS
 
-.EXTERNALSCRIPTDEPENDENCIES 
+.EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
 CATE - Clean All Temp Etc
@@ -32,9 +32,15 @@ system profile temp folders, and system temp folders (they are not the same!);
 also clears logs, IE caches, Firefox caches, Chrome caches, Ask Partner Network data,
 Adobe Flash caches, Java deployment caches, and Microsoft CryptnetURL caches.
 
-.PRIVATEDATA 
+.PRIVATEDATA
 
 #> 
+
+
+
+
+
+
 
 
 

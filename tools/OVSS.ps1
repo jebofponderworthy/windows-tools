@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 3.8
+.VERSION 3.7
 
 .GUID ced41cc3-0763-4229-be97-4aac877c39e2
 
@@ -9,21 +9,21 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2018 Jonathan E. Brickman
+.COPYRIGHT (c) 2019 Jonathan E. Brickman
 
-.TAGS 
+.TAGS
 
 .LICENSEURI https://opensource.org/licenses/BSD-3-Clause
 
 .PROJECTURI https://github.com/jebofponderworthy/windows-tools
 
-.ICONURI 
+.ICONURI
 
 .EXTERNALMODULEDEPENDENCIES 
 
-.REQUIREDSCRIPTS 
+.REQUIREDSCRIPTS
 
-.EXTERNALSCRIPTDEPENDENCIES 
+.EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
 OVSS
@@ -31,9 +31,11 @@ Removes all orphan shadows, and then preallocates 20%
 of each drive volume for VSS, as docs for different tools
 advise.
 
-.PRIVATEDATA 
+.PRIVATEDATA
 
 #> 
+
+
 
 
 

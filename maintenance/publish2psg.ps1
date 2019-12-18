@@ -9,7 +9,7 @@ $OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding =
                     New-Object System.Text.ASCIIEncoding
 $PSDefaultParameterValues['*:Encoding'] = 'ascii'
 
-$NuGetKey = "oy2m7hbiqjjz5w7mgd7qsi5hveiza3puri4hdj5as7jcwi"
+$NuGetKey = "oy2jtj4ifoiyvt3biqfqdyaayia4sc7ujarnkacuaty4pm"
 
 Function ShowProgress {
 	param( [string]$reportStatus, [string]$currentOp )
@@ -40,27 +40,37 @@ ShowProgress("Preparing Powershell environment...","Checking/preparing NuGet..."
 PrepareModule("NuGet")
 
 Function ToPSGallery {
-	param( 	[string]$psItem, 
-			[string]$psDescription,
+	param( 	$psName, 
+			$psDescription,
 			$psReleaseNotes,
 			$psTags,
-			[string]$psVersion
+			$psVersion
 			)
 	
-	ShowProgress("Working on",$psItem)
+	"Script:`t" + $psName
+	"Description:`t" + $psDescription
+	"Version:`t" + $psVersion
 	
-	$OnlineModuleInfo = Find-Module $psItem -Repository PSGallery
-	If ($OnlineModuleInfo.Version -ge $psVersion) {
-		"The same or later version already exists in PSGallery."
+	Try { $OnlineInfo = Find-Script $psName -Repository PSGallery -ErrorAction SilentlyContinue | Out-Null }
+	Catch {}
+	If ($OnlineInfo -eq $null) {
+		"$psName version $psVersion does not yet exist in PSGallery."
+		}
+	ElseIf ($OnlineInfo.Version -ge $psVersion) {
+		"$psName version $psVersion or later, already exists in PSGallery."
+		""
 		return
 		}
 	
-	"Updating ps1 file with metadata..."
+	$psFileName = ("..\tools\" + $psName + ".ps1")
+	$psCopyRight = ('(c) ' + (Get-Date).year + ' Jonathan E. Brickman')
 	
-	Update-ScriptFileInfo -Path ("..\tools\$psItem" + ".ps1") `
+	"Updating $psFileName with metadata..."
+	
+	Update-ScriptFileInfo -Path $psFileName `
 		-Author 'Jonathan E. Brickman' `
 		-CompanyName 'Ponderworthy Music' `
-		-Copyright '(c) ' + (Get-Date).year + ' Jonathan E. Brickman' `
+		-Copyright $psCopyRight `
 		-Description $psDescription `
 		-LicenseURI 'https://opensource.org/licenses/BSD-3-Clause' `
 		-ProjectURI 'https://github.com/jebofponderworthy/windows-tools' `
@@ -70,12 +80,14 @@ Function ToPSGallery {
 	
 	"Publishing ps1 file..."
 	
-	Publish-Script -Path ("..\tools\$psItem" + ".ps1") -NuGetApiKey $NuGetKey -Force
+	Publish-Script -Path $psFileName -NuGetApiKey $NuGetKey -Force
+	
+	""
+	""
 }
 
 # ---------------------------------------
 
-'mma-appx-etc...'
 $Author = 'Jonathan E. Brickman'
 $Desc = 'mma-appx-etc - performance gains of several kinds new to Windows 8/10/201*'
 $Tags = @(
@@ -87,11 +99,15 @@ $ReleaseNotes = @(
 	'removes several consumer-grade appx items, disables preload of Edge Browser,',
 	'and disables Game Mode.'
 	)
+'mma-appx-etc' 
+$Desc 
+$ReleaseNotes 
+$Tags 
+'2.3'
 ToPSGallery 'mma-appx-etc' $Desc $ReleaseNotes $Tags '2.3'
 
 # ---------------------------------------
 
-'CATE...'
 $Author = 'Jonathan E. Brickman'
 $Desc = 'Clean All Temp Etc - cleans temporary files and folders from all standard user and system temp folders, clears logs, and more'
 $Tags = @(
@@ -108,7 +124,6 @@ ToPSGallery 'CATE' $Desc $ReleaseNotes $Tags '4.7'
 
 # ---------------------------------------
 
-'TweakNTFS...'
 $Desc = 'TweakNTFS - optimizes NTFS volumes for performance and reliability'
 $Tags = @(
 	'NTFS', 'Performance', 'Reliability', 'Speed'
@@ -123,7 +138,6 @@ ToPSGallery 'TweakNTFS' $Desc $ReleaseNotes $Tags '3.01'
 
 # ---------------------------------------
 
-'OVSS...'
 $Desc = 'OVSS - optimizes VSS preallocation to 20% for each NTFS volume, and clears orphan shadows'
 $Tags = @(
 	'VSS', 'Optimize', 'Speed', 'Performance', 'Clean', 'VSS Association', 'Orphan Shadows'
@@ -138,7 +152,6 @@ ToPSGallery 'OVSS' $Desc $ReleaseNotes $Tags '3.7'
 
 # ---------------------------------------
 
-'GetRedists...'
 $Desc = 'GetRedists - Get all current Microsoft VC++ redistributables'
 $Tags = @(
 	'VC++', 'Redistributable', 'Redists', 'Redistributables', 'Microsoft Redistributable Libraries', 'Microsoft Redistributables', 'Microsoft VC++', 'Reliability'
@@ -153,7 +166,6 @@ ToPSGallery 'GetRedists' $Desc $ReleaseNotes $Tags '2.5'
 
 # ---------------------------------------
 
-'OWTAS...'
 $Desc = 'OWTAS - enhances performance by adding threads. Optimizes critical and delayed worker threads and service work items.'
 $Tags = @(
 	'Speed', 'Performance', 'Memory', 'Threads', 'Worker Threads', 'Critical Worker Threads', 'Delayed Worker Threads', 'Service Work Items'
@@ -175,7 +187,6 @@ ToPSGallery 'OWTAS' $Desc $ReleaseNotes $Tags '3.8'
 
 # ---------------------------------------
 
-'RunDevNodeClean...'
 $Desc = 'RunDevNodeClean - cleans unused device nodes in registry, improves performance'
 $Tags = @(
 	'DevNodeClean', 'Unused Device Nodes', 'Device Nodes', 'Clean', 'Cleanup', 'Speed', 'Performance'
@@ -190,7 +201,6 @@ ToPSGallery 'RunDevNodeClean' $Desc $ReleaseNotes $Tags '1.13'
 
 # ---------------------------------------
 
-'TOSC...'
 $Desc = 'TOSC - Turn Off Share Caching'
 $Tags = @(
 	'Offline Files', 'Caching', 'Speed', 'Performance'
@@ -211,7 +221,6 @@ ToPSGallery 'TOSC' $Desc $ReleaseNotes $Tags '1.13'
 
 # ---------------------------------------
 
-'windows-tools-performance-all ...'
 $Desc = 'Windows-tools-performance-all - Retrieves, installs, and runs all clean/optimize/performance items of the windows-tools project.'
 $Tags = @(
 	'Cleanup', 'Clean', 'Temp', 'Temp Files', 'Temporary Files', 'Lean Computing', 'Lean', 'Speed', 'Performance', 'Optimize',
@@ -231,7 +240,6 @@ ToPSGallery 'windows-tools-performance-all' $Desc $ReleaseNotes $Tags '1.2'
 
 # ---------------------------------------
 
-'windows-tools-performance-most ...'
 $Desc = 'Windows-tools-performance-most - Retrieves, installs, and runs all clean/optimize/performance items of the windows-tools project, including all but TOSC (Turn Off Share Caching).'
 $Tags = @(
 	'Cleanup', 'Clean', 'Temp', 'Temp Files', 'Temporary Files', 'Lean Computing', 'Lean', 'Speed', 'Performance', 'Optimize', 

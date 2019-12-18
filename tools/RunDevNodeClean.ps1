@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 1.14
+.VERSION 1.13
 
 .GUID 2f1b0fa1-c184-47e6-b65c-8ed5c92db371
 
@@ -9,21 +9,21 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2018 Jonathan E. Brickman
+.COPYRIGHT (c) 2019 Jonathan E. Brickman
 
-.TAGS 
+.TAGS
 
 .LICENSEURI https://opensource.org/licenses/BSD-3-Clause
 
 .PROJECTURI https://github.com/jebofponderworthy/windows-tools
 
-.ICONURI 
+.ICONURI
 
 .EXTERNALMODULEDEPENDENCIES 
 
-.REQUIREDSCRIPTS 
+.REQUIREDSCRIPTS
 
-.EXTERNALSCRIPTDEPENDENCIES 
+.EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
 RunDevNodeClean
@@ -31,9 +31,11 @@ Downloads the DevNodeClean package, chooses the binary appropriate to
 the bit-width of the current OS, and runs it.  This cleans unused
 device nodes in the registry, improving performance.
 
-.PRIVATEDATA 
+.PRIVATEDATA
 
 #> 
+
+
 
 
 

@@ -9,26 +9,26 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2018 Jonathan E. Brickman
+.COPYRIGHT (c) 2019 Jonathan E. Brickman
 
-.TAGS 
+.TAGS
 
 .LICENSEURI https://opensource.org/licenses/BSD-3-Clause
 
 .PROJECTURI https://github.com/jebofponderworthy/windows-tools
 
-.ICONURI 
+.ICONURI
 
 .EXTERNALMODULEDEPENDENCIES 
 
-.REQUIREDSCRIPTS 
+.REQUIREDSCRIPTS
 
-.EXTERNALSCRIPTDEPENDENCIES 
+.EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
 TOSC
 By default in Windows since XP/2003, if a folder is shared to the network via SMB,
-so-called "caching" is turned on. This actually means that the Offline Files service
+so-called caching is turned on. This actually means that the Offline Files service
 on other machines accessing the share, are allowed to retrieve and store copies of
 files and folders on the machine acting as server. Turning this off for all shares
 gives a speed bump for the server machine, and also improves reliability overall,
@@ -37,9 +37,11 @@ when the server is not available or suddenly becomes available et cetera. TOSC d
 this turning off very well, for all file shares extant on the machine on which
 it is run.
 
-.PRIVATEDATA 
+.PRIVATEDATA
 
 #> 
+
+
 
 
 

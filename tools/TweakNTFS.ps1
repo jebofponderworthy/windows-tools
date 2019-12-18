@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 3.2
+.VERSION 3.01
 
 .GUID 527423ef-dadd-45b1-a547-56d2fdb325d1
 
@@ -9,30 +9,33 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2018 Jonathan E. Brickman
+.COPYRIGHT (c) 2019 Jonathan E. Brickman
 
-.TAGS 
+.TAGS
 
 .LICENSEURI https://opensource.org/licenses/BSD-3-Clause
 
 .PROJECTURI https://github.com/jebofponderworthy/windows-tools
 
-.ICONURI 
+.ICONURI
 
 .EXTERNALMODULEDEPENDENCIES 
 
-.REQUIREDSCRIPTS 
+.REQUIREDSCRIPTS
 
-.EXTERNALSCRIPTDEPENDENCIES 
+.EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
 TweakNTFS
 Tweaks all NTFS volumes on a system for
-performance and reliability, using FSUTIL
+performance and reliability, using FSUTIL;
+also defrags NTFS metafiles using Contig.
 
-.PRIVATEDATA 
+.PRIVATEDATA
 
 #> 
+
+
 
 
 

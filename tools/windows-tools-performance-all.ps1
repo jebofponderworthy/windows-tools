@@ -9,21 +9,21 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2018 Jonathan E. Brickman
+.COPYRIGHT (c) 2019 Jonathan E. Brickman
 
-.TAGS 
+.TAGS
 
 .LICENSEURI https://opensource.org/licenses/BSD-3-Clause
 
 .PROJECTURI https://github.com/jebofponderworthy/windows-tools
 
-.ICONURI 
+.ICONURI
 
 .EXTERNALMODULEDEPENDENCIES 
 
-.REQUIREDSCRIPTS 
+.REQUIREDSCRIPTS
 
-.EXTERNALSCRIPTDEPENDENCIES 
+.EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
 windows-tools-performance-all
@@ -31,7 +31,11 @@ Retrieves, installs, and runs all clean/optimize/performance items of the window
 which do many different things to clean up and improve performance and reliability of any
 Microsoft-supported desktop or server Windows system.
 
+.PRIVATEDATA
+
 #> 
+
+
 
 
 

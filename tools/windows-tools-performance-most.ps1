@@ -9,29 +9,33 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2018 Jonathan E. Brickman
+.COPYRIGHT (c) 2019 Jonathan E. Brickman
 
-.TAGS 
+.TAGS
 
 .LICENSEURI https://opensource.org/licenses/BSD-3-Clause
 
 .PROJECTURI https://github.com/jebofponderworthy/windows-tools
 
-.ICONURI 
+.ICONURI
 
 .EXTERNALMODULEDEPENDENCIES 
 
-.REQUIREDSCRIPTS 
+.REQUIREDSCRIPTS
 
-.EXTERNALSCRIPTDEPENDENCIES 
+.EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
 windows-tools-performance-most
 Retrieves, installs, and runs all clean/optimize/performance items of the windows-tools project,
-including all but TOSC (Turn Off Share Caching).  These do many different things to clean up and 
+including all but TOSC (Turn Off Share Caching).  These do many different things to clean up and
 improve performance and reliability of any Microsoft-supported desktop or server Windows system.
 
+.PRIVATEDATA
+
 #> 
+
+
 
 
 

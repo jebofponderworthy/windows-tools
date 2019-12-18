@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 2.7
+.VERSION 2.5
 
 .GUID 03c695c0-bf45-4257-8156-89310e951140
 
@@ -11,19 +11,19 @@
 
 .COPYRIGHT (c) 2019 Jonathan E. Brickman
 
-.TAGS 
+.TAGS
 
 .LICENSEURI https://opensource.org/licenses/BSD-3-Clause
 
 .PROJECTURI https://github.com/jebofponderworthy/windows-tools
 
-.ICONURI 
+.ICONURI
 
 .EXTERNALMODULEDEPENDENCIES 
 
-.REQUIREDSCRIPTS 
+.REQUIREDSCRIPTS
 
-.EXTERNALSCRIPTDEPENDENCIES 
+.EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
 GetRedists
@@ -31,9 +31,11 @@ Retrieve, and install/update, all missing VC++ redistributable libraries
 currently being supported by Microsoft, using the excellent
 VcRedist module.
 
-.PRIVATEDATA 
+.PRIVATEDATA
 
 #> 
+
+
 
 
 

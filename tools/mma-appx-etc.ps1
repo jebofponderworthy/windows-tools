@@ -1,3 +1,54 @@
+
+<#PSScriptInfo
+
+.VERSION 2.3
+
+.GUID 5cc3176c-2e44-40d7-8ead-592e4e2e3665
+
+.AUTHOR Jonathan E. Brickman
+
+.COMPANYNAME Ponderworthy Music
+
+.COPYRIGHT (c) 2019 Jonathan E. Brickman
+
+.TAGS
+
+.LICENSEURI https://opensource.org/licenses/BSD-3-Clause
+
+.PROJECTURI https://github.com/jebofponderworthy/windows-tools
+
+.ICONURI
+
+.EXTERNALMODULEDEPENDENCIES 
+
+.REQUIREDSCRIPTS
+
+.EXTERNALSCRIPTDEPENDENCIES
+
+.RELEASENOTES
+mma-appx-etc - performance gains of several kinds new to Windows 8/10/201*
+Configures MMAgent (including Superfetch, Memory Compression, etc.) for performance,
+removes several consumer-grade appx items, disables preload of Edge Browser,
+and disables Game Mode.
+
+.PRIVATEDATA
+
+#> 
+
+
+
+
+
+<# 
+
+.DESCRIPTION 
+mma-appx-etc - performance gains of several kinds new to Windows 8/10/201*
+
+#> 
+
+Param()
+
+
 #######################################################################
 # MMA, appx, and other 8+/2012+/10+/201* performance items            #
 # v2.3                                                                #
