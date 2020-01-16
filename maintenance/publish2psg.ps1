@@ -91,7 +91,7 @@ Function ToPSGallery {
 $Author = 'Jonathan E. Brickman'
 $Desc = 'mma-appx-etc - performance gains of several kinds new to Windows 8/10/201*'
 $Tags = @(
-	'Lean Computing', 'Lean', 'Speed', 'Performance', 'Windows 10', 'Windows 8'
+	'Lean Computing', 'Lean', 'Speed', 'Performance', 'Windows 10', 'Windows 8', 'Superfetch', 'MMA Agent', 'MMAgent', 'Memory Compression'
 	)
 $ReleaseNotes = @(
 	'mma-appx-etc - performance gains of several kinds new to Windows 8/10/201*',
@@ -99,12 +99,7 @@ $ReleaseNotes = @(
 	'removes several consumer-grade appx items, disables preload of Edge Browser,',
 	'and disables Game Mode.'
 	)
-'mma-appx-etc' 
-$Desc 
-$ReleaseNotes 
-$Tags 
-'2.3'
-ToPSGallery 'mma-appx-etc' $Desc $ReleaseNotes $Tags '2.3'
+ToPSGallery 'mma-appx-etc' $Desc $ReleaseNotes $Tags '2.4'
 
 # ---------------------------------------
 
