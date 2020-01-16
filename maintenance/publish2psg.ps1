@@ -162,7 +162,7 @@ $ReleaseNotes = @(
 	'currently being supported by Microsoft, using the excellent',
 	'VcRedist module.'
 	)
-ToPSGallery 'GetRedists' $Desc $ReleaseNotes $Tags '2.5'
+ToPSGallery 'GetRedists' $Desc $ReleaseNotes $Tags '2.8'
 
 # ---------------------------------------
 

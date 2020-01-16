@@ -39,6 +39,10 @@ and disables Game Mode.
 
 
 
+
+
+
+
 <# 
 
 .DESCRIPTION 
@@ -103,6 +107,9 @@ $ErrorActionPreference= 'silentlycontinue'
 
 "Configuring and enabling aspects of MMAgent..."
 
+Set-Service sysmain -StartupType Automatic | Out-Null
+Start-Service sysmain | Out-Null
+
 Set-MMAgent -MaxOperationAPIFiles 8192 | Out-Null
 
 $MMAgentSetup = Get-MMAgent
@@ -121,9 +128,6 @@ If (-Not $MMAgentSetup.OperationAPI)
 If (-Not $MMAgentSetup.PageCombining)
 	{ Enable-MMAgent -PageCombining | Out-Null }
 	
-Set-Service sysmain -StartupType Automatic | Out-Null
-Start-Service sysmain | Out-Null
-
 "Removing appx's..."
 
 Get-AppxPackage "Microsoft.XboxApp" | Remove-AppxPackage | Out-Null
