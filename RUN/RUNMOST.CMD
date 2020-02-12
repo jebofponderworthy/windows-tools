@@ -26,6 +26,17 @@ echo:
 @del mma-appx-etc.ps1
 
 echo:
+echo Downloading and running TweakMemTCP.ps1 ...
+echo ---
+echo:
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
+"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/tools/TweakMemTCP.ps1') > TweakMemTCP.ps1"
+
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex .\TweakMemTCP.ps1"
+
+@del TweakMemTCP.ps1
+
+echo:
 echo Downloading, verifying, and running RunDevNodeClean.ps1 ...
 echo ---
 echo:
