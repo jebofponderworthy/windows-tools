@@ -1,13 +1,13 @@
 
 <#PSScriptInfo
 
-.VERSION 1.0
+.VERSION 1.05
 
 .AUTHOR Jonathan E. Brickman
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2019 Jonathan E. Brickman
+.COPYRIGHT (c) 2020 Jonathan E. Brickman
 
 .TAGS
 
@@ -136,6 +136,9 @@ function setupDWORD {
             Write-Error ("Could not visit or create registry path " + $regPath)
             Return
             }
+		Finally {
+			$oldValue = ""
+			}
         }
 
     #############
@@ -144,9 +147,7 @@ function setupDWORD {
         $oldValueProperty = Get-ItemProperty -Path $regPath -Name $nameForDWORD -ErrorAction SilentlyContinue
         $oldValue = $oldValueProperty.$nameforDWORD
         }
-    Catch {
-        $oldValue = ""
-        }
+	Catch {}
 
     #############
     # Report the changes to make
