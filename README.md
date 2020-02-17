@@ -30,7 +30,7 @@ Lots of interesting things have been introduced as part of Windows 8/8.1 and 10.
 
 ## TweakMemTCP
 
-StorageCraft has published some rather marvelous OS tweaks for overall performance, memory management and TCP networking.  These are implemented in [TweakMemTCP](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/TweakMemTCP.ps1).
+[StorageCraft has published](https://support.storagecraft.com/s/article/Tuning-Guide-for-StorageCraft-Software-on-Servers?language=en_US) some rather marvelous OS tweaks for overall performance, memory management and TCP networking.  These are implemented in [TweakMemTCP](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/TweakMemTCP.ps1).
 
 ## RunDevNodeClean
 
