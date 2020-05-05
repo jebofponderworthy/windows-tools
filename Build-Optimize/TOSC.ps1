@@ -1,65 +1,45 @@
 
 <#PSScriptInfo
 
-.VERSION 1.01
+.VERSION 1.13
+
+.GUID c5bed407-028e-4963-bfde-7fad2d640a1a
 
 .AUTHOR Jonathan E. Brickman
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2018 Jonathan E. Brickman
+.COPYRIGHT (c) 2019 Jonathan E. Brickman
 
-.TAGS 
+.TAGS
 
 .LICENSEURI https://opensource.org/licenses/BSD-3-Clause
 
 .PROJECTURI https://github.com/jebofponderworthy/windows-tools
 
-.ICONURI 
+.ICONURI
 
 .EXTERNALMODULEDEPENDENCIES 
 
-.REQUIREDSCRIPTS 
+.REQUIREDSCRIPTS
 
-.EXTERNALSCRIPTDEPENDENCIES 
+.EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
-OtherPerf
-Other performance tweaks for windows-tools:
-increase dynamic IP ports available, and
-turn off Microsoft Compatibility Telemetry.
+TOSC
+By default in Windows since XP/2003, if a folder is shared to the network via SMB,
+so-called caching is turned on. This actually means that the Offline Files service
+on other machines accessing the share, are allowed to retrieve and store copies of
+files and folders on the machine acting as server. Turning this off for all shares
+gives a speed bump for the server machine, and also improves reliability overall,
+dependence on Offline Files can lead to all sorts of issues including data loss
+when the server is not available or suddenly becomes available et cetera. TOSC does
+this turning off very well, for all file shares extant on the machine on which
+it is run.
 
-.PRIVATEDATA 
+.PRIVATEDATA
 
 #> 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -80,21 +60,29 @@ turn off Microsoft Compatibility Telemetry.
 <#
 
 .DESCRIPTION 
-OtherPerf - increase dynamic IP ports available, and turn off Microsoft Compatibility Telemetry.
+TOSC - Turn Off Share Caching
 
 #>
 
 Param()
 
 
-######################################
-# OtherPerf: Other Performance Items #
-######################################
+################################
+#    Turn Off Share Caching    #
+################################
 
 #
 # by Jonathan E. Brickman
 #
-# Increase dynamic IP ports available, and turn off Microsoft Compatibility Telemetry.
+# By default in Windows since XP/2003, if a folder is shared to the network via SMB,
+# so-called "caching" is turned on. This actually means that the Offline Files service
+# on other machines accessing the share, are allowed to retrieve and store copies of
+# files and folders on the machine acting as server. Turning this off for all shares
+# gives a speed bump for the server machine, and also improves reliability overall,
+# dependence on Offline Files can lead to all sorts of issues including data loss
+# when the server is not available or suddenly becomes available et cetera. TOSC does
+# this turning off very well, for all file shares extant on the machine on which
+# it is run.
 #
 # Copyright 2018 Jonathan E. Brickman
 # https://notes.ponderworthy.com/
@@ -103,11 +91,13 @@ Param()
 # and is reprised at the end of this file
 #
 
-""
-""
-"***************"
-"   OtherPerf   "
-"***************"
+''
+''
+'****************************'
+'   Turn Off Share Caching   '
+'****************************'
+''
+''
 
 # Self-elevate if not already elevated.
 
@@ -123,28 +113,18 @@ else {
     ""
     }
 
-"Increase dynamic IP ports available in Windows..."
-Invoke-Expression ('netsh int ipv4 set dynamicport tcp start=1025 num=64511') -ErrorAction SilentlyContinue | Out-Null
-
-"Two registry entries to go with..."
-
-$registryPath = "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"
-if (!(Test-Path $registryPath)) {
-	New-Item -Path $registryPath -Force | Out-Null
+# Get list of shares with 'net view', parse, and set appropriately.
+Get-CimInstance -class Win32_Share | ForEach-Object {
+	if ( $_.Name -ne 'IPC$' ) {
+		""
+		"Turning off share caching for " + $_.Name
+		$result = Invoke-Expression ('net share "' + $_.Name + '" /CACHE:None') -ErrorAction SilentlyContinue
+		if ($result -eq $null)
+			{ "Not possible." }
+		else
+			{ "Done." }
+		}
 	}
-New-ItemProperty -Path $registryPath -Name "TcpTimedWaitDelay" -Value "00000030" -PropertyType DWORD -Force | Out-Null
-New-ItemProperty -Path $registryPath -Name "StrictTimeWaitSeqCheck" -Value "00000001" -PropertyType DWORD -Force | Out-Null
-
-"And one registry entry to disable Microsoft Compatibility Telemetry..."
-
-$registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
-if (!(Test-Path $registryPath)) {
-	New-Item -Path $registryPath -Force | Out-Null
-	}
-New-ItemProperty -Path $registryPath -Name "Allow Telemetry" -Value "0" -PropertyType DWORD -Force | Out-Null
-
-"Done!"
-
 
 
 # The 3-Clause BSD License
@@ -152,7 +132,7 @@ New-ItemProperty -Path $registryPath -Name "Allow Telemetry" -Value "0" -Propert
 # SPDX short identifier: BSD-3-Clause
 
 # Note: This license has also been called
-# the AYA>A>??sA??.??oNew BSD LicenseAYA>A>??sA??,A? or AYA>A>??sA??.??oModified BSD LicenseAYA>A>??sA??,A?.
+# the "New BSD License" or "Modified BSD License".
 # See also the 2-clause BSD License.
 
 # Copyright 2017 Jonathan E. Brickman
@@ -176,7 +156,7 @@ New-ItemProperty -Path $registryPath -Name "Allow Telemetry" -Value "0" -Propert
 # specific prior written permission.
 
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
-# CONTRIBUTORS AYA>A>??sA??.??oAS ISAYA>A>??sA??,A? AND ANY EXPRESS OR IMPLIED WARRANTIES,
+# CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
 # OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 # ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER
@@ -189,6 +169,17 @@ New-ItemProperty -Path $registryPath -Name "Allow Telemetry" -Value "0" -Propert
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
+
+
+
+
+
+
+
+
+
+
 
 
 

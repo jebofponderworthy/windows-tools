@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 4.5
+.VERSION 4.7
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -9,7 +9,7 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2018 Jonathan E. Brickman
+.COPYRIGHT (c) 2020 Jonathan E. Brickman
 
 .TAGS 
 
@@ -33,6 +33,38 @@ also clears logs, IE caches, Firefox caches, Chrome caches, Ask Partner Network 
 Adobe Flash caches, Java deployment caches, and Microsoft CryptnetURL caches.
 
 #> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -214,6 +246,7 @@ $foldersToClean = @(
     "\AppData\Local\Microsoft\Windows\INetCache\Content.Outlook",
     "\AppData\Local\Google\Chrome\User Data\Default\Cache",
     "\AppData\Local\AskPartnerNetwork",
+	"\AppData\Local\Temp",
     "\Application Data\Local\Microsoft\Windows\WER",
     "\Application Data\Adobe\Flash Player\AssetCache",
     "\Application Data\Sun\Java\Deployment\cache",
@@ -243,11 +276,13 @@ function ShowCATEProgress {
 
 $RecursiveDeleteSource = @"
 using System;
-using System.Runtime.InteropServices;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Management.Automation.Runspaces;
+using System.Runtime.InteropServices;
+
 
 namespace CATEcsharp
 {
@@ -258,12 +293,12 @@ namespace CATEcsharp
 			if (!baseDir.Exists)
 				return;
 
-			foreach (var dir in baseDir.EnumerateDirectories())
-			{
+			Parallel.ForEach(baseDir.EnumerateDirectories(), (dir) => 
+				{
 				RecursiveDelete(dir, ProfileNumber);
-			}
-
-			foreach (var file in baseDir.EnumerateFiles())
+				});
+			
+			Parallel.ForEach(baseDir.EnumerateFiles(), (file) =>
 			{
 				try
 				{
@@ -276,7 +311,7 @@ namespace CATEcsharp
 				catch
 				{
 				}
-			}
+			});
 		}
 	
 		public static void RecursiveDelete(DirectoryInfo baseDir, int ProfileNumber)
@@ -284,14 +319,12 @@ namespace CATEcsharp
 			if (!baseDir.Exists)
 				return;
 
-			foreach (var dir in baseDir.EnumerateDirectories())
-			{
+			Parallel.ForEach(baseDir.EnumerateDirectories(), (dir) => 
+				{
 				RecursiveDelete(dir, ProfileNumber);
-			}
+				});
 
-			var files = baseDir.GetFiles();
-
-			foreach (var file in files)
+			Parallel.ForEach(baseDir.EnumerateFiles(), (file) =>
 			{
 				try
 				{
@@ -304,7 +337,7 @@ namespace CATEcsharp
 				catch
 				{
 				}
-			}
+			});
 	
 			try
 			{
@@ -322,13 +355,12 @@ namespace CATEcsharp
 			if (!baseDir.Exists)
 				return;
 
-			foreach (var dir in baseDir.EnumerateDirectories())
+			Parallel.ForEach(baseDir.EnumerateDirectories(), (dir) => 
 			{
 				RecursiveDeleteFilesOnly(dir, Wildcard, ProfileNumber);
-			}
+			});
 
-			var files = baseDir.EnumerateFiles(Wildcard);
-			foreach (var file in files)
+			Parallel.ForEach(baseDir.EnumerateFiles(Wildcard), (file) =>
 			{
 				try
 				{
@@ -341,7 +373,7 @@ namespace CATEcsharp
 				catch
 				{
 				}
-			}
+			});
 		}
 		
 		// ProgressString will gradually look something like this:  .....//..././...//.///.
@@ -478,14 +510,6 @@ $ProfileList | ForEach-Object {
 			}
 		}
 
-
-    # One special subpath needing TLC
-    $ToClean = $profileItem.ProfileImagePath + '\AppData\Local\Temp'
-    If (Test-Path $ToClean) {
-        # If the actual path exists, clean it
-        CATE-Recursive-Delete-Folder-Contents $ToClean $ProfileNumber
-        }
-
     # A subpath to be eliminated altogether, also present in the $foldersToClean list above
     CATE-Recursive-Delete ($profileItem.ProfileImagePath + '\AppData\Local\AskPartnerNetwork') $ProfileNumber
     }
@@ -545,9 +569,9 @@ Write-Output ""
 Write-Output $strOut
 Write-Output ""
 
-Start-Sleep 3
-
 Set-Location $originalLocation
+
+Start-Sleep 7
 
 # The 3-Clause BSD License
 
@@ -591,6 +615,22 @@ Set-Location $originalLocation
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,13 +1,15 @@
 
 <#PSScriptInfo
 
-.VERSION 1.05
+.VERSION 3.8
+
+.GUID 14025447-cf92-41ee-b735-3d99c9e2c4d5
 
 .AUTHOR Jonathan E. Brickman
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2020 Jonathan E. Brickman
+.COPYRIGHT (c) 2019 Jonathan E. Brickman
 
 .TAGS
 
@@ -67,23 +69,30 @@ to work well on all.
 <#
 
 .DESCRIPTION 
-TweakMemTCP - enhances performance by adding threads. Optimizes critical and delayed worker threads and service work items.
+OWTAS - enhances performance by adding threads. Optimizes critical and delayed worker threads and service work items.
 
 #>
 
 Param()
 
 
-################################################
-# TweakMemTCP: Tweak Memory and TCP Parameters #
-################################################
+######################################################
+# OWTS: Optimize Worker Threads and Service Requests #
+######################################################
 
 #
 # by Jonathan E. Brickman
 #
-# Tweaks memory and TCP parameters, for performance.
+# Optimizes default and extra worker threads and
+# service requests.
 #
-# Copyright 2020 Jonathan E. Brickman
+# Documentation on these settings has ranged from sparse to none over
+# many years.  The early Microsoft documents used in the
+# calculations are completely gone.  The settings have undergone
+# testing over the last ten years, on a wide variety of Wintelamd platforms,
+# and appear to work well on all.
+#
+# Copyright 2018 Jonathan E. Brickman
 # https://notes.ponderworthy.com/
 # This script is licensed under the 3-Clause BSD License
 # https://opensource.org/licenses/BSD-3-Clause
@@ -93,7 +102,7 @@ Param()
 ""
 ""
 "**************************************************"
-"   TweakMemTCP: Tweak Memory and TCP Parameters   "
+"   Optimize Worker Threads and Service Requests   "
 "**************************************************"
 ""
 ""
@@ -113,15 +122,42 @@ else {
     }
 
 
+# First find out how much RAM is in this machine
+
+$totalRAMinBytes = (Get-CimInstance -class "cim_physicalmemory" | Measure-Object -Property Capacity -Sum).Sum
+$totalRAMinGB = [double]$totalRAMinBytes / 1024.0 / 1024.0 / 1024.0
+
+"Available RAM: " + [int]$totalRAMinGB + "G"
+
+# Then find out whether this OS is 32-bit or 64-bit, and calculate changes.
+# We add half as many threads on a 64-bit OS, because each thread could take
+# twice as much RAM, though does not always.
+
+if ([System.IntPtr]::Size -eq 4)
+    {
+    # 32-bit OS
+
+    $AddCriticalWorkerThreads = [Int][Math]::Truncate($totalRAMinGB * 6)
+    $AddDelayedWorkerThreads = [Int][Math]::Truncate($totalRAMinGB * 6)
+    $DefaultWorkerThreads = 64
+
+    "OS bit width: 32"
+    }
+else
+    {
+    # 64-bit OS
+
+    $AddCriticalWorkerThreads = [Int][Math]::Truncate($totalRAMinGB * 3)
+    $AddDelayedWorkerThreads = [Int][Math]::Truncate($totalRAMinGB * 3)
+    $DefaultWorkerThreads = 64
+
+    "OS bit width: 64"
+    }
+
 ""
 
 # Now we make changes.
 # http://www.tomsitpro.com/articles/powershell_registry-powershell_command_line,2-152.html
-
-# The settings come from a quite reliable source:
-# https://support.storagecraft.com/s/article/Tuning-Guide-for-StorageCraft-Software-on-Servers?language=en_US
-
-$WinVersionStr = Get-CimInstance -Class Win32_OperatingSystem | ForEach-Object -MemberName Caption
 
 function setupDWORD {
     param( [string]$regPath, [string]$nameForDWORD, [long]$valueForDWORD )
@@ -136,9 +172,6 @@ function setupDWORD {
             Write-Error ("Could not visit or create registry path " + $regPath)
             Return
             }
-		Finally {
-			$oldValue = ""
-			}
         }
 
     #############
@@ -147,7 +180,9 @@ function setupDWORD {
         $oldValueProperty = Get-ItemProperty -Path $regPath -Name $nameForDWORD -ErrorAction SilentlyContinue
         $oldValue = $oldValueProperty.$nameforDWORD
         }
-	Catch {}
+    Catch {
+        $oldValue = ""
+        }
 
     #############
     # Report the changes to make
@@ -181,49 +216,19 @@ function setupDWORD {
     ""
     }
 
-if ( 		($WinVersionStr -Like "*Windows Server 2008 R2*") 	`
-		-Or ($WinVersionStr -Like "*Windows 7*") 				`
-		-Or ($WinVersionStr -Like "*Windows 8*")				`
-		-Or ($WinVersionStr -Like "*Windows 10*")				`
-		-Or ($WinVersionStr -Like "*Windows 201*") ) 
-	{
-	Write-Output "Windows 7/2008R2 or later found.  Setting appropriately."
-	Write-Output ""
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "LargeSystemCache" 	0x1
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SystemPages" 		0x0
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PagedPoolSize" 		0x0b71b000
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PoolUsageMaximum" 	0x00000050
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SessionPoolSize" 	0x00000030
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SessionViewSize" 	0x00000044
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "IrpStackSize" 0x00000018
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "Size" 		0x00000003
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "TcpTimedWaitDelay" 		0x0000001e
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "StrictTimeWaitSeqCheck" 	0x00000001
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "MaxUserPort" 			0x00007fff
-	}
-else {
-	Write-Output "Pre-Windows-7 found.  Setting appropriately."
-	Write-Output ""
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PagedPoolSize" 		0xffffffff
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PoolUsageMaximum" 	0x0000003c
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SessionPoolSize" 	0x00000030
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SessionViewSize" 	0x00000044
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "IrpStackSize" 0x00000018
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "Size" 		0x00000003
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "TcpTimedWaitDelay" 		0x0000001e
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "StrictTimeWaitSeqCheck" 	0x00000001
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "MaxUserPort" 			0x00007fff
-	}
-	
-# For StorageCraft ImageManager, if it exists
-# https://support.storagecraft.com/articles/en_US/Informational/Tuning-Guide-for-StorageCraft-Software-on-Servers
-If ( (Test-Path "C:\Program Files (x86)\StorageCraft\ImageManager") -Or (Test-Path "C:\Program Files\StorageCraft\ImageManager") )
-	{
-	Write-Output "StorageCraft ImageManager found."
-	Write-Output ""
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\StorageCraft ImageManager\Parameters" "ReadUnbuffered" 0x1
-	}
-	
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Executive" "AdditionalCriticalWorkerThreads" $AddCriticalWorkerThreads
+
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Executive" "AdditionalDelayedWorkerThreads" $AddDelayedWorkerThreads
+
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\RpcXdr\Parameters" "DefaultNumberOfWorkerThreads" $DefaultWorkerThreads
+
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\RpcXdr\Parameters" "MaxWorkItems" 8192
+
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\RpcXdr\Parameters" "MaxMpxCt" 2048
+
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\RpcXdr\Parameters" "MaxCmds" 2048
+
+
 # The 3-Clause BSD License
 
 # SPDX short identifier: BSD-3-Clause

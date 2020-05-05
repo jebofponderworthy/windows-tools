@@ -140,12 +140,9 @@ function ShowProgress {
 
     Write-Progress -Activity "Get Microsoft Redists" -Status $reportStatus -PercentComplete -1 -CurrentOperation $currentOp
     }
-
+	
 Function PrepareModule {
 	param( [string]$ModuleName )
-
-	# Sets TLS version.  Necessary for some platforms.
-	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 	
 	If ((Find-Module -Name $ModuleName).Version -lt (Get-Module -Name $ModuleName -ListAvailable)) {
 		Install-Module -Name $ModuleName -Repository PSGallery -Force
@@ -160,10 +157,6 @@ Set-PSRepository -InstallationPolicy Trusted -Name PSGallery
 
 ShowProgress("Preparing Powershell environment:","Preparing PackageProvider NuGet...")
 If ((Find-PackageProvider -Name NuGet).Version -lt (Get-PackageProvider -Name Nuget)) {
-
-	# Sets TLS version.  Necessary for some platforms.
-	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-
 	Install-PackageProvider -Name NuGet -Force | Out-Null
 	}
 
