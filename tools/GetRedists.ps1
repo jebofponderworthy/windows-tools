@@ -157,6 +157,9 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unrestricted -Force > $null
 
 ShowProgress("Preparing Powershell environment...","Setting up to use Powershell Gallery...")
 
+# Some platforms need this before this will work...
+Register-PSRepository -Default
+
 Set-PSRepository -InstallationPolicy Trusted -Name PSGallery
 
 ShowProgress("Preparing Powershell environment:","Setting up to use page provider NuGet...")
