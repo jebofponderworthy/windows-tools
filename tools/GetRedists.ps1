@@ -159,8 +159,8 @@ ShowProgress("Preparing Powershell environment...","Setting up to use Powershell
 
 Set-PSRepository -InstallationPolicy Trusted -Name PSGallery
 
-ShowProgress("Preparing Powershell environment:","Preparing PackageProvider NuGet...")
-If ((Find-PackageProvider -Name NuGet).Version -lt (Get-PackageProvider -Name Nuget)) {
+ShowProgress("Preparing Powershell environment:","Setting up to use page provider NuGet...")
+If ( (Find-PackageProvider -Name "NuGet").Version -ne (Get-PackageProvider -ListAvailable -name "NuGet").Version ) {
 
 	# Sets TLS version.  Necessary for some platforms.
 	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -168,9 +168,9 @@ If ((Find-PackageProvider -Name NuGet).Version -lt (Get-PackageProvider -Name Nu
 	Install-PackageProvider -Name NuGet -Force | Out-Null
 	}
 
-ShowProgress("Preparing Powershell environment...","Checking/preparing NuGet...")
+ShowProgress("Preparing Powershell environment...","Checking/preparing module NuGet...")
 PrepareModule("NuGet")
-ShowProgress("Preparing Powershell environment...","Checking/preparing VcRedist...")
+ShowProgress("Preparing Powershell environment...","Checking/preparing module VcRedist...")
 PrepareModule("VcRedist")
 
 if ($False -eq (Test-Path C:\VcRedist -PathType Container)) {
