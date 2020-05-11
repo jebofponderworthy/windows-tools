@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 2.8
+.VERSION 3.0
 
 .GUID 03c695c0-bf45-4257-8156-89310e951140
 
@@ -87,7 +87,7 @@ Param()
 
 #######################################################################
 # GetRedists                                                          #
-# v2.8                                                                #
+# v3.0                                                                #
 #######################################################################
 
 #
@@ -96,7 +96,7 @@ Param()
 # Retrieves and installs all of the Microsoft redistributable libraries
 # currently being supported, using the excellent VcRedist package.
 #
-# Copyright 2018 Jonathan E. Brickman
+# Copyright 2020 Jonathan E. Brickman
 # https://notes.ponderworthy.com/
 # This script is licensed under the 3-Clause BSD License
 # https://opensource.org/licenses/BSD-3-Clause
@@ -147,9 +147,10 @@ Function PrepareModule {
 	# Sets TLS version.  Necessary for some platforms.
 	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 	
-	If ((Find-Module -Name $ModuleName).Version -lt (Get-Module -Name $ModuleName -ListAvailable)) {
-		Install-Module -Name $ModuleName -Repository PSGallery -Force
-		}
+	If (Get-Module -ListAvailable -Name $ModuleName)
+		{ Update-Module $ModuleName }
+	Else
+		{ Install-Module $ModuleName }
 	}
 
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unrestricted -Force > $null
