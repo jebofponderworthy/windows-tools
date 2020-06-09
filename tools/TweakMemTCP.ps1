@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 1.05
+.VERSION 1.2
 
 .AUTHOR Jonathan E. Brickman
 
