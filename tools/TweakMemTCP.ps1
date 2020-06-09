@@ -189,6 +189,9 @@ if ( 		($WinVersionStr -Like "*Windows Server 2008 R2*") 	`
 	{
 	Write-Output "Windows 7/2008R2 or later found.  Setting appropriately."
 	Write-Output ""
+	
+	# Original set
+	
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "LargeSystemCache" 	0x1
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SystemPages" 		0x0
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PagedPoolSize" 		0x0b71b000
@@ -200,6 +203,19 @@ if ( 		($WinVersionStr -Like "*Windows Server 2008 R2*") 	`
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "TcpTimedWaitDelay" 		0x0000001e
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "StrictTimeWaitSeqCheck" 	0x00000001
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "MaxUserPort" 			0x00007fff
+	
+	# Newer set
+	
+	netsh int tcp set global chimney=disabled | Out-Null
+	netsh int tcp set global rss=disabled | Out-Null
+	netsh int ip set global taskoffload=disabled | Out-Null
+	netsh int tcp set global autotuninglevel=disabled | Out-Null
+	netsh int tcp set supplemental custom congestionprovider=none | Out-Null
+	netsh int tcp set global ecncapability=disabled | Out-Null
+	netsh int tcp set global timestamps=disabled | Out-Null
+	netsh int tcp set supplemental custom congestionprovider = ctcp | Out-Null
+	netsh int tcp set global ecncapability=enabled | Out-Null
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "EnableTCPA" 0x1
 	}
 else {
 	Write-Output "Pre-Windows-7 found.  Setting appropriately."

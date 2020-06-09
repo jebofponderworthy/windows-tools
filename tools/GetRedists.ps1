@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 3.1
+.VERSION 3.2
 
 .GUID 03c695c0-bf45-4257-8156-89310e951140
 
@@ -9,7 +9,7 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2019 Jonathan E. Brickman
+.COPYRIGHT (c) 2020 Jonathan E. Brickman
 
 .TAGS
 
@@ -133,6 +133,9 @@ else {
     ""
 }
 
+# Sets TLS version.  Necessary for some platforms.
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 $reportStatus = ''
 $currentOp = ''
 function ShowProgress {
@@ -144,9 +147,6 @@ function ShowProgress {
 Function PrepareModule {
 	param( [string]$ModuleName )
 
-	# Sets TLS version.  Necessary for some platforms.
-	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-	
 	If (Get-Module -ListAvailable -Name $ModuleName)
 		{ Update-Module $ModuleName }
 	Else
@@ -157,19 +157,12 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unrestricted -Force > $null
 
 ShowProgress("Preparing Powershell environment...","Setting up to use Powershell Gallery...")
 
-# Some platforms need this before this will work...
-Register-PSRepository -Default
-
-Set-PSRepository -InstallationPolicy Trusted -Name PSGallery
-
 ShowProgress("Preparing Powershell environment:","Setting up to use page provider NuGet...")
-If ( (Find-PackageProvider -Name "NuGet").Version -ne (Get-PackageProvider -ListAvailable -name "NuGet").Version ) {
+Install-PackageProvider -Name NuGet -Force | Out-Null
 
-	# Sets TLS version.  Necessary for some platforms.
-	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-
-	Install-PackageProvider -Name NuGet -Force | Out-Null
-	}
+# This appears to set PSGallery nicely when need be
+Register-PSRepository -Default -InstallationPolicy Trusted 2> $null
+Set-PSRepository -InstallationPolicy Trusted -Name PSGallery
 
 ShowProgress("Preparing Powershell environment...","Checking/preparing module NuGet...")
 PrepareModule("NuGet")
@@ -286,30 +279,4 @@ ShowProgress("Done!","")
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
