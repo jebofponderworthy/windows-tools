@@ -204,9 +204,9 @@ if ( 		($WinVersionStr -Like "*Windows Server 2008 R2*") 	`
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "StrictTimeWaitSeqCheck" 	0x00000001
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "MaxUserPort" 			0x00007fff
 	
-	# Newer set
+	# Newer set, TCP only
 	
-	netsh int tcp set global chimney=disabled | Out-Null
+	Set-NetOffloadGlobalSetting -Chimney Disabled | Out-Null
 	netsh int tcp set global rss=disabled | Out-Null
 	netsh int ip set global taskoffload=disabled | Out-Null
 	netsh int tcp set global autotuninglevel=disabled | Out-Null
