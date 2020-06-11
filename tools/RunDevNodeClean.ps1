@@ -130,14 +130,14 @@ if ([System.IntPtr]::Size -eq 4) {
     # 32-bit OS
 	"Running 32-bit binary..."
 	""
-	Invoke-Expression $TempPath\x86\DevNodeClean.exe
-	Invoke-Expression $TempPath\x86\DevNodeClean.exe
+	& $TempPath\x86\DevNodeClean.exe
+	& $TempPath\x86\DevNodeClean.exe
 	} else {
 	# 64-bit OS
 	"Running 64-bit binary..."
 	""
-	Invoke-Expression $TempPath\x64\DevNodeClean.exe
-	Invoke-Expression $TempPath\x64\DevNodeClean.exe
+	& $TempPath\x64\DevNodeClean.exe
+	& $TempPath\x64\DevNodeClean.exe
 	}
 
 ""
