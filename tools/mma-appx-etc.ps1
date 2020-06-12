@@ -180,6 +180,9 @@ CD HKLM:\Software\Microsoft\ | Out-Null
 mkdir GameBar -Force | Out-Null
 New-ItemProperty . -Name AllowAutoGameMode -Value 0 -PropertyType "DWord" -Force | Out-Null
 
+"Disable Windows Compatibility Telemetry..."
+schtasks /Change /Disable /TN "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" | Out-Null
+
 popd | Out-Null
 
 ""
