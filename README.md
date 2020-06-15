@@ -30,7 +30,7 @@ Lots of interesting things have been introduced as part of Windows 8/8.1 and 10.
 
 ## TweakMemTCP
 
-[StorageCraft has published](https://support.storagecraft.com/s/article/Tuning-Guide-for-StorageCraft-Software-on-Servers?language=en_US) some rather marvelous OS tweaks for overall performance, memory management and TCP networking.  These are implemented in [TweakMemTCP](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/TweakMemTCP.ps1).  They have been working very well.
+[StorageCraft has published](https://support.storagecraft.com/s/article/Tuning-Guide-for-StorageCraft-Software-on-Servers?language=en_US) some rather marvelous OS tweaks for overall performance, memory management and TCP networking.  These and others are implemented in [TweakMemTCP](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/TweakMemTCP.ps1).  They have been working very well.
 
 ## RunDevNodeClean
 
@@ -73,6 +73,6 @@ By default in Windows since XP/2003, if a folder is shared to the network via SM
 
 By default, on Windows client OS systems, VSS is active on all VSS-aware volumes, but it is not optimized, which in this case means, there is an "association" or preallocation, of zero space.  On Windows server OS systems, VSS is likewise active, but there is no association/preallocation, at all, on any VSS-aware volumes.  Many different (e.g., [StorageCraft](https://www.storagecraft.com/support/kb/article/289), [Carbonite](https://support.carbonite.com/articles/Server-Windows-How-to-Manage-VSS-Shadowstorage-Space), others) Windows tools make the same recommendation concerning this, stating that every volume to be backed up should have 20% of its space "associated" or preallocated for VSS.  [OVSS](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/OVSS.ps1) does this, and also, removes all orphan shadows.  Orphan shadows are VSS snapshots existing uselessly because of old aborted backups, adding OS volume-related overhead.  The manual steps of this script, with one additional optional step very useful in some server configurations, [are documented here](https://notes.ponderworthy.com/thorough-cleanup-of-vss).
 
-## wt_removeGhosts: remove ghost devices from Windows
+## removeGhosts: remove ghost devices from Windows
 
-Over time, Windows accumulates 'ghost devices', devices which can show up in Device Manager as transparent because they aren't actually there, but things are set up if they are plugged in again.  This applies to anything and everything, including motherboard device objects replaced during driver updates, VSS items, USB sticks inserted and removed, really anything at all.  This contributes greatly to slowdown of an old OS install image.  And removeGhosts removes them all.  This is not Ponderworthy code, but it's great stuff, found on several web sites.  No author cited within, but thanks are deserved!  
+Over time, Windows accumulates 'ghost devices', devices which can show up in Device Manager as transparent because they aren't actually there, but things are set up if they are plugged in again.  This applies to anything and everything, including motherboard device objects replaced during driver updates, VSS items, USB sticks inserted and removed, really anything at all.  This contributes greatly to slowdown of an old OS install image.  And removeGhosts removes them all.  This is not Ponderworthy code, but it's great stuff.  We run our own fork of it just in case.
