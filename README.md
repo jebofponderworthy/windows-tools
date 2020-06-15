@@ -26,11 +26,11 @@ Lots of software uses Microsoft VC++ redistributables.  They get updated fairly 
 
 ## mma-appx-etc
 
-Lots of interesting things have been introduced as part of Windows 8/8.1 and 10.  There is something called MMAgent, lots of little applets called APPX's, the Edge browser, and something called Game Mode.  Application launch prefetching, page combining, memory compression, and application prelaunching have all been rolled into MMAgent, and properly configured, this can improve overall OS performance quite nicely: disabling Superfetch can sometimes give a bit of performance, but configuring it nicely often gains a lot, especially with an SSD.  There are many APPX items which eat resources and confuse end users; deleting these (e.g., the consumer-grade email app) can prevent many issues.  The Edge browser is preloaded at boot by default, taking RAM in hidden fashion; disabling this can help a good bit, and has not been noticeable to users so far.  And Game Mode is something hidden which, by default, runs all the time, sits in the background, tries to guess when any user is playing a game whose video is worth recording for sharing with other gamers, and does the recording whether its guess is correct or not...all of which takes resources, and is therefore well worth turning off!  The above are all implemented in [mma-appx-etc](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/mma-appx-etc.ps1) for your operating pleasure.
+Lots of interesting things have been introduced as part of Windows 8/8.1/2012 and 10/2016/2019.  There is something called MMAgent, lots of little applets called APPX's, the Edge browser, and something called Game Mode.  Application launch prefetching, page combining, memory compression, and application prelaunching have all been rolled into MMAgent, and properly configured, this can improve overall OS performance quite nicely: disabling Superfetch can sometimes give a bit of performance, but configuring it nicely often gains a lot, especially with an SSD.  There are many APPX items which eat resources and confuse end users; deleting these (e.g., the consumer-grade email app) can prevent many issues.  The Edge browser is preloaded at boot by default, taking RAM in hidden fashion; disabling this can help a good bit, and has not been noticeable to users so far.  And Game Mode is something hidden which, by default, runs all the time, sits in the background, tries to guess when any user is playing a game whose video is worth recording for sharing with other gamers, and does the recording whether its guess is correct or not...all of which takes resources, and is therefore well worth turning off!  The above are all implemented in [mma-appx-etc](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/mma-appx-etc.ps1) for your operating pleasure.
 
 ## TweakMemTCP
 
-[StorageCraft has published](https://support.storagecraft.com/s/article/Tuning-Guide-for-StorageCraft-Software-on-Servers?language=en_US) some rather marvelous OS tweaks for overall performance, memory management and TCP networking.  These are implemented in [TweakMemTCP](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/TweakMemTCP.ps1).  They have been working very well.
+[StorageCraft has published](https://support.storagecraft.com/s/article/Tuning-Guide-for-StorageCraft-Software-on-Servers?language=en_US) some rather marvelous OS tweaks for overall performance, memory management and TCP networking.  These and others are implemented in [TweakMemTCP](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/TweakMemTCP.ps1).  They have been working very well.
 
 ## RunDevNodeClean
 
@@ -46,7 +46,7 @@ For quite a while I had been curious as to why a simple method to do this was no
 
 One thing discovered along the way, is even in XP there was a user profile called the “System Profile” — XP had it in C:\WINDOWS\System32\config\systemprofile — and some malware dumps junk into it, and sometimes many gigs of unwanted files can be found in its temporary storage. CATE cleans all user profiles including those, as well as the Windows Error Reporting cache, and the system TEMP folders, and in recent versions, many Windows log files which are often found in many thousands of fragments.
 
-The tool is designed for Windows 10 down through XP. It is self-elevating if run non-administratively.
+The tool is designed for Windows 10/2019 down through XP/2003. It is self-elevating if run non-administratively.
 
 ## OWTAS: Optimize Service Work Items and Additional/Delayed Worker Threads
 
@@ -58,12 +58,12 @@ more so with more RAM.
 Documentation on these settings has ranged from sparse to none over
 many years.  The early Microsoft documents used in the  calculations appear
 completely gone, there are some new ones.  The settings produced by OWTAS
-have undergone testing over the last ten years, on a wide variety of 
+have undergone continuous testing since 2006, on a wide variety of 
 Wintelamd platforms, and appear to work well on all.
   
 OWTAS is available as [VBS](https://github.com/jebofponderworthy/windows-tools/raw/master/old-vbs/OWTAS.VBS) and as [PowerShell](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/OWTAS.ps1).  Future development will be in PowerShell.
 
-The tool is designed for Windows 10 down through XP. As of 2017-10-10, it is self-elevating if run non-administratively.
+The tool is designed for Windows 10/2019 down through XP/2003. It is self-elevating if run non-administratively.
 
 ## TOSC: Turn Off Share Caching
 
@@ -73,6 +73,6 @@ By default in Windows since XP/2003, if a folder is shared to the network via SM
 
 By default, on Windows client OS systems, VSS is active on all VSS-aware volumes, but it is not optimized, which in this case means, there is an "association" or preallocation, of zero space.  On Windows server OS systems, VSS is likewise active, but there is no association/preallocation, at all, on any VSS-aware volumes.  Many different (e.g., [StorageCraft](https://www.storagecraft.com/support/kb/article/289), [Carbonite](https://support.carbonite.com/articles/Server-Windows-How-to-Manage-VSS-Shadowstorage-Space), others) Windows tools make the same recommendation concerning this, stating that every volume to be backed up should have 20% of its space "associated" or preallocated for VSS.  [OVSS](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/OVSS.ps1) does this, and also, removes all orphan shadows.  Orphan shadows are VSS snapshots existing uselessly because of old aborted backups, adding OS volume-related overhead.  The manual steps of this script, with one additional optional step very useful in some server configurations, [are documented here](https://notes.ponderworthy.com/thorough-cleanup-of-vss).
 
-## wt_removeGhosts: remove ghost devices from Windows
+## removeGhosts: remove ghost devices from Windows
 
-Over time, Windows accumulates 'ghost devices', devices which can show up in Device Manager as transparent because they aren't actually there, but things are set up if they are plugged in again.  This applies to anything and everything, including motherboard device objects replaced during driver updates, VSS items, USB sticks inserted and removed, really anything at all.  This contributes greatly to slowdown of an old OS install image.  And removeGhosts removes them all.  This is not Ponderworthy code, but it's great stuff, found on several web sites.  No author cited within, but thanks are deserved!  
+Over time, Windows accumulates 'ghost devices', devices which can show up in Device Manager as transparent because they aren't actually there, but things are set up if they are plugged in again.  This applies to anything and everything, including motherboard device objects replaced during driver updates, VSS items, USB sticks inserted and removed, really anything at all.  This contributes greatly to slowdown of an old OS install image.  And removeGhosts removes them all.  This is not Ponderworthy code, but it's great stuff.  We run our own fork of it just in case.
