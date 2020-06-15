@@ -26,7 +26,7 @@ Lots of software uses Microsoft VC++ redistributables.  They get updated fairly 
 
 ## mma-appx-etc
 
-Lots of interesting things have been introduced as part of Windows 8/8.1 and 10.  There is something called MMAgent, lots of little applets called APPX's, the Edge browser, and something called Game Mode.  Application launch prefetching, page combining, memory compression, and application prelaunching have all been rolled into MMAgent, and properly configured, this can improve overall OS performance quite nicely: disabling Superfetch can sometimes give a bit of performance, but configuring it nicely often gains a lot, especially with an SSD.  There are many APPX items which eat resources and confuse end users; deleting these (e.g., the consumer-grade email app) can prevent many issues.  The Edge browser is preloaded at boot by default, taking RAM in hidden fashion; disabling this can help a good bit, and has not been noticeable to users so far.  And Game Mode is something hidden which, by default, runs all the time, sits in the background, tries to guess when any user is playing a game whose video is worth recording for sharing with other gamers, and does the recording whether its guess is correct or not...all of which takes resources, and is therefore well worth turning off!  The above are all implemented in [mma-appx-etc](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/mma-appx-etc.ps1) for your operating pleasure.
+Lots of interesting things have been introduced as part of Windows 8/8.1/2012 and 10/2016/2019.  There is something called MMAgent, lots of little applets called APPX's, the Edge browser, and something called Game Mode.  Application launch prefetching, page combining, memory compression, and application prelaunching have all been rolled into MMAgent, and properly configured, this can improve overall OS performance quite nicely: disabling Superfetch can sometimes give a bit of performance, but configuring it nicely often gains a lot, especially with an SSD.  There are many APPX items which eat resources and confuse end users; deleting these (e.g., the consumer-grade email app) can prevent many issues.  The Edge browser is preloaded at boot by default, taking RAM in hidden fashion; disabling this can help a good bit, and has not been noticeable to users so far.  And Game Mode is something hidden which, by default, runs all the time, sits in the background, tries to guess when any user is playing a game whose video is worth recording for sharing with other gamers, and does the recording whether its guess is correct or not...all of which takes resources, and is therefore well worth turning off!  The above are all implemented in [mma-appx-etc](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/mma-appx-etc.ps1) for your operating pleasure.
 
 ## TweakMemTCP
 
@@ -46,7 +46,7 @@ For quite a while I had been curious as to why a simple method to do this was no
 
 One thing discovered along the way, is even in XP there was a user profile called the “System Profile” — XP had it in C:\WINDOWS\System32\config\systemprofile — and some malware dumps junk into it, and sometimes many gigs of unwanted files can be found in its temporary storage. CATE cleans all user profiles including those, as well as the Windows Error Reporting cache, and the system TEMP folders, and in recent versions, many Windows log files which are often found in many thousands of fragments.
 
-The tool is designed for Windows 10/2019 down through XP. It is self-elevating if run non-administratively.
+The tool is designed for Windows 10/2019 down through XP/2003. It is self-elevating if run non-administratively.
 
 ## OWTAS: Optimize Service Work Items and Additional/Delayed Worker Threads
 
@@ -63,7 +63,7 @@ Wintelamd platforms, and appear to work well on all.
   
 OWTAS is available as [VBS](https://github.com/jebofponderworthy/windows-tools/raw/master/old-vbs/OWTAS.VBS) and as [PowerShell](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/OWTAS.ps1).  Future development will be in PowerShell.
 
-The tool is designed for Windows 10 down through XP. As of 2017-10-10, it is self-elevating if run non-administratively.
+The tool is designed for Windows 10/2019 down through XP/2003. It is self-elevating if run non-administratively.
 
 ## TOSC: Turn Off Share Caching
 
