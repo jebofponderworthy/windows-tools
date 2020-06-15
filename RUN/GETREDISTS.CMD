@@ -23,10 +23,9 @@ echo Processing...
 echo ---
 echo:
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/12645a911ab70f855b0b919910c86bfe67b80b42/tools/GetRedists.ps1') > GetRedists.ps1"
+"$wco = (New-Object System.Net.WebClient); $wco.Encoding = [System.Text.Encoding]::UTF8; $wco.DownloadString('https://github.com/jebofponderworthy/windows-tools/raw/master/tools/GetRedists.ps1') > GetRedists.ps1"
 
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$certrpt = (certutil -hashfile GetRedists.ps1 SHA256)[1] -replace '\s','' ; If ($certrpt -eq '2bb3078b3d68b42351fc7a2823e788c1b8de5e8607c9c5add8e3e700df13f461') { iex .\GetRedists.ps1 } Else { 'Hash fail on GetRedists.ps1!' }"
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ".\GetRedists.ps1"
 
 @del GetRedists.ps1
 
