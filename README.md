@@ -58,7 +58,7 @@ more so with more RAM.
 Documentation on these settings has ranged from sparse to none over
 many years.  The early Microsoft documents used in the  calculations appear
 completely gone, there are some new ones.  The settings produced by OWTAS
-have undergone testing over the last ten years, on a wide variety of 
+have undergone continuous testing since 2006, on a wide variety of 
 Wintelamd platforms, and appear to work well on all.
   
 OWTAS is available as [VBS](https://github.com/jebofponderworthy/windows-tools/raw/master/old-vbs/OWTAS.VBS) and as [PowerShell](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/OWTAS.ps1).  Future development will be in PowerShell.
