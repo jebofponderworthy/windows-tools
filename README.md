@@ -46,7 +46,7 @@ For quite a while I had been curious as to why a simple method to do this was no
 
 One thing discovered along the way, is even in XP there was a user profile called the “System Profile” — XP had it in C:\WINDOWS\System32\config\systemprofile — and some malware dumps junk into it, and sometimes many gigs of unwanted files can be found in its temporary storage. CATE cleans all user profiles including those, as well as the Windows Error Reporting cache, and the system TEMP folders, and in recent versions, many Windows log files which are often found in many thousands of fragments.
 
-The tool is designed for Windows 10 down through XP. It is self-elevating if run non-administratively.
+The tool is designed for Windows 10/2019 down through XP. It is self-elevating if run non-administratively.
 
 ## OWTAS: Optimize Service Work Items and Additional/Delayed Worker Threads
 
