@@ -182,6 +182,7 @@ New-ItemProperty . -Name AllowAutoGameMode -Value 0 -PropertyType "DWord" -Force
 
 "Disable Windows Compatibility Telemetry..."
 schtasks /Change /Disable /TN "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" | Out-Null
+taskkill /f /im compattelrunner.exe 2>&1 | Out-Null
 
 popd | Out-Null
 
