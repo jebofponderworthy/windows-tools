@@ -191,7 +191,9 @@ ForEach ($OnlineRedist in $AvailableRedists) {
 	# Cycle through all redists currently installed,
 	# checking to see if the available one being checked is there,
 	# and if not, add it to the array of those to be installed.
+	
 	$IsInstalled = $False
+	
 	ForEach ($LocalRedist in $InstalledRedists) {
 		If ($OnlineRedist.Version -eq $LocalRedist.Version) {
 			$OnlineRedist.Version + " already installed!"
