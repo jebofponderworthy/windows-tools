@@ -104,8 +104,8 @@ mkdir $TempPath > $null
 
 "Downloading the binary from Microsoft..."
 
-$WebClientObj = (New-Object System.Net.WebClient)
-$WebClientObj.DownloadFile("https://download.microsoft.com/download/B/C/6/BC670519-7EA1-44BE-8B5C-6FF83A7FF96C/devnodeclean.zip","$TempPath\devnodeclean.zip") > $null
+Import-Module BitsTransfer
+Start-BitsTransfer -Source 'https://download.microsoft.com/download/B/C/6/BC670519-7EA1-44BE-8B5C-6FF83A7FF96C/devnodeclean.zip' -Destination "$TempPath\devnodeclean.zip"
 
 # Now unpack the zip file.
 
