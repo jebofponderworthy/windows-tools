@@ -98,14 +98,16 @@ $TempFolderName = -join ((65..90) + (97..122) | Get-Random -Count 10 | ForEach-O
 
 $envTEMP = [Environment]::GetEnvironmentVariable("TEMP")
 $TempPath = "$envTEMP\$TempFolderName"
-mkdir $TempPath > $null
+mkdir $TempPath 2> $null
 
 # Then download the zip file.
 
 "Downloading the binary from Microsoft..."
 
 Import-Module BitsTransfer
-Start-BitsTransfer -Source 'https://download.microsoft.com/download/B/C/6/BC670519-7EA1-44BE-8B5C-6FF83A7FF96C/devnodeclean.zip' -Destination "$TempPath\devnodeclean.zip"
+Start-BitsTransfer -Source 'https://download.microsoft.com/download/B/C/6/BC670519-7EA1-44BE-8B5C-6FF83A7FF96C/devnodeclean.zip' `
+					-Destination "$TempPath\devnodeclean.zip" `
+					-Priority Foreground -Description 'Downloading DevNodeClean binary package...'
 
 # Now unpack the zip file.
 
