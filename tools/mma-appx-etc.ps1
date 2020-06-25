@@ -146,15 +146,15 @@ Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage | Out-Null
 if ( ($WinVersionStr -Like "*Windows Server 2012*") -Or ($WinVersionStr -Like "*Windows 8*") )
 	{ exit 0 }
 
-Get-AppxPackage "Microsoft.XboxApp" | Remove-AppxPackage -allusers | Out-Null
-Get-AppxPackage "Microsoft.XboxGameOverlay" | Remove-AppxPackage -allusers | Out-Null
-Get-AppxPackage "Microsoft.XboxIdentityProvider"  | Remove-AppxPackage -allusers | Out-Null
-Get-AppxPackage "Microsoft.Xbox.TCUI" | Remove-AppxPackage -allusers | Out-Null
-Get-AppxPackage "Microsoft.XboxSpeechToTextOverlay"  | Remove-AppxPackage  -allusers | Out-Null
-Get-AppxPackage "Microsoft.WindowsCommunicationsApps" | Remove-AppxPackage -allusers | Out-Null
-Get-AppxPackage "Microsoft.BingNews" | Remove-AppxPackage  -allusers | Out-Null
-Get-AppxPackage "Microsoft.BingWeather" | Remove-AppxPackage -allusers | Out-Null
-Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage -allusers | Out-Null
+Get-AppxPackage "Microsoft.XboxApp" -allusers | Remove-AppxPackage -allusers | Out-Null
+Get-AppxPackage "Microsoft.XboxGameOverlay" -allusers | Remove-AppxPackage -allusers | Out-Null
+Get-AppxPackage "Microsoft.XboxIdentityProvider"  -allusers | Remove-AppxPackage -allusers | Out-Null
+Get-AppxPackage "Microsoft.Xbox.TCUI" -allusers | Remove-AppxPackage -allusers | Out-Null
+Get-AppxPackage "Microsoft.XboxSpeechToTextOverlay" -allusers | Remove-AppxPackage  -allusers | Out-Null
+Get-AppxPackage "Microsoft.WindowsCommunicationsApps" -allusers | Remove-AppxPackage -allusers | Out-Null
+Get-AppxPackage "Microsoft.BingNews" -allusers | Remove-AppxPackage  -allusers | Out-Null
+Get-AppxPackage "Microsoft.BingWeather" -allusers | Remove-AppxPackage -allusers | Out-Null
+Get-AppxPackage "Microsoft.Advertising.Xaml" -allusers | Remove-AppxPackage -allusers | Out-Null
 
 "Disabling prelaunch/preload of Microsoft Edge browser..."
 
