@@ -43,7 +43,9 @@ ForEach ($ps_script in $ps_script_list) {
 	"--- Downloading $ps_script... ---"
 	Invoke-WebRequest -Uri $download_url -Outfile ".\$ps_script"
 
-	iex ".\$ps_script"
+	$run_script = ".\$ps_script"
+
+	& $run_script
 	Remove-Item ".\$ps_script"
 	}
 	

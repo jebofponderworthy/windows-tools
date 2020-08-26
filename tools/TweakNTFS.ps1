@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 3.1
+.VERSION 3.2
 
 .GUID 527423ef-dadd-45b1-a547-56d2fdb325d1
 
@@ -104,7 +104,7 @@ Param()
 # Tweaks all NTFS volumes on a system for
 # performance and reliability, using FSUTIL
 #
-# Copyright 2018 Jonathan E. Brickman
+# Copyright 2020 Jonathan E. Brickman
 # https://notes.ponderworthy.com/
 # This script is licensed under the 3-Clause BSD License
 # https://opensource.org/licenses/BSD-3-Clause
@@ -133,9 +133,12 @@ else {
 
 
 "Tweaks for all drives..."
-Invoke-Expression ('fsutil 8dot3name set 1') -ErrorAction SilentlyContinue
-Invoke-Expression ('fsutil behavior set DisableLastAccess 1') -ErrorAction SilentlyContinue
-Invoke-Expression ('fsutil behavior set DisableDeleteNotify 0') -ErrorAction SilentlyContinue # Turn SSD TRIM on if SSD is present
+
+# Using & instead of Invoke-Expression, this appears to be security-positive, hopefully less apt to be false-positived by security tools
+& fsutil 8dot3name set 1 | Out-Null
+& fsutil behavior set DisableLastAccess 1 | Out-Null
+& fsutil behavior set DisableDeleteNotify 0 | Out-Null
+# The last one turns TRIM on for SSDs
 
 function Unzip {
 	param([string]$zipfile, [string]$outpath)
@@ -194,25 +197,25 @@ function Defrag-NTFS-Metafiles {
 		}
 
 	'$Mft ...'
-	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$Mft') -ErrorAction SilentlyContinue | Out-Null
+	& $cmdstr -nobanner -accepteula $DriveID $Mft | Out-Null
 	'$LogFile ...'
-	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$LogFile') -ErrorAction SilentlyContinue | Out-Null
+	& $cmdstr -nobanner -accepteula $DriveID $LogFile | Out-Null
 	'$Volume ...'
-	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$Volume') -ErrorAction SilentlyContinue | Out-Null
+	& $cmdstr -nobanner -accepteula $DriveID $Volume | Out-Null
 	'$AttrDef ...'
-	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$AttrDef') -ErrorAction SilentlyContinue | Out-Null
+	& $cmdstr -nobanner -accepteula $DriveID $AttrDef | Out-Null
 	'$Bitmap ...'
-	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$Bitmap') -ErrorAction SilentlyContinue | Out-Null
+	& $cmdstr -nobanner -accepteula $DriveID $Bitmap | Out-Null
 	'$Boot ...'
-	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$Boot') -ErrorAction SilentlyContinue | Out-Null
+	& $cmdstr -nobanner -accepteula $DriveID $Boot | Out-Null
 	'$BadClus ...'
-	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$BadClus') -ErrorAction SilentlyContinue | Out-Null
+	& $cmdstr -nobanner -accepteula $DriveID $BadClus | Out-Null
 	'$Secure ...'
-	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$Secure') -ErrorAction SilentlyContinue | Out-Null
+	& $cmdstr -nobanner -accepteula $DriveID $Secure | Out-Null
 	'$Upcase ...'
-	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$Upcase') -ErrorAction SilentlyContinue | Out-Null
+	& $cmdstr -nobanner -accepteula $DriveID $Upcase | Out-Null
 	'$Extend ...'
-	Invoke-Expression ($cmdstr + ' -nobanner -accepteula ' + $DriveID + '$Extend') -ErrorAction SilentlyContinue | Out-Null
+	& $cmdstr -nobanner -accepteula $DriveID $Extend | Out-Null
 
 	}
 	
@@ -229,13 +232,16 @@ Get-CimInstance -Query "Select * FROM Win32_LogicalDisk WHERE DriveType=3" | For
 		""
 		
 		"fsutil repair ..."
-		Invoke-Expression ('fsutil repair set ' + $DriveID + ' 0x01') -ErrorAction SilentlyContinue | Out-Null
+		& fsutil repair set $DriveID 0x01 | Out-Null
+		
+		$DriveIDslash = ($DriveID + '\')
+		
 		"fsutil resource setautoreset true ..."
-		Invoke-Expression ('fsutil resource setautoreset true ' + ($DriveID + '\')) -ErrorAction SilentlyContinue | Out-Null
+		& fsutil resource setautoreset true $DriveIDslash | Out-Null
 		"fsutil resource setconsistent ..."
-		Invoke-Expression ('fsutil resource setconsistent ' + ($DriveID + '\')) -ErrorAction SilentlyContinue | Out-Null
+		& fsutil resource setconsistent $DriveIDslash | Out-Null
 		"fsutil resource setlog shrink 10 ..."
-		Invoke-Expression ('fsutil resource setlog shrink 10 ' + ($DriveID + '\')) -ErrorAction SilentlyContinue | Out-Null
+		& fsutil resource setlog shrink 10 $DriveIDslash | Out-Null
 		""
 		Defrag-NTFS-Metafiles($DriveID)
 		""
