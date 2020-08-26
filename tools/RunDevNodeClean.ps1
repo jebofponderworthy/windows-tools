@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 1.13
+.VERSION 1.2
 
 .GUID 2f1b0fa1-c184-47e6-b65c-8ed5c92db371
 
@@ -104,10 +104,8 @@ mkdir $TempPath 2> $null
 
 "Downloading the binary from Microsoft..."
 
-Import-Module BitsTransfer
-Start-BitsTransfer -Source 'https://download.microsoft.com/download/B/C/6/BC670519-7EA1-44BE-8B5C-6FF83A7FF96C/devnodeclean.zip' `
-					-Destination "$TempPath\devnodeclean.zip" `
-					-Priority Foreground -Description 'Downloading DevNodeClean binary package...'
+$download_url = 'https://download.microsoft.com/download/B/C/6/BC670519-7EA1-44BE-8B5C-6FF83A7FF96C/devnodeclean.zip'
+Invoke-WebRequest -Uri $download_url -Outfile "$TempPath\devnodeclean.zip"
 
 # Now unpack the zip file.
 
@@ -195,29 +193,5 @@ Remove-Item -Path $TempPath -Force -Recurse -ErrorAction SilentlyContinue
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

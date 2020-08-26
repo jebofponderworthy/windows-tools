@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 3.01
+.VERSION 3.1
 
 .GUID 527423ef-dadd-45b1-a547-56d2fdb325d1
 
@@ -162,9 +162,9 @@ function Install-Contig {
 	"Downloading the Contig zip file from Microsoft..."
 
 	Remove-Item "$TempPath\Contig.zip" -ErrorAction SilentlyContinue | Out-Null
-	$WebClientObj = (New-Object System.Net.WebClient)
-	$WebClientObj.DownloadFile("https://download.sysinternals.com/files/Contig.zip","$TempPath\Contig.zip") | Out-Null
-
+	$download_url = 'https://download.sysinternals.com/files/Contig.zip'
+	Invoke-WebRequest -Uri $download_url -Outfile "$TempPath\Contig.zip"
+	
 	# Now unpack the zip file.
 
 	"Unpacking..."
@@ -286,16 +286,6 @@ Get-CimInstance -Query "Select * FROM Win32_LogicalDisk WHERE DriveType=3" | For
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
-
-
-
-
-
-
-
-
-
 
 
 

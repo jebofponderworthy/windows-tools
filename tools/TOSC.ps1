@@ -113,18 +113,15 @@ else {
     ""
     }
 
-# Get list of shares with 'net view', parse, and set appropriately.
+# Get list of shares and set appropriately.
 Get-CimInstance -class Win32_Share | ForEach-Object {
 	if ( $_.Name -ne 'IPC$' ) {
-		""
 		"Turning off share caching for " + $_.Name
-		$result = Invoke-Expression ('net share "' + $_.Name + '" /CACHE:None') -ErrorAction SilentlyContinue
-		if ($result -eq $null)
-			{ "Not possible." }
-		else
-			{ "Done." }
+		Set-SmbShare -Name $_.Name -CachingMode None -Force -ErrorAction SilentlyContinue
 		}
 	}
+	
+""
 
 
 # The 3-Clause BSD License
@@ -169,30 +166,5 @@ Get-CimInstance -class Win32_Share | ForEach-Object {
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

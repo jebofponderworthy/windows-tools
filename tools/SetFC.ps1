@@ -277,3 +277,4 @@ write-output "            Min : $SFCMin"
 write-output ("            Max : $SFCMax ( " + $SFCMax / 1024 / 1024 / 1024 + " GiB )")
 write-output "          Flags : $SFCFlags"
 output-flags $SFCFlags
+

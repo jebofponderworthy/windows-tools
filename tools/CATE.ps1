@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 5.1
+.VERSION 5.2
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -245,6 +245,7 @@ $foldersToClean = @(
     "\AppData\Local\Microsoft\Windows\INetCache\Low\Flash",
     "\AppData\Local\Microsoft\Windows\INetCache\Content.Outlook",
     "\AppData\Local\Google\Chrome\User Data\Default\Cache",
+	"\AppData\Local\Google\Chrome\User Data\Default\Code Cache\js",
     "\AppData\Local\AskPartnerNetwork",
 	"\AppData\Local\Temp",
     "\Application Data\Local\Microsoft\Windows\WER",
@@ -262,13 +263,20 @@ $ffFoldersToClean = @(
 	"chromeappstore.sqlite"
 	)
 
-# A quasiprimitive for PowerShell-style progress reporting.
+# A quasiprimitive for progress reporting.
 
 function ShowCATEProgress {
 	param( [string]$reportStatus, [string]$currentOp )
 
-    Write-Progress -Activity "Clean All Temp Etc" -Status $reportStatus -PercentComplete -1 -CurrentOperation $currentOp
-    }
+    try {
+		Write-Progress -Activity "Clean All Temp Etc" -Status $reportStatus -PercentComplete -1 -CurrentOperation $currentOp
+	}
+	catch {
+		Write-Host "Clean All Temp Etc: $reportStatus $currentOp"
+	}
+	
+	# Write-Progress is not compatible with some remote shell methods.
+}
 
 # Rewriting the delete primitives, as effectively as possible, without inline C#.
 #
@@ -283,7 +291,7 @@ $randomFolderName = -join ((65..90) + (97..122) | Get-Random -Count 10 | % {[cha
 $envUserProfile = $env:UserProfile
 $blankFolder = $envUserProfile + '\' + $randomFolderName
 New-Item $blankFolder -Force -ItemType Container
-If ( !(Test-Path $blankFolder -PathType Container) )
+If ( !(Test-Path $blankFolder -PathType Container -ErrorAction SilentlyContinue) )
 		{ 
 		Write-Host 'Error: Cannot create reference folder for delete primitive'
 		Exit 
@@ -293,8 +301,9 @@ If ( !(Test-Path $blankFolder -PathType Container) )
 # useful for absolute deletes of items and trees, and 
 # also callable for more selective uses
 
-# Still starting with non-literal paths, because ROBOCOPY requires them,
-# and because of recursion.
+# There is a lot of question about \\? path syntax.
+# It appears to not work at all before Windows 10, in Powershell.
+# -LiteralPath does not refer to this.  Not using \\? syntax for now.
 
 # CATE-DELETE has to ignore symbolic links and junctions and the like
 # if it's asked to touch them.  Hence, Test-ReparsePoint() below.
@@ -307,15 +316,13 @@ function Test-ReparsePoint([string]$literalPath) {
 function CATE-Delete {
 	param( [string]$deletePath )
 	
-	$literalDeletePath = '\\?\' + $deletePath
-	
 	# If the folder isn't there, we're done
-	If ( !(Test-Path -LiteralPath $literalDeletePath -PathType Container) )
+	If ( !(Test-Path -LiteralPath $deletePath -PathType Container -ErrorAction SilentlyContinue) )
 		{ Return }
 	
 	# If $deletePath is a ReparsePoint, if it is a link or a junction,
 	# exit CATE-Delete silently
-	If (Test-ReparsePoint($literalDeletePath))
+	If (Test-ReparsePoint($deletePath))
 		{ Return }
 	
 	ShowCATEProgress $CATEStatus $deletePath
@@ -323,10 +330,10 @@ function CATE-Delete {
 	# First try to remove simply, which includes non-containers
 	# Do this using literal paths because it works more often
 	#
-	Remove-Item -LiteralPath $literalDeletePath -Force -Recurse *> $null
+	Remove-Item -LiteralPath $deletePath -Force -Recurse *> $null
 	
 	# If it's gone, we're done.
-	If ( !(Test-Path -LiteralPath $literalDeletePath -PathType Container) )
+	If ( !(Test-Path -LiteralPath $deletePath -PathType Container -ErrorAction SilentlyContinue) )
 		{ Return }
 	
 	# If it's not, delete all contents with ROBOCOPY, 10 threads.
@@ -335,7 +342,7 @@ function CATE-Delete {
 	
 	# If there's anything left inside it, call this whole function recursively, 
 	# on all of the contents.
-	Get-ChildItem -Recurse -LiteralPath $literalDeletePath -Name -Force -ErrorAction SilentlyContinue | ForEach-Object {
+	Get-ChildItem -Recurse -LiteralPath $deletePath -Name -Force -ErrorAction SilentlyContinue | ForEach-Object {
 		CATE-Delete ($deletePath + '\' + $_)
 		}
 	}
@@ -343,15 +350,13 @@ function CATE-Delete {
 function CATE-Delete-Folder-Contents {
 	param( [string]$deletePath )
 	
-	$literalDeletePath = '\\?\' + $deletePath
-
 	# If the folder isn't there, we're done
-	If ( !(Test-Path -LiteralPath $literalDeletePath -PathType Container) )
+	If ( !(Test-Path -LiteralPath $deletePath -PathType Container -ErrorAction SilentlyContinue) )
 		{ Return }
 		
 	# If $deletePath is a ReparsePoint, if it is a link or a junction,
 	# exit CATE-Delete silently
-	If (Test-ReparsePoint($literalDeletePath))
+	If (Test-ReparsePoint($deletePath))
 		{ Return }
 		
 	ShowCATEProgress $CATEStatus $deletePath
@@ -361,7 +366,7 @@ function CATE-Delete-Folder-Contents {
 	ROBOCOPY $blankFolder $deletePath /MIR /R:1 /W:1 /MT:10 *> $null
 	
 	# Now try to delete everything left inside, using CATE-Delete.
-	Get-ChildItem -LiteralPath $literalDeletePath -Name -Force -ErrorAction SilentlyContinue | ForEach-Object {
+	Get-ChildItem -LiteralPath $deletePath -Name -Force -ErrorAction SilentlyContinue | ForEach-Object {
 		CATE-Delete ($deletePath + '\' + $_)
 		}
 	}
@@ -369,20 +374,28 @@ function CATE-Delete-Folder-Contents {
 function CATE-Delete-Files-Only {
 	param( [string]$deletePath, [string]$wildCard )
 	
-	$literalDeletePath = '\\?\' + $deletePath
-	
 	# If the folder isn't there, we're done
-	If ( !(Test-Path -LiteralPath $literalDeletePath -PathType Container) )
+	If ( !(Test-Path -LiteralPath $deletePath -PathType Container -ErrorAction SilentlyContinue) )
 		{ Return }
 		
 	# If $deletePath is a ReparsePoint, if it is a link or a junction,
 	# exit CATE-Delete silently
-	If (Test-ReparsePoint($literalDeletePath))
+	If (Test-ReparsePoint($deletePath))
 		{ Return }
 
 	ShowCATEProgress $CATEStatus ($deletePath + '\' + $wildCard)
 	
 	ROBOCOPY $blankFolder $deletePath $wildCard /MIR /R:1 /W:1 /MT:10 *> $null
+	}
+	
+function Replace-Numbered-Temp-Folders {
+	param( [string]$topPath )
+	
+	New-Item ($topPath + '\1') -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item ($topPath + '\2') -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item ($topPath + '\3') -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item ($topPath + '\4') -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item ($topPath + '\5') -Force -ErrorAction SilentlyContinue | Out-Null
 	}
 		
 # Loop through all of the paths for all user profiles
@@ -394,22 +407,22 @@ $ProfileCount = $ProfileList.Count
 $ProfileNumber = 1
 $ProfileList | ForEach-Object {
     $profileItem = Get-ItemProperty $_.pspath
-    $CATEStatus = "Working on (profile " + $ProfileNumber + "/" + $ProfileCount + ") " + $profileItem.ProfileImagePath + " ..."
+    $CATEStatus = ('Working on (profile ' + $ProfileNumber + '/' + $ProfileCount + ') ' + $profileItem.ProfileImagePath + ' ...')
     $ProfileNumber += 1
 
     # This loop enumerates all non-Firefox folder subpaths within profiles to be cleaned
     ForEach ($folderSubpath in $foldersToClean) {
-        $ToClean = $profileItem.ProfileImagePath + $folderSubpath
-        If (Test-Path $ToClean -PathType Container) {
+        $ToClean = ($profileItem.ProfileImagePath + $folderSubpath)
+        If (Test-Path $ToClean -PathType Container -ErrorAction SilentlyContinue) {
             # If the actual path exists, clean it
             CATE-Delete-Folder-Contents $ToClean
             }
         }
 		
 	# These loops handle Firefox and multiple FF profiles if they exist
-	$ffProfilePath = $profileItem.ProfileImagePath + '\AppData\Local\Mozilla\Firefox\Profiles\'
-	If (Test-Path $ffProfilePath) {
-		Get-ChildItem -Path $ffProfilePath -ErrorAction SilentlyContinue | ForEach-Object {
+	$ffProfilePath = ($profileItem.ProfileImagePath + '\AppData\Local\Mozilla\Firefox\Profiles\')
+	If (Test-Path $ffProfilePath -PathType Container -ErrorAction SilentlyContinue) {
+		Get-ChildItem -LiteralPath $ffProfilePath -Force -ErrorAction SilentlyContinue | ForEach-Object {
 			$ffProfilePath = Get-ItemProperty $_.pspath
 		
 			ForEach ($subPath in $ffFoldersToClean) {
@@ -418,9 +431,9 @@ $ProfileList | ForEach-Object {
 				}
 			}
 		}
-	$ffProfilePath = $profileItem.ProfileImagePath + '\AppData\Roaming\Mozilla\Firefox\Profiles\'
-	If (Test-Path $ffProfilePath) {
-		Get-ChildItem -Path $ffProfilePath -ErrorAction SilentlyContinue | ForEach-Object {
+	$ffProfilePath = ($profileItem.ProfileImagePath + '\AppData\Roaming\Mozilla\Firefox\Profiles\')
+	If (Test-Path $ffProfilePath -PathType Container -ErrorAction SilentlyContinue) {
+		Get-ChildItem -LiteralPath $ffProfilePath -Force -ErrorAction SilentlyContinue | ForEach-Object {
 			$ffProfilePath = Get-ItemProperty $_.pspath
 		
 			ForEach ($subPath in $ffFoldersToClean) {
@@ -432,6 +445,9 @@ $ProfileList | ForEach-Object {
 
     # A subpath to be eliminated altogether, also present in the $foldersToClean list above
     CATE-Delete ($profileItem.ProfileImagePath + '\AppData\Local\AskPartnerNetwork')
+	
+	# Recreate Windows TEMP folder subpaths, prevents issues in a number of oddball situations
+	Replace-Numbered-Temp-Folders ($profileItem.ProfileImagePath + '\AppData\Local\Temp') -Force -ErrorAction SilentlyContinue | Out-Null
     }
 
 # Now empty certain folders
@@ -439,10 +455,13 @@ $ProfileList | ForEach-Object {
 $CATEStatus = "Working on other folders ..."
 
 CATE-Delete-Folder-Contents $envTEMP
+Replace-Numbered-Temp-Folders ($envTEMP) -Force -ErrorAction SilentlyContinue | Out-Null
 
 CATE-Delete-Folder-Contents $envTMP
+Replace-Numbered-Temp-Folders ($envTMP) -Force -ErrorAction SilentlyContinue | Out-Null
 
 CATE-Delete-Folder-Contents ($envSystemRoot + "\Temp")
+Replace-Numbered-Temp-Folders ($envSystemRoot + "\Temp") -Force -ErrorAction SilentlyContinue | Out-Null
 
 CATE-Delete-Folder-Contents ($envSystemRoot + "\system32\wbem\logs")
 
@@ -541,3 +560,123 @@ exit
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# SIG # Begin signature block
+# MIIQIQYJKoZIhvcNAQcCoIIQEjCCEA4CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
+# gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU/Nr/RnjOdi2uudzAeAjYr1bg
+# 1VqgggupMIIDDDCCAfSgAwIBAgIQGsDSayfiep9MU0Gn9qSESTANBgkqhkiG9w0B
+# AQsFADAeMRwwGgYDVQQDDBNDQlQgUG93ZXJTaGVsbCBDb2RlMB4XDTIwMDgyNjE0
+# Mjc1MloXDTI1MDgyNjE0Mzc1MlowHjEcMBoGA1UEAwwTQ0JUIFBvd2VyU2hlbGwg
+# Q29kZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAN2yXYLb9UAxirdD
+# q1wGZNWYCUGXlju/a3aZmN8iVpJRAxr1IsJmeEjgZgvhKxCFiQOulI1XzfC0qF3E
+# W5wSZbmoXlHkeihS3Qne4735WEAAp0JVVsdstZuK3faFJCtaWorhtHF9QTfPmMZb
+# CU40CNmZmaH/FaAvwX7Y0lt2bNLbf6ICgwwMQy1KOQIQtgIZYohBM9ceC+OyU/ko
+# VVvMFQeX9V+vYijAWJxlpTv+A52Z4MvlkpO+zdVKBm3pg0BVxK/jgk288K9otTCY
+# AybawIjeVS77C//wGwQjM+Qgpdswhxnu9AYUtREht9aaqL2trA3eIQhdzFCMpTze
+# L3KEFqECAwEAAaNGMEQwDgYDVR0PAQH/BAQDAgeAMBMGA1UdJQQMMAoGCCsGAQUF
+# BwMDMB0GA1UdDgQWBBTuCNhmsoGL4xfXdeHB9ajub1TGKjANBgkqhkiG9w0BAQsF
+# AAOCAQEATsu+0CzTZUEniNgB+6gJ5Ver2WexHfVumGqXQ/VgSV6o7Na1adM5YDEl
+# OOupwxAqYyHRh7S6ljOTqSxs0MXv0u3N9WuL8QKTZi6N8b6Fm9721TZiszxDdefW
+# ZxgSkRq9UAsx9yyVEq6JfKenH/JmPPZ/a7E0ioYTkAHNR3CHTh8WeeQBBWpFDO7X
+# mtAjrSbNTymvE+zAQ8t6BuxAua5JzGrBGbEKaTMhwFP/nseeCMKRNsH6EevnYah/
+# +DmW6AzXJOuoazW+KNF54T6drKTx1lLBFfTjNSCKwN6Z82jpFfCD1/XDWC8njt/N
+# 766cq+efmqOajiWX6uQSIIPH3Oy9cDCCA+4wggNXoAMCAQICEH6T6/t8xk5Z6kua
+# d9QG/DswDQYJKoZIhvcNAQEFBQAwgYsxCzAJBgNVBAYTAlpBMRUwEwYDVQQIEwxX
+# ZXN0ZXJuIENhcGUxFDASBgNVBAcTC0R1cmJhbnZpbGxlMQ8wDQYDVQQKEwZUaGF3
+# dGUxHTAbBgNVBAsTFFRoYXd0ZSBDZXJ0aWZpY2F0aW9uMR8wHQYDVQQDExZUaGF3
+# dGUgVGltZXN0YW1waW5nIENBMB4XDTEyMTIyMTAwMDAwMFoXDTIwMTIzMDIzNTk1
+# OVowXjELMAkGA1UEBhMCVVMxHTAbBgNVBAoTFFN5bWFudGVjIENvcnBvcmF0aW9u
+# MTAwLgYDVQQDEydTeW1hbnRlYyBUaW1lIFN0YW1waW5nIFNlcnZpY2VzIENBIC0g
+# RzIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCxrLNJVEuXHBIK2CV5
+# kSJXKm/cuCbEQ3Nrwr8uUFr7FMJ2jkMBJUO0oeJF9Oi3e8N0zCLXtJQAAvdN7b+0
+# t0Qka81fRTvRRM5DEnMXgotptCvLmR6schsmTXEfsTHd+1FhAlOmqvVJLAV4RaUv
+# ic7nmef+jOJXPz3GktxK+Hsz5HkK+/B1iEGc/8UDUZmq12yfk2mHZSmDhcJgFMTI
+# yTsU2sCB8B8NdN6SIqvK9/t0fCfm90obf6fDni2uiuqm5qonFn1h95hxEbziUKFL
+# 5V365Q6nLJ+qZSDT2JboyHylTkhE/xniRAeSC9dohIBdanhkRc1gRn5UwRN8xXnx
+# ycFxAgMBAAGjgfowgfcwHQYDVR0OBBYEFF+a9W5czMx0mtTdfe8/2+xMgC7dMDIG
+# CCsGAQUFBwEBBCYwJDAiBggrBgEFBQcwAYYWaHR0cDovL29jc3AudGhhd3RlLmNv
+# bTASBgNVHRMBAf8ECDAGAQH/AgEAMD8GA1UdHwQ4MDYwNKAyoDCGLmh0dHA6Ly9j
+# cmwudGhhd3RlLmNvbS9UaGF3dGVUaW1lc3RhbXBpbmdDQS5jcmwwEwYDVR0lBAww
+# CgYIKwYBBQUHAwgwDgYDVR0PAQH/BAQDAgEGMCgGA1UdEQQhMB+kHTAbMRkwFwYD
+# VQQDExBUaW1lU3RhbXAtMjA0OC0xMA0GCSqGSIb3DQEBBQUAA4GBAAMJm495739Z
+# MKrvaLX64wkdu0+CBl03X6ZSnxaN6hySCURu9W3rWHww6PlpjSNzCxJvR6muORH4
+# KrGbsBrDjutZlgCtzgxNstAxpghcKnr84nodV0yoZRjpeUBiJZZux8c3aoMhCI5B
+# 6t3ZVz8dd0mHKhYGXqY4aiISo1EZg362MIIEozCCA4ugAwIBAgIQDs/0OMj+vzVu
+# BNhqmBsaUDANBgkqhkiG9w0BAQUFADBeMQswCQYDVQQGEwJVUzEdMBsGA1UEChMU
+# U3ltYW50ZWMgQ29ycG9yYXRpb24xMDAuBgNVBAMTJ1N5bWFudGVjIFRpbWUgU3Rh
+# bXBpbmcgU2VydmljZXMgQ0EgLSBHMjAeFw0xMjEwMTgwMDAwMDBaFw0yMDEyMjky
+# MzU5NTlaMGIxCzAJBgNVBAYTAlVTMR0wGwYDVQQKExRTeW1hbnRlYyBDb3Jwb3Jh
+# dGlvbjE0MDIGA1UEAxMrU3ltYW50ZWMgVGltZSBTdGFtcGluZyBTZXJ2aWNlcyBT
+# aWduZXIgLSBHNDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKJjCzlE
+# uLsjp0RJuw7/ofBhClOTsJjbrSwPSsVu/4Y8U1UPFc4EPyv9qZaW2b5heQtbyUyG
+# duXgQ0sile7CK0PBn9hotI5AT+6FOLkRxSPyZFjwFTJvTlehroikAtcqHs1L4d1j
+# 1ReJMluwXplaqJ0oUA4X7pbbYTtFUR3PElYLkkf8q672Zj1HrHBy55LnX80QucSD
+# ZJQZvSWA4ejSIqXQugJ6oXeTW2XD7hd0vEGGKtwITIySjJEtnndEH2jWqHR32w5b
+# MotWizO92WPISZ06xcXqMwvS8aMb9Iu+2bNXizveBKd6IrIkri7HcMW+ToMmCPsL
+# valPmQjhEChyqs0CAwEAAaOCAVcwggFTMAwGA1UdEwEB/wQCMAAwFgYDVR0lAQH/
+# BAwwCgYIKwYBBQUHAwgwDgYDVR0PAQH/BAQDAgeAMHMGCCsGAQUFBwEBBGcwZTAq
+# BggrBgEFBQcwAYYeaHR0cDovL3RzLW9jc3Aud3Muc3ltYW50ZWMuY29tMDcGCCsG
+# AQUFBzAChitodHRwOi8vdHMtYWlhLndzLnN5bWFudGVjLmNvbS90c3MtY2EtZzIu
+# Y2VyMDwGA1UdHwQ1MDMwMaAvoC2GK2h0dHA6Ly90cy1jcmwud3Muc3ltYW50ZWMu
+# Y29tL3Rzcy1jYS1nMi5jcmwwKAYDVR0RBCEwH6QdMBsxGTAXBgNVBAMTEFRpbWVT
+# dGFtcC0yMDQ4LTIwHQYDVR0OBBYEFEbGaaMOShQe1UzaUmMXP142vA3mMB8GA1Ud
+# IwQYMBaAFF+a9W5czMx0mtTdfe8/2+xMgC7dMA0GCSqGSIb3DQEBBQUAA4IBAQB4
+# O7SRKgBM8I9iMDd4o4QnB28Yst4l3KDUlAOqhk4ln5pAAxzdzuN5yyFoBtq2MrRt
+# v/QsJmMz5ElkbQ3mw2cO9wWkNWx8iRbG6bLfsundIMZxD82VdNy2XN69Nx9DeOZ4
+# tc0oBCCjqvFLxIgpkQ6A0RH83Vx2bk9eDkVGQW4NsOo4mrE62glxEPwcebSAe6xp
+# 9P2ctgwWK/F/Wwk9m1viFsoTgW0ALjgNqCmPLOGy9FqpAa8VnCwvSRvbIrvD/niU
+# UcOGsYKIXfA9tFGheTMrLnu53CAJE3Hrahlbz+ilMFcsiUk/uc9/yb8+ImhjU5q9
+# aXSsxR08f5Lgw7wc2AR1MYID4jCCA94CAQEwMjAeMRwwGgYDVQQDDBNDQlQgUG93
+# ZXJTaGVsbCBDb2RlAhAawNJrJ+J6n0xTQaf2pIRJMAkGBSsOAwIaBQCgeDAYBgor
+# BgEEAYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEE
+# MBwGCisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQX
+# IWDd1KdzBqy8KN4/YBjHRZfVvDANBgkqhkiG9w0BAQEFAASCAQDBTdblTRtef6sp
+# W3EZJ1DJ1QeWHz7tgowD1UnpCNvMRYz8V7pXb9vpw3WbuvcWrEqHCO6ceUc2ox5X
+# nz7o5mMcsnYQDFqHZuythTrpXQGFX4xNsQNB6bdzJT5M1AIjQfa7BL+l/qGTA622
+# bU0VgWFdL0EW4KxZlpHNAJfj+aaWji9Yxpo8p3MXf78rFGjnoU6Fl6KeuB6p0aT+
+# W8EBiZVejTXSI48Pxkp3sKr1JwVtoOX1JemugXcw0Q3Oln+HdixTeNvSEUPNjCBA
+# C/JKJr+MdfbrBc9XjgqRt01c9xbY85aDa4p+QxgEHHkDk05wB9S8Oe0Z8tZnC81j
+# cvku8tYBoYICCzCCAgcGCSqGSIb3DQEJBjGCAfgwggH0AgEBMHIwXjELMAkGA1UE
+# BhMCVVMxHTAbBgNVBAoTFFN5bWFudGVjIENvcnBvcmF0aW9uMTAwLgYDVQQDEydT
+# eW1hbnRlYyBUaW1lIFN0YW1waW5nIFNlcnZpY2VzIENBIC0gRzICEA7P9DjI/r81
+# bgTYapgbGlAwCQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEw
+# HAYJKoZIhvcNAQkFMQ8XDTIwMDgyNjE0Mzc1NlowIwYJKoZIhvcNAQkEMRYEFGU/
+# BmgE+/c9F4OjC17wHXBftwNkMA0GCSqGSIb3DQEBAQUABIIBAFxqLIv4/gOd7gDc
+# lXtQhIWd+TmhaL98K0grCkv5e+RFKHZmUgX5XNL5koI4EQVbKBvZ8Bhx+Go2CT59
+# KTy6GvekCL8I2uQfdyBpiTIPbqWf0uPa5Ss0Bt+g5g9jFU1Rgeebah/PiMkSYe8N
+# KQ6ouhQ/sNOBratWZ6Tb7nEMKAcZLsaKpdIMPJLp3UEI9YiTUGHeS8hi+HxFWRLK
+# ifPdlThhj9J33OxwPs2Q/+VXzzS1v9l0EsKoPVCibYme+6eLM0MBWfEh2u7mpfoe
+# HD0szdVsMg8nYN6VWIRZ29+JRm/nqRmkWf1yj2nS8f9mP2e70GIB4RmnYD+PNOrb
+# iPdfVTk=
+# SIG # End signature block

@@ -290,26 +290,3 @@ If ( (Test-Path "C:\Program Files (x86)\StorageCraft\ImageManager") -Or (Test-Pa
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -386,18 +386,3 @@ Add-Type -TypeDefinition $setupapi
 	
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

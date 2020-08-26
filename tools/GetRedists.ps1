@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 3.2
+.VERSION 3.3
 
 .GUID 03c695c0-bf45-4257-8156-89310e951140
 
@@ -87,7 +87,7 @@ Param()
 
 #######################################################################
 # GetRedists                                                          #
-# v3.1                                                                #
+# v3.3                                                                #
 #######################################################################
 
 #
@@ -141,8 +141,16 @@ $currentOp = ''
 function ShowProgress {
 	param( [string]$reportStatus, [string]$currentOp )
 
-    Write-Progress -Activity "Get Microsoft Redists" -Status $reportStatus -PercentComplete -1 -CurrentOperation $currentOp
+	try {
+		Write-Progress -Activity "Get Microsoft Redistributables" -Status $reportStatus -PercentComplete -1 -CurrentOperation $currentOp
+	}
+	catch {
+		Write-Host "Get Microsoft Redistributables: $reportStatus $currentOp"
     }
+	
+	# Write-Progress is not compatible with some remote shell methods.
+
+}
 
 Function PrepareModule {
 	param( [string]$ModuleName )
