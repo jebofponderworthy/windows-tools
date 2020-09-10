@@ -20,6 +20,9 @@ else {
 	
 Set-ExecutionPolicy Bypass -Scope Process -Force
 
+# Do not show download preference, this permits execution where cannot
+$ProgressPreference = 'SilentlyContinue'
+
 Import-Module BitsTransfer
 
 $ps_script_list = @(

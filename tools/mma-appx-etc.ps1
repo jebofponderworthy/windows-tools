@@ -155,14 +155,6 @@ Get-AppxPackage "Microsoft.Advertising.Xaml" -allusers | Remove-AppxPackage -all
 "10/10..."
 Get-AppxPackage "*Microsoft.Skype*" -allusers | Remove-AppxPackage -allusers  -ErrorAction SilentlyContinue | Out-Null
 
-# Reregisters the remaining Appx items, this can solve lots of problems
-
-"Reregistering needed Appx items..."
-
-Get-AppXPackage -AllUsers | Foreach {
-	Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml" -ErrorAction SilentlyContinue | Out-Null
-	}
-
 # The rest do not apply to Windows 8 / Server 2012 platforms.
 if ( ($WinVersionStr -Like "*Windows Server 2012*") -Or ($WinVersionStr -Like "*Windows 8*") )
 	{ exit 0 }

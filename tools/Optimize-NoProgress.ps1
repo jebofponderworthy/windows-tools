@@ -13,6 +13,10 @@ else {
 	
 Set-ExecutionPolicy Bypass -Scope Process -Force
 
+# Do not show progress, this permits execution where otherwise cannot,
+# e.g., within certain scripting environments
+$ProgressPreference = 'SilentlyContinue'
+
 Import-Module BitsTransfer
 
 $ps_script_list = @(

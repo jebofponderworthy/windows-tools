@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 1.2
+.VERSION 1.3
 
 .GUID 2f1b0fa1-c184-47e6-b65c-8ed5c92db371
 
@@ -73,7 +73,7 @@ Param()
 # This cleans unused device nodes in the registry,
 # improving performance
 #
-# Copyright 2018 Jonathan E. Brickman
+# Copyright 2020 Jonathan E. Brickman
 # https://notes.ponderworthy.com/
 # This script is licensed under the 3-Clause BSD License
 # https://opensource.org/licenses/BSD-3-Clause
@@ -98,7 +98,7 @@ $TempFolderName = -join ((65..90) + (97..122) | Get-Random -Count 10 | ForEach-O
 
 $envTEMP = [Environment]::GetEnvironmentVariable("TEMP")
 $TempPath = "$envTEMP\$TempFolderName"
-mkdir $TempPath 2> $null
+New-Item $TempPath -Force -ItemType Container | Out-Null
 
 # Then download the zip file.
 

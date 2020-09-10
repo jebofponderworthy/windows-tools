@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 5.2
+.VERSION 5.3
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -150,7 +150,7 @@ Param()
 # Cleans temp files from all user profiles and
 # several other locations.  Also clears log files.
 #
-# Copyright 2018 Jonathan E. Brickman
+# Copyright 2020 Jonathan E. Brickman
 # https://notes.ponderworthy.com/
 # This script is licensed under the 3-Clause BSD License
 # https://opensource.org/licenses/BSD-3-Clause
@@ -290,7 +290,7 @@ function ShowCATEProgress {
 $randomFolderName = -join ((65..90) + (97..122) | Get-Random -Count 10 | % {[char]$_})
 $envUserProfile = $env:UserProfile
 $blankFolder = $envUserProfile + '\' + $randomFolderName
-New-Item $blankFolder -Force -ItemType Container
+New-Item $blankFolder -Force -ItemType Container | Out-Null
 If ( !(Test-Path $blankFolder -PathType Container -ErrorAction SilentlyContinue) )
 		{ 
 		Write-Host 'Error: Cannot create reference folder for delete primitive'
@@ -391,11 +391,11 @@ function CATE-Delete-Files-Only {
 function Replace-Numbered-Temp-Folders {
 	param( [string]$topPath )
 	
-	New-Item ($topPath + '\1') -Force -ErrorAction SilentlyContinue | Out-Null
-	New-Item ($topPath + '\2') -Force -ErrorAction SilentlyContinue | Out-Null
-	New-Item ($topPath + '\3') -Force -ErrorAction SilentlyContinue | Out-Null
-	New-Item ($topPath + '\4') -Force -ErrorAction SilentlyContinue | Out-Null
-	New-Item ($topPath + '\5') -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\1') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\2') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\3') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\4') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\5') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
 	}
 		
 # Loop through all of the paths for all user profiles
