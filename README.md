@@ -4,25 +4,21 @@ This is a toolset for improvement of performance of Windows desktop and server o
 
 PowerShell 3.0 and later are supported, on Windows 7/2008R2 and later; the exception is GetRedists, which requires 5.1.  Please note that 7 and 2008R2 ship with PowerShell 2.0 by default.  Installing the [WMF](https://www.microsoft.com/en-us/download/details.aspx?id=54616) will update to 5.1.  
 
-## RUNALL.CMD:  download, verify by hash, and run almost all of the tools
+## OPTIMIZE.CMD:  download, verify by hash, and run the full general set of tools
 
-[RUNALL is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/RUNALL.CMD) which, if run as administrator, will download, verify integrity by hash, and run RunDevNodeClean first, then wt_removeGhosts, then TweakNTFS, then OWTAS, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+[OPTIMIZE is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/OPTIMIZE.CMD) which, if run as administrator, will download, verify integrity by hash, and run mma-appx-etc first, then RunDevNodeClean, then wt_removeGhosts, then TweakNTFS, then OWTAS, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
 Do not use this if you want Offline Files caching to be active, RUNMOST does everything except the Offline Files cache disabling.
 
-For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
+## OPTIMIZE-KEEP-SHARE-CACHING.CMD:  download, verify by hash, and run most of the tools
 
-## RUNMOST.CMD:  download, verify by hash, and run most of the tools
+[OPTIMIZE-KEEP-SHARE-CACHING is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/OPTIMIZE-KEEP-SHARE-CACHING.CMD) which, if run as administrator, will download, verify integrity by hash, and run mma-appx-etc, RunDevNodeClean, wt_removeGhosts, TweakNTFS, OWTAS, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
 
-[RUNMOST is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/RUN.CMD) which, if run as administrator, will download, verify integrity by hash, and run RunDevNodeClean, wt_removeGhosts, TweakNTFS, OWTAS, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
-
-*Do* use this if you want Offline Files caching to be active.  RUNMOST.CMD does not run TOSC.ps1.
-
-For compatibility, hashing is done using the command-line CERTUTIL tool (capturing text output to PowerShell code run within CMD), instead of Get-FileHash.  SHA256 is in use.
+*Do* use this if you want Offline Files caching to be active.  OPTIMIZE-KEEP-SHARE-CACHING.CMD does not run TOSC.ps1.
 
 ## GETREDISTS.CMD:  Get and update Microsoft VC++ redistributables using GetRedists.ps1
 
-Lots of software uses Microsoft VC++ redistributables.  They get updated fairly often and almost never automatically.  To bring all of yours up to date and install all the newers which Microsoft supports, run [GETREDISTS.CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/RUN.CMD) to call GetRedists.ps1.  Requires PowerShell 5.1, and automatically pulls in the VcRedist module.
+Lots of software uses Microsoft VC++ redistributables.  They get updated fairly often and almost never automatically.  To bring all of yours up to date and install all the newers which Microsoft supports, run [GETREDISTS.CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/GETREDISTS.CMD) to call GetRedists.ps1.  Requires PowerShell 5.1, and automatically pulls in the VcRedist module.
 
 ## mma-appx-etc
 
