@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 3.3
+.VERSION 4.0
 
 .GUID 03c695c0-bf45-4257-8156-89310e951140
 
@@ -87,7 +87,7 @@ Param()
 
 #######################################################################
 # GetRedists                                                          #
-# v3.3                                                                #
+# v4.0                                                                #
 #######################################################################
 
 #
@@ -141,13 +141,7 @@ $currentOp = ''
 function ShowProgress {
 	param( [string]$reportStatus, [string]$currentOp )
 
-	try {
-		Write-Progress -Activity "Get Microsoft Redistributables" -Status $reportStatus -PercentComplete -1 -CurrentOperation $currentOp
-	}
-	catch {
-		Write-Host "Get Microsoft Redistributables: $reportStatus $currentOp"
-    }
-	
+	Write-Progress -Activity "Get Microsoft Redistributables" -Status $reportStatus -PercentComplete -1 -CurrentOperation $currentOp
 	# Write-Progress is not compatible with some remote shell methods.
 
 }
@@ -162,6 +156,8 @@ Function PrepareModule {
 	}
 
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unrestricted -Force > $null
+
+'Preparing Powershell environment...'
 
 ShowProgress("Preparing Powershell environment...","Setting up to use Powershell Gallery...")
 
@@ -180,10 +176,16 @@ PrepareModule("VcRedist")
 if ($False -eq (Test-Path C:\VcRedist -PathType Container)) {
 	New-Item C:\VcRedist -ItemType Directory | Out-Null 
 	}
+
+'Getting list of currently installed redistributables...'
 	
 ShowProgress("Getting list of currently installed redistributables...","")
 $InstalledRedists = Get-InstalledVcRedist
-ShowProgress("Getting list of currently available supported redistributables...","")
+
+'Getting list of currently available and supported redistributables...'
+''
+
+ShowProgress("Getting list of currently available and supported redistributables...","")
 $AvailableRedists = Get-VcList
 
 ShowProgress("Checking and installing/upgrading as needed...","")
@@ -191,10 +193,14 @@ ShowProgress("Checking and installing/upgrading as needed...","")
 # Create blank array of redists to install
 $RedistsToGet = @()
 
+# Initialize...
+$NothingMissing = $True
+
 # Cycle through all available redists
+# Using .ProductCode not .Version, .ProductCode will eliminate false downloads
 ForEach ($OnlineRedist in $AvailableRedists) {
 
-	"Checking version " + $OnlineRedist.Version + "..."
+	'Checking: ' + $OnlineRedist.Name + '...'
 	
 	# Cycle through all redists currently installed,
 	# checking to see if the available one being checked is there,
@@ -203,24 +209,24 @@ ForEach ($OnlineRedist in $AvailableRedists) {
 	$IsInstalled = $False
 	
 	ForEach ($LocalRedist in $InstalledRedists) {
-		If ($OnlineRedist.Version -eq $LocalRedist.Version) {
-			$OnlineRedist.Version + " already installed!"
+		If ($OnlineRedist.ProductCode -eq $LocalRedist.ProductCode) {
+			'Already installed.'
 			""
 			$IsInstalled = $True
 			break
 			}
 		}
 	If ($IsInstalled -eq $False) {
-		$OnlineRedist.Version + " needed."
+		'Needed.'
 		""
 		$RedistsToGet += ,$OnlineRedist
-		$IsInstalled = $True
+		$NothingMissing = $False
 		}
 	}
 	
-If ($RedistsToGet -eq @())
+If ($NothingMissing -eq $True)
 	{
-	"No VC++ redistributables missing!"
+	"No VC++ redistributables missing."
 	""
 	Exit
 	}
