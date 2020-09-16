@@ -31,5 +31,5 @@ echo ---
 echo:
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ".\Optimize.ps1"
 
-@del GetRedists.ps1
+@del Optimize.ps1
 
