@@ -26,4 +26,4 @@ function Find-NestedGroupMember
 		}
 	}
 
-Find-NestedGroupMember Optimum sdavis
+Find-NestedGroupMember Group Username
