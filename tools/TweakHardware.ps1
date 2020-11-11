@@ -127,6 +127,8 @@ Get-NetAdapter | ForEach-Object {
 	
 	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Energy-Efficient Ethernet" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
 	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Energy Efficient Ethernet" -DisplayValue "Off" -ErrorAction SilentlyContinue | Out-Null
+	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Advanced EEE" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
+	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "EEE Control Policies" -DisplayValue "Maximum Performance" -ErrorAction SilentlyContinue | Out-Null
 	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Reduce Speed On Power Down" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
 	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "System Idle Power Saver" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
 	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Ultra Low Power Mode" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
@@ -140,12 +142,10 @@ Get-NetAdapter | ForEach-Object {
 	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Interrupt Moderation" -DisplayValue "Enabled" -ErrorAction SilentlyContinue | Out-Null
 	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Interrupt Moderation Rate" -DisplayValue "Adaptive" -ErrorAction SilentlyContinue | Out-Null
 	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Adaptive Inter-Frame Spacing" -DisplayValue "Enabled" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Advanced EEE" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
 	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Auto Disable Gigabit" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
 	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "RSS Profile" -DisplayValue "NUMA Scaling Static" -ErrorAction SilentlyContinue | Out-Null
 	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "RSS load balancing profile" -DisplayValue "NUMAScalingStatic" -ErrorAction SilentlyContinue | Out-Null
 	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Virtual Machine Queues" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "EEE Control Policies" -DisplayValue "Maximum Performance" -ErrorAction SilentlyContinue | Out-Null
 
 	try {
 		$NICProperty = Get-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Maximum Number of RSS Queues"  -ErrorAction Stop
