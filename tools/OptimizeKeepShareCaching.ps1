@@ -30,7 +30,8 @@ $ps_script_list = @(
     'TweakNTFS.ps1',
     'OWTAS.ps1',
     'OVSS.ps1',
-    'CATE.ps1'
+    'CATE.ps1',
+	'TweakHardware.ps1'
     )
 
 $wco = (New-Object System.Net.WebClient)

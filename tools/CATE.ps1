@@ -511,10 +511,6 @@ Write-Output ""
 Remove-Item $blankFolder -Force -Recurse -ErrorAction SilentlyContinue
 Set-Location $originalLocation
 
-ShowCATEProgress 'Pausing for report...' ''
-
-Start-Sleep 7
-
 exit
 
 # The 3-Clause BSD License
