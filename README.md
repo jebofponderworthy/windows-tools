@@ -6,13 +6,13 @@ PowerShell 3.0 and later are supported, on Windows 7/2008R2 and later; the excep
 
 ## OPTIMIZE.CMD:  download, verify by hash, and run the full general set of tools
 
-[OPTIMIZE is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/OPTIMIZE.CMD) which, if run as administrator, will download, verify integrity by hash, and run mma-appx-etc first, then RunDevNodeClean, then wt_removeGhosts, then TweakNTFS, then OWTAS, then TOSC, then OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+[OPTIMIZE is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/OPTIMIZE.CMD) which, if run as administrator, will download and run Optimize.ps1, when in turn will run mma-appx-etc first, then TweakMemTCP, then RunDevNodeClean, then wt_removeGhosts, then TweakNTFS, then OWTAS, then TOSC, then OVSS, then CATE, then TweakHardware.  The result is a distinct performance hike on any current Windows machine.
 
 Do not use this if you want Offline Files caching to be active, RUNMOST does everything except the Offline Files cache disabling.
 
 ## OPTIMIZE-KEEP-SHARE-CACHING.CMD:  download, verify by hash, and run most of the tools
 
-[OPTIMIZE-KEEP-SHARE-CACHING is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/OPTIMIZE-KEEP-SHARE-CACHING.CMD) which, if run as administrator, will download, verify integrity by hash, and run mma-appx-etc, RunDevNodeClean, wt_removeGhosts, TweakNTFS, OWTAS, OVSS, and then CATE.  The result is a distinct performance hike on any current Windows machine.
+[OPTIMIZE-KEEP-SHARE-CACHING is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/OPTIMIZE-KEEP-SHARE-CACHING.CMD) which, if run as administrator, will download and run Optimize.ps1, when in turn will run mma-appx-etc first, then TweakMemTCP, then RunDevNodeClean, then wt_removeGhosts, then TweakNTFS, then OWTAS, then OVSS, then CATE, then TweakHardware.  The result is a distinct performance hike on any current Windows machine.
 
 *Do* use this if you want Offline Files caching to be active.  OPTIMIZE-KEEP-SHARE-CACHING.CMD does not run TOSC.ps1.
 
