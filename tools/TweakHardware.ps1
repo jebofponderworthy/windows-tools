@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 1.2
+.VERSION 1.4
 
 .AUTHOR Jonathan E. Brickman
 
@@ -120,71 +120,138 @@ else {
 # To get a list of valid values for many given items, example:
 # $ValidValues = (Get-NetAdapterAdvancedProperty -Name "NIC Name" -DisplayName "Energy-Efficient Ethernet").ValidDisplayValues
 
+# Performance tuning information comes from:
+# https://docs.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-tuning-nics
+# https://docs.microsoft.com/en-us/search/?terms=Performance%20Tuning%20Network%20Adapters
+# and others
+
+function Set-NIC-Property {
+	param( [string]$NICName, [string]$PropertyName, [string]$PropertySetting )
+	
+	# Try to make the setting.  If the requested setting is valid and successful, report.
+	# Otherwise don't care.
+	
+	try {
+		Set-NetAdapterAdvancedProperty -Name $NICName -DisplayName $PropertyName -DisplayValue $PropertySetting -ErrorAction Stop | Out-Null
+		}
+	catch {
+		return
+		}
+		
+	"On NIC <$NICName>, set <$PropertyName> to <$PropertySetting>."
+	}
+	
+function Set-NIC-Property-Highest {
+	param( [string]$NICName, [string]$PropertyName )
+
+	try {
+		$NICProperty = Get-NetAdapterAdvancedProperty -Name $NICName -DisplayName $PropertyName  -ErrorAction Stop
+		$ValidValues = (Get-NetAdapterAdvancedProperty -Name $NICName -DisplayName $PropertyName).ValidDisplayValues
+		Set-NIC-Property $NICName $PropertyName $ValidValues[-1]
+		# $ValidValues[-1] sets the last one in the list, i.e., the highest
+		}
+	catch {
+		return
+		}
+	}
+
 Get-NetAdapter | ForEach-Object {
-	"Changing settings on NIC <" + $_.Name + "> if/as appropriate..."
+	"Checking NIC <" + $_.Name + "> ..."
 	
 	# Green Ethernet et al.
 	
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Energy-Efficient Ethernet" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Energy Efficient Ethernet" -DisplayValue "Off" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Advanced EEE" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "EEE Control Policies" -DisplayValue "Maximum Performance" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Reduce Speed On Power Down" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "System Idle Power Saver" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Ultra Low Power Mode" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Green Ethernet" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Gigabit Lite" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Power Saving Mode" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Enable PME" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
+	Set-NIC-Property $_.Name "Energy-Efficient Ethernet" "Disabled"
+	Set-NIC-Property $_.Name "Energy Efficient Ethernet" "Off"
+	Set-NIC-Property $_.Name "Advanced EEE" "Disabled"
+	Set-NIC-Property $_.Name "EEE Control Policies" "Maximum Performance"
+	Set-NIC-Property $_.Name "Reduce Speed On Power Down" "Disabled"
+	Set-NIC-Property $_.Name "System Idle Power Saver" "Disabled"
+	Set-NIC-Property $_.Name "Ultra Low Power Mode" "Disabled"
+	Set-NIC-Property $_.Name "Green Ethernet" "Disabled"
+	Set-NIC-Property $_.Name "Gigabit Lite" "Disabled"
+	Set-NIC-Property $_.Name "Power Saving Mode" "Disabled"
+	Set-NIC-Property $_.Name "Enable PME" "Disabled"
 
 	# Other general performance items
 	
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Interrupt Moderation" -DisplayValue "Enabled" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Interrupt Moderation Rate" -DisplayValue "Adaptive" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Adaptive Inter-Frame Spacing" -DisplayValue "Enabled" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Auto Disable Gigabit" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "RSS Profile" -DisplayValue "NUMA Scaling Static" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "RSS load balancing profile" -DisplayValue "NUMAScalingStatic" -ErrorAction SilentlyContinue | Out-Null
-	Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Virtual Machine Queues" -DisplayValue "Disabled" -ErrorAction SilentlyContinue | Out-Null
-
-	try {
-		$NICProperty = Get-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Maximum Number of RSS Queues"  -ErrorAction Stop
-		$ValidValues = (Get-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Maximum Number of RSS Queues").ValidDisplayValues
-		Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Maximum Number of RSS Queues" -DisplayValue $ValidValues[-1] -ErrorAction Stop
-		# $ValidValues[-1] sets the last one in the list, i.e., the highest
-		}
-	catch {
-		}
+	Set-NIC-Property $_.Name "Interrupt Moderation" "Enabled"
+	Set-NIC-Property $_.Name "Interrupt Moderation Rate" "Adaptive"
+	Set-NIC-Property $_.Name "Adaptive Inter-Frame Spacing" "Enabled"
+	Set-NIC-Property $_.Name "Auto Disable Gigabit" "Disabled"
+	Set-NIC-Property $_.Name "RSS Profile" "NUMA Scaling Static"
+	Set-NIC-Property $_.Name "RSS load balancing profile" "NUMAScalingStatic"
+	Set-NIC-Property $_.Name "Virtual Machine Queues" "Disabled"
+	
+	Set-NIC-Property-Highest $_.Name "Maximum Number of RSS Queues"
+	Set-NIC-Property-Highest $_.Name "Max Number of RSS Processors"
+	Set-NIC-Property-Highest $_.Name "Maximum Number of RSS Processors"
+	
+	# Some wifi items
+	
+	Set-NIC-Property $_.Name "MIMO Power Save Mode" "No SMPS"
+	Set-NIC-Property $_.Name "Roaming Aggressiveness" "4. Medium-High"
+	Set-NIC-Property $_.Name "Throughput Booster" "Enabled"
+	Set-NIC-Property $_.Name "Transmit Power" "5. Highest"
+	
+	# Vendor specific...
 		
-	try {
-		$NICProperty = Get-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Max Number of RSS Processors"  -ErrorAction Stop
-		$ValidValues = (Get-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Max Number of RSS Processors").ValidDisplayValues
-		Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Max Number of RSS Processors" -DisplayValue $ValidValues[-1] -ErrorAction Stop
-		# $ValidValues[-1] sets the last one in the list, i.e., the highest
-		}
-	catch {
-		}
+	$NICDescription = (Get-NetAdapter -Name $_.Name).InterfaceDescription
 		
 	# Intel only.  
-	If ((Get-NetAdapter -Name $_.Name).InterfaceDescription -Match 'Intel') {
-		Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Receive Buffers" -DisplayValue "2048" -ErrorAction SilentlyContinue | Out-Null
-		Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Transmit Buffers" -DisplayValue "2048" -ErrorAction SilentlyContinue | Out-Null
+	If ($NICDescription -Match 'Intel') {
+		Set-NIC-Property $_.Name "Receive Buffers" "2048"
+		Set-NIC-Property $_.Name "Transmit Buffers" "2048"
 		}	
 		
-	# HPE only.  
-	If ((Get-NetAdapter -Name $_.Name).InterfaceDescription -Match 'HPE') {
-		Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Receive Buffers" -DisplayValue "512" -ErrorAction SilentlyContinue | Out-Null
-		Set-NetAdapterAdvancedProperty -Name $_.Name -DisplayName "Transmit Buffers" -DisplayValue "600" -ErrorAction SilentlyContinue | Out-Null
+	# Broadcom.
+	If ($NICDescription -Match 'Broadcom') {
+		Set-NIC-Property $_.Name "Receive Buffers" "Maximum"
+		Set-NIC-Property $_.Name "Transmit Buffers" "600"
+		}	
+	
+		
+	# HPE and HP can be Intel and others, with different number sets.  
+	# Set low first, high second, high will not go in if does not fit.
+	# There are also other limitations in some NICs, e.g., multiples of 8.
+	If ($NICDescription -Match 'HP' ) {
+
+		Set-NIC-Property $_.Name "Receive Buffers" "512"
+		Set-NIC-Property $_.Name "Transmit Buffers" "600"
+
+		Set-NIC-Property $_.Name "Receive Buffers" "2048"
+		Set-NIC-Property $_.Name "Transmit Buffers" "2048"
+
+		Set-NIC-Property $_.Name "Receive Buffers" "Maximum"
+		Set-NIC-Property $_.Name "Transmit Buffers" "Maximum"
+		
+		Set-NIC-Property $_.Name "Receive Buffers (0=Auto)" "35000"
+		Set-NIC-Property $_.Name "Transmit Buffers (0=Auto)" "5000"
+
 		}	
 
+	if ($NICDescription -Match 'Microsoft Hyper-V') {
+
+		Set-NIC-Property-Highest $_Name "Send Buffer Size"
+		Set-NIC-Property-Highest $_Name "Receive Buffer Size"
+		
+		}
+		
 	}
 
 ""
-"Turning off power management for USB root hubs..."
+"Turning off power management for USB root hubs and controllers..."
 
-# Does not work for Intel USB 3.0 eXtensible, something odd about that one
+
+# This seems to work for a lot of them.  
+
+# Not using Get-CimObject because some hardware does not work with that.
+
+# This seems to list all relevant devices:
+# gwmi -list | ?{ $_.Name -cmatch "USB" }
 
 $hubs = Get-WmiObject Win32_USBHub
+$counthubs = $hubs.Count
+"Setting for $counthubs USB hubs."
 $powerMgmt = Get-WmiObject MSPower_DeviceEnable -Namespace root\wmi
 foreach ($p in $powerMgmt)
 {
@@ -199,6 +266,25 @@ foreach ($p in $powerMgmt)
                 }
   }
 }
+
+$Controllers = Get-WmiObject Win32_USBController
+$ControllerCount = $Controllers.Count
+"Setting for $ControllerCount USB controllers."
+$powerMgmt = Get-WmiObject MSPower_DeviceEnable -Namespace root\wmi
+foreach ($p in $powerMgmt)
+{
+  $IN = $p.InstanceName.ToUpper()
+  foreach ($h in $Controllers)
+  {
+    $PNPDI = $h.PNPDeviceID
+                if ($IN -like "*$PNPDI*")
+                {
+                    $p.enable = $False
+                    $p.psbase.put() | Out-Null
+                }
+  }
+}
+
 
 ""
 

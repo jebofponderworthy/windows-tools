@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 3.2
+.VERSION 3.3
 
 .GUID 527423ef-dadd-45b1-a547-56d2fdb325d1
 
@@ -219,10 +219,13 @@ function Defrag-NTFS-Metafiles {
 
 	}
 	
+
+	
 "Get Contig to defragment NTFS metafiles..."
 
 Install-Contig
 
+# Handle NTFS tweaks for all NTFS volumes
 Get-CimInstance -Query "Select * FROM Win32_LogicalDisk WHERE DriveType=3" | ForEach-Object {
     $DriveID = $_.DeviceID
 
@@ -247,6 +250,20 @@ Get-CimInstance -Query "Select * FROM Win32_LogicalDisk WHERE DriveType=3" | For
 		""
         }
     }
+	
+# Now do TRIM for all SSD volumes
+
+Get-PhysicalDisk | ForEach-Object {
+	If ($_.MediaType -eq "SSD")
+		{
+		"SSD found, drive " + $_.DeviceID + ", " + $_.FriendlyName
+		
+		Get-Partition -DiskNumber $_.DeviceID | ForEach-Object {
+			"Initiating TRIM for partition number " + $_.PartitionNumber
+			Get-Volume -Partition $_ | Optimize-Volume -Retrim -Verbose -ErrorAction SilentlyContinue
+			}
+		}
+	}
 
 "Done!"
 

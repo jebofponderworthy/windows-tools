@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 5.3
+.VERSION 5.4
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -316,9 +316,15 @@ function Test-ReparsePoint([string]$literalPath) {
 function CATE-Delete {
 	param( [string]$deletePath )
 	
-	# If the folder isn't there, we're done
-	If ( !(Test-Path -LiteralPath $deletePath -PathType Container -ErrorAction SilentlyContinue) )
-		{ Return }
+	# If the folder isn't there or we can't touch it, we're done
+	try {
+		$retval = Test-Path -LiteralPath $deletePath -PathType Container -ErrorAction SilentlyContinue
+		}
+	catch
+		{
+		"Cannot access path: $deletePath"
+		Return
+		}
 	
 	# If $deletePath is a ReparsePoint, if it is a link or a junction,
 	# exit CATE-Delete silently
@@ -342,18 +348,31 @@ function CATE-Delete {
 	
 	# If there's anything left inside it, call this whole function recursively, 
 	# on all of the contents.
-	Get-ChildItem -Recurse -LiteralPath $deletePath -Name -Force -ErrorAction SilentlyContinue | ForEach-Object {
-		CATE-Delete ($deletePath + '\' + $_)
+	Try {
+		Get-ChildItem -Recurse -LiteralPath $deletePath -Name -Force -ErrorAction SilentlyContinue | ForEach-Object {
+			CATE-Delete ($deletePath + '\' + $_)
+			}
+		}
+	Catch
+		{
+		"Cannot recurse path: $deletePath"
+		Return
 		}
 	}
 
 function CATE-Delete-Folder-Contents {
 	param( [string]$deletePath )
 	
-	# If the folder isn't there, we're done
-	If ( !(Test-Path -LiteralPath $deletePath -PathType Container -ErrorAction SilentlyContinue) )
-		{ Return }
-		
+	# If the folder isn't there or we can't touch it, we're done
+	try {
+		$retval = Test-Path -LiteralPath $deletePath -PathType Container -ErrorAction SilentlyContinue
+		}
+	catch
+		{
+		"Cannot access path: $deletePath"
+		Return
+		}
+	
 	# If $deletePath is a ReparsePoint, if it is a link or a junction,
 	# exit CATE-Delete silently
 	If (Test-ReparsePoint($deletePath))
@@ -374,10 +393,16 @@ function CATE-Delete-Folder-Contents {
 function CATE-Delete-Files-Only {
 	param( [string]$deletePath, [string]$wildCard )
 	
-	# If the folder isn't there, we're done
-	If ( !(Test-Path -LiteralPath $deletePath -PathType Container -ErrorAction SilentlyContinue) )
-		{ Return }
-		
+	# If the folder isn't there or we can't touch it, we're done
+	try {
+		$retval = Test-Path -LiteralPath $deletePath -PathType Container -ErrorAction SilentlyContinue
+		}
+	catch
+		{
+		"Cannot access path: $deletePath"
+		Return
+		}
+	
 	# If $deletePath is a ReparsePoint, if it is a link or a junction,
 	# exit CATE-Delete silently
 	If (Test-ReparsePoint($deletePath))
@@ -396,6 +421,10 @@ function Replace-Numbered-Temp-Folders {
 	New-Item -Path ($topPath + '\3') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
 	New-Item -Path ($topPath + '\4') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
 	New-Item -Path ($topPath + '\5') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\6') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\7') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\8') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\9') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
 	}
 		
 # Loop through all of the paths for all user profiles
