@@ -540,6 +540,9 @@ Write-Output ""
 Remove-Item $blankFolder -Force -Recurse -ErrorAction SilentlyContinue
 Set-Location $originalLocation
 
+Write-Progress "Done!" -Completed
+Write-Progress "Done!" -Completed
+
 exit
 
 # The 3-Clause BSD License
