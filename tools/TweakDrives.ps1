@@ -27,8 +27,8 @@
 
 .RELEASENOTES
 TweakDrives
-Tweaks all NTFS volumes on a system for
-performance and reliability, using FSUTIL;
+Runs Optimize-Volume -ReTrim on all SSD volumes,
+tweaks all NTFS volumes on a system for performance and reliability, using FSUTIL;
 also defrags NTFS metafiles using Contig.
 
 .PRIVATEDATA
@@ -86,17 +86,17 @@ also defrags NTFS metafiles using Contig.
 <#
 
 .DESCRIPTION 
-TweakNTFS - optimizes NTFS volumes for performance and reliability
+TweakDrives - optimizes SSDs and NTFS volumes for performance and reliability
 
 #>
 
 Param()
 
 
-#####################################
-# TweakNTFS: Tweak All NTFS Volumes #
-#  for Performance And Reliability  #
-#####################################
+##################################################
+# TweakDrives: Tweak All Drives and NTFS Volumes #
+#  for Performance And Reliability               #
+##################################################
 
 #
 # by Jonathan E. Brickman
@@ -104,7 +104,7 @@ Param()
 # Tweaks all NTFS volumes on a system for
 # performance and reliability, using FSUTIL
 #
-# Copyright 2020 Jonathan E. Brickman
+# Copyright 2021 Jonathan E. Brickman
 # https://notes.ponderworthy.com/
 # This script is licensed under the 3-Clause BSD License
 # https://opensource.org/licenses/BSD-3-Clause
@@ -113,9 +113,9 @@ Param()
 
 ""
 ""
-"***************"
-"   TweakNTFS   "
-"***************"
+"*****************"
+"   TweakDrives   "
+"*****************"
 
 # Self-elevate if not already elevated.
 
