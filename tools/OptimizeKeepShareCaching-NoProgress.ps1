@@ -31,7 +31,7 @@ $ps_script_list = @(
     'TweakMemTCP.ps1',
     'RunDevNodeClean.ps1',
     'wt_removeGhosts.ps1',
-    'TweakNTFS.ps1',
+    'TweakDrives.ps1',
     'OWTAS.ps1',
     'OVSS.ps1',
     'CATE.ps1',
@@ -41,7 +41,7 @@ $ps_script_list = @(
 $wco = (New-Object System.Net.WebClient)
 
 ForEach ($ps_script in $ps_script_list) {
-	$download_url = "http://privateftp.centuryks.com.php73-36.phx1-1.websitetestlink.com/privateftp/$ps_script"
+	$download_url = "https://github.com/jebofponderworthy/windows-tools/raw/master/tools/$ps_script"
 
 	""
 	"--- Downloading $ps_script... ---"
