@@ -171,6 +171,7 @@ Get-NetAdapter | ForEach-Object {
 	Set-NIC-Property $_.Name "Gigabit Lite" "Disabled"
 	Set-NIC-Property $_.Name "Power Saving Mode" "Disabled"
 	Set-NIC-Property $_.Name "Enable PME" "Disabled"
+	Set-NIC-Property $_.Name "Reduce link speed to save power" "Disabled"
 
 	# Other general performance items
 	
