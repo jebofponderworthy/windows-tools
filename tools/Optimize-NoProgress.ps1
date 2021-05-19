@@ -25,6 +25,7 @@ $ps_script_list = @(
     'RunDevNodeClean.ps1',
     'wt_removeGhosts.ps1',
     'TweakDrives.ps1',
+	'TweakSMB.ps1',
     'OWTAS.ps1',
 	'TOSC.ps1',
     'OVSS.ps1',
