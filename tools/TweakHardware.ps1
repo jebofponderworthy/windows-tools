@@ -71,15 +71,16 @@ TweakMemTCP - enhances performance by adding threads. Optimizes critical and del
 Param()
 
 
-################################################################
-# Tweak Hardware: NIC performance and disable USB power saving #
-################################################################
+##############################################################
+# Tweak Hardware: NIC performance, disable USB power saving, #
+# and printer spooler maintenance                            #
+##############################################################
 
 #
 # by Jonathan E. Brickman
 #
 # Tweaks NIC(s) for performance, and disables power saving for all
-# USB devices.
+# USB devices, and also does a very special cleanup of the Windows printer spooler.
 #
 # Copyright 2020 Jonathan E. Brickman
 # https://notes.ponderworthy.com/
@@ -286,6 +287,21 @@ foreach ($p in $powerMgmt)
   }
 }
 
+""
+"Performing special cleanup of Windows printer spooler registry area..."
+
+function Remove-AllItemProperties
+{
+    [CmdletBinding()]
+    param([string]$Path)
+
+    Remove-ItemProperty -Name * @PSBoundParameters
+}
+
+Remove-AllItemProperties "HKCU:\SOFTWARE\microsoft\windows nt\currentversion\devices"
+
+Stop-Service Spooler
+Start-Service Spooler
 
 ""
 

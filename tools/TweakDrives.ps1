@@ -133,6 +133,9 @@ else {
 
 # Do TRIM if possible for all volumes on SSDs...
 
+"Do TRIM if possible for all volumes on SSDs..."
+""
+
 Get-PhysicalDisk | ForEach-Object {
 	If ($_.MediaType -eq "SSD")
 		{
@@ -178,6 +181,7 @@ function Install-Contig {
 	"Downloading the Contig zip file from Microsoft..."
 
 	Remove-Item "$TempPath\Contig.zip" -ErrorAction SilentlyContinue | Out-Null
+	[Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
 	$download_url = 'https://download.sysinternals.com/files/Contig.zip'
 	Invoke-WebRequest -Uri $download_url -Outfile "$TempPath\Contig.zip"
 	

@@ -105,6 +105,7 @@ New-Item $TempPath -Force -ItemType Container | Out-Null
 "Downloading the binary from Microsoft..."
 
 $download_url = 'https://download.microsoft.com/download/B/C/6/BC670519-7EA1-44BE-8B5C-6FF83A7FF96C/devnodeclean.zip'
+[Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
 Invoke-WebRequest -Uri $download_url -Outfile "$TempPath\devnodeclean.zip"
 
 # Now unpack the zip file.
