@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 3.4
+.VERSION 3.6
 
 .GUID 527423ef-dadd-45b1-a547-56d2fdb325d1
 
@@ -9,7 +9,7 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2019 Jonathan E. Brickman
+.COPYRIGHT (c) 2021 Jonathan E. Brickman
 
 .TAGS
 
@@ -133,18 +133,15 @@ else {
 
 # Do TRIM if possible for all volumes on SSDs...
 
-"Do TRIM if possible for all volumes on SSDs..."
+"Do TRIM and SlabConsolidate if possible for any volumes..."
 ""
 
 Get-PhysicalDisk | ForEach-Object {
-	If ($_.MediaType -eq "SSD")
-		{
-		"SSD found, drive " + $_.DeviceID + ", " + $_.FriendlyName
-		
-		Get-Partition -DiskNumber $_.DeviceID | ForEach-Object {
-			"Initiating TRIM for partition number " + $_.PartitionNumber
-			Get-Volume -Partition $_ | Optimize-Volume -Retrim -Verbose -ErrorAction SilentlyContinue
-			}
+	Get-Partition -DiskNumber $_.DeviceID | ForEach-Object {
+		"Initiating TRIM if appropriate for partition number " + $_.PartitionNumber
+		Get-Volume -Partition $_ | Optimize-Volume -Retrim -Verbose -ErrorAction SilentlyContinue
+		"Initiating SlabConsolidate if appropriate for partition number " + $_.PartitionNumber
+		Get-Volume -Partition $_ | Optimize-Volume -SlabConsolidate -Verbose -ErrorAction SilentlyContinue
 		}
 	}
 
