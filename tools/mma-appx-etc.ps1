@@ -162,39 +162,53 @@ if ( ($WinVersionStr -Like "*Windows Server 2012*") -Or ($WinVersionStr -Like "*
 "Disabling prelaunch/preload of Microsoft Edge browser..."
 
 pushd HKCU:\Software\Policies\Microsoft\ | Out-Null
+
 mkdir MicrosoftEdge -Force | Out-Null
 mkdir MicrosoftEdge\Main -Force | Out-Null
-CD MicrosoftEdge\Main | Out-Null
-New-ItemProperty -Path . -Name AllowPrelaunch -Value 0 -PropertyType "DWord" -Force | Out-Null
-CD ..
 mkdir MicrosoftEdge\TabPreloader -Force | Out-Null
+CD HKCU:\Software\Policies\Microsoft\MicrosoftEdge\Main | Out-Null
+New-ItemProperty -Path . -Name AllowPrelaunch -Value 0 -PropertyType "DWord" -Force | Out-Null
+CD HKCU:\Software\Policies\Microsoft\MicrosoftEdge\TabPreloader
 New-ItemProperty -Path . -Name AllowTabPreloading -Value 0 -PropertyType "DWord" -Force | Out-Null
 
 CD HKLM:\Software\Policies\Microsoft\ | Out-Null
+
 mkdir MicrosoftEdge -Force | Out-Null
 mkdir MicrosoftEdge\Main -Force | Out-Null
-CD MicrosoftEdge\Main | Out-Null
-New-ItemProperty -Path . -Name AllowPrelaunch -Value 0 -PropertyType "DWord" -Force | Out-Null
-CD ..
 mkdir MicrosoftEdge\TabPreloader -Force | Out-Null
+CD HKCU:\Software\Policies\Microsoft\MicrosoftEdge\Main | Out-Null
+New-ItemProperty -Path . -Name AllowPrelaunch -Value 0 -PropertyType "DWord" -Force | Out-Null
+CD HKCU:\Software\Policies\Microsoft\MicrosoftEdge\TabPreloader
 New-ItemProperty -Path . -Name AllowTabPreloading -Value 0 -PropertyType "DWord" -Force | Out-Null
 
 "Disabling AutoGameMode..."
 
 CD HKCU:\Software\Microsoft\ | Out-Null
+
 mkdir GameBar -Force  -ErrorAction SilentlyContinue | Out-Null
+CD GameBar
 New-ItemProperty -Path . -Name AllowAutoGameMode -Value 0 -PropertyType "DWord" -Force  -ErrorAction SilentlyContinue | Out-Null
 
 CD HKLM:\Software\Microsoft\ | Out-Null
+
 mkdir GameBar -Force  -ErrorAction SilentlyContinue | Out-Null
+CD GameBar
 New-ItemProperty -Path . -Name AllowAutoGameMode -Value 0 -PropertyType "DWord" -Force  -ErrorAction SilentlyContinue | Out-Null
 
 CD HKLM:\SYSTEM\CurrentControlSet\Services | Out-Null
 Set-ItemProperty -Path . -Name "xbgm" -Value 4 -Force -ErrorAction SilentlyContinue | Out-Null
 
 "Disable Windows Compatibility Telemetry..."
+
 schtasks /Change /Disable /TN "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" | Out-Null
 taskkill /f /im compattelrunner.exe 2>&1 | Out-Null
+
+"Disable Microsoft Consumer Experiences..."
+
+CD HKLM:\SOFTWARE\Policies\Microsoft\Windows | Out-Null
+mkdir CloudContent | Out-Null
+CD CloudContent
+New-ItemProperty -Path . -Name DisableWindowsConsumerFeatures -Value 1 -PropertyType "DWord" -Force -ErrorAction SilentlyContinue | Out-Null
 
 popd | Out-Null
 
