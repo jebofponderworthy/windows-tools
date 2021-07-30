@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 5.4
+.VERSION 5.5
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -497,6 +497,8 @@ CATE-Delete-Folder-Contents ($envSystemRoot + "\system32\wbem\logs")
 CATE-Delete-Folder-Contents ($envSystemRoot + "\system32\Debug")
 
 CATE-Delete-Folder-Contents ($envSystemRoot + "\PCHEALTH\ERRORREP\UserDumps")
+
+CATE-Delete-Folder-Contents ($envSystemRoot + "\minidump")
 
 CATE-Delete-Folder-Contents ($envProgramData + "\Microsoft\Windows\WER\ReportQueue")
 

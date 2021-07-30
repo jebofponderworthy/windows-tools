@@ -206,7 +206,7 @@ taskkill /f /im compattelrunner.exe 2>&1 | Out-Null
 "Disable Microsoft Consumer Experiences..."
 
 CD HKLM:\SOFTWARE\Policies\Microsoft\Windows | Out-Null
-mkdir CloudContent | Out-Null
+mkdir CloudContent -Force  -ErrorAction SilentlyContinue | Out-Null
 CD CloudContent
 New-ItemProperty -Path . -Name DisableWindowsConsumerFeatures -Value 1 -PropertyType "DWord" -Force -ErrorAction SilentlyContinue | Out-Null
 
