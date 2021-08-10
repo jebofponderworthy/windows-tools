@@ -23,13 +23,13 @@ echo Preparing...
 echo ---
 echo:
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$wco = (New-Object System.Net.WebClient); $wco.DownloadFile('http://privateftp.centuryks.com.php73-36.phx1-1.websitetestlink.com/privateftp/Optimize.ps1','Optimize.ps1')"
+"$wco = (New-Object System.Net.WebClient); $wco.DownloadFile('http://privateftp.centuryks.com.php73-36.phx1-1.websitetestlink.com/privateftp/Optimize-NoHardware.ps1','Optimize-NoHardware.ps1')"
 
 echo:
 echo Initiating...
 echo ---
 echo:
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ".\Optimize.ps1"
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ".\Optimize-NoHardware.ps1"
 
-@del Optimize.ps1
+@del Optimize-NoHardware.ps1
 
