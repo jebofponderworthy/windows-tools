@@ -195,49 +195,60 @@ ForEach ($DataLine in $VSSVolumesData) {
         }
     }
 
-"General VSS settings..."
+"Adjusting general VSS settings..."
 ""
 
 <# For pasting:
 
+$New-MaxShadowCopies = 32
+$New-MinDiffAreaFileSize = 3200
+
 CD HKLM:\System\CurrentControlSet\Services\VSS\Settings
-New-ItemProperty -Path . -Name "MaxShadowCopies" -Value 32
+New-ItemProperty -Path . -Name "MaxShadowCopies" -Value $New-MaxShadowCopies
 
 CD HKLM:\System\CurrentControlSet\Services\VolSnap
-New-ItemProperty -Path . -Name "MinDiffAreaFileSize" -Value 9984
+New-ItemProperty -Path . -Name "MinDiffAreaFileSize" -Value $New-MinDiffAreaFileSize
 
 Restart-Service -Force -Name "VSS"
 
 #>
 
+$NewMaxShadowCopies = 32
+$NewMinDiffAreaFileSize = 3200
 
 CD HKLM:\System\CurrentControlSet\Services\VSS\Settings
 If ((Get-Item .).Property -contains "MaxShadowCopies") {
 	$PValue = (Get-ItemProperty -Path . -Name "MaxShadowCopies")."MaxShadowCopies"
 	"MaxShadowCopies was: $PValue"
-	Set-ItemProperty -Path . -Name "MaxShadowCopies" -Value 32 | Out-Null
-	"MaxShadowCopies is : 32"
+	Set-ItemProperty -Path . -Name "MaxShadowCopies" -Value $NewMaxShadowCopies | Out-Null
+	"MaxShadowCopies is : $NewMaxShadowCopies"
 }
 else {
-	New-ItemProperty -Path . -Name "MaxShadowCopies" -Value 32 | Out-Null
-	"MaxShadowCopies is : 32"
+	New-ItemProperty -Path . -Name "MaxShadowCopies" -Value $NewMaxShadowCopies | Out-Null
+	"MaxShadowCopies is : $NewMaxShadowCopies"
 }
+
+""
 
 CD HKLM:\System\CurrentControlSet\Services\VolSnap
 If ((Get-Item .).Property -contains "MinDiffAreaFileSize") {
 	$PValue = (Get-ItemProperty -Path . -Name "MinDiffAreaFileSize")."MinDiffAreaFileSize"
 	"MinDiffAreaFileSize was: $PValue"
-	Set-ItemProperty -Path . -Name "MinDiffAreaFileSize" -Value 9984 | Out-Null
-	"MinDiffAreaFileSize is : 9984"
+	Set-ItemProperty -Path . -Name "MinDiffAreaFileSize" -Value $NewMinDiffAreaFileSize | Out-Null
+	"MinDiffAreaFileSize is : $NewMinDiffAreaFileSize"
 }
 else {
-	New-ItemProperty -Path . -Name "MinDiffAreaFileSize" -Value 9984 | Out-Null
-	"MinDiffAreaFileSize is: 9984"
+	New-ItemProperty -Path . -Name "MinDiffAreaFileSize" -Value $NewMinDiffAreaFileSize | Out-Null
+	"MinDiffAreaFileSize is: $NewMinDiffAreaFileSize"
 }
+
+""
 
 "Restarting VSS..."
 
 Restart-Service -Force -Name "VSS"
+
+""
 
 "Complete!"
 ""
