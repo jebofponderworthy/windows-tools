@@ -23,7 +23,7 @@ echo Preparing...
 echo ---
 echo:
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$wco = (New-Object System.Net.WebClient); $wco.DownloadFile('http://privateftp.centuryks.com.php73-36.phx1-1.websitetestlink.com/privateftp/GetRedists.ps1','GetRedists.ps1')"
+"$wco = (New-Object System.Net.WebClient); $wco.DownloadFile('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/tools/GetRedists.ps1','GetRedists.ps1')"
 
 echo:
 echo Initiating...

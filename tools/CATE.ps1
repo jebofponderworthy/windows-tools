@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 5.5
+.VERSION 5.7
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -9,7 +9,7 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2020 Jonathan E. Brickman
+.COPYRIGHT (c) 2021 Jonathan E. Brickman
 
 .TAGS 
 
@@ -181,6 +181,7 @@ $envTEMP = [Environment]::GetEnvironmentVariable("TEMP", "Machine")
 $envTMP = [Environment]::GetEnvironmentVariable("TEMP", "Machine")
 $envSystemRoot = $env:SystemRoot
 $envProgramData = $env:ProgramData
+$envSystemDrive = $env:SystemDrive
 
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 
@@ -492,6 +493,8 @@ Replace-Numbered-Temp-Folders ($envTMP) -Force -ErrorAction SilentlyContinue | O
 CATE-Delete-Folder-Contents ($envSystemRoot + "\Temp")
 Replace-Numbered-Temp-Folders ($envSystemRoot + "\Temp") -Force -ErrorAction SilentlyContinue | Out-Null
 
+CATE-Delete-Folder-Contents ($envSystemDrive + "\$GetCurrent")
+
 CATE-Delete-Folder-Contents ($envSystemRoot + "\system32\wbem\logs")
 
 CATE-Delete-Folder-Contents ($envSystemRoot + "\system32\Debug")
@@ -499,6 +502,10 @@ CATE-Delete-Folder-Contents ($envSystemRoot + "\system32\Debug")
 CATE-Delete-Folder-Contents ($envSystemRoot + "\PCHEALTH\ERRORREP\UserDumps")
 
 CATE-Delete-Folder-Contents ($envSystemRoot + "\minidump")
+
+CATE-Delete-Folder-Contents ($envSystemRoot + "\Downloaded Program Files")
+
+CATE-Delete-Folder-Contents ($envSystemRoot + "\LiveKernelReports")
 
 CATE-Delete-Folder-Contents ($envProgramData + "\Microsoft\Windows\WER\ReportQueue")
 

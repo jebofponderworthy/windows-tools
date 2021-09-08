@@ -23,7 +23,7 @@ echo Preparing...
 echo ---
 echo:
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$wco = (New-Object System.Net.WebClient); $wco.DownloadFile('http://privateftp.centuryks.com.php73-36.phx1-1.websitetestlink.com/privateftp/Optimize.ps1','Optimize.ps1')"
+"$wco = (New-Object System.Net.WebClient); $wco.DownloadFile('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/tools/Optimize.ps1','Optimize.ps1')"
 
 echo:
 echo Initiating...

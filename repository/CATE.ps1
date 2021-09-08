@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 4.7
+.VERSION 5.7
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -9,7 +9,7 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2020 Jonathan E. Brickman
+.COPYRIGHT (c) 2021 Jonathan E. Brickman
 
 .TAGS 
 
@@ -150,7 +150,7 @@ Param()
 # Cleans temp files from all user profiles and
 # several other locations.  Also clears log files.
 #
-# Copyright 2018 Jonathan E. Brickman
+# Copyright 2020 Jonathan E. Brickman
 # https://notes.ponderworthy.com/
 # This script is licensed under the 3-Clause BSD License
 # https://opensource.org/licenses/BSD-3-Clause
@@ -181,6 +181,7 @@ $envTEMP = [Environment]::GetEnvironmentVariable("TEMP", "Machine")
 $envTMP = [Environment]::GetEnvironmentVariable("TEMP", "Machine")
 $envSystemRoot = $env:SystemRoot
 $envProgramData = $env:ProgramData
+$envSystemDrive = $env:SystemDrive
 
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 
@@ -245,6 +246,7 @@ $foldersToClean = @(
     "\AppData\Local\Microsoft\Windows\INetCache\Low\Flash",
     "\AppData\Local\Microsoft\Windows\INetCache\Content.Outlook",
     "\AppData\Local\Google\Chrome\User Data\Default\Cache",
+	"\AppData\Local\Google\Chrome\User Data\Default\Code Cache\js",
     "\AppData\Local\AskPartnerNetwork",
 	"\AppData\Local\Temp",
     "\Application Data\Local\Microsoft\Windows\WER",
@@ -262,210 +264,171 @@ $ffFoldersToClean = @(
 	"chromeappstore.sqlite"
 	)
 
-# A quasiprimitive for PowerShell-style progress reporting.
+# A quasiprimitive for progress reporting.
 
 function ShowCATEProgress {
 	param( [string]$reportStatus, [string]$currentOp )
 
-    Write-Progress -Activity "Clean All Temp Etc" -Status $reportStatus -PercentComplete -1 -CurrentOperation $currentOp
-    }
-
-# Embedded C# code for actual deletes.
-# Needed because, as is reported very very rarely, PowerShell deletes are buggy
-# and in practice often don't work, sometimes without error messages.
-
-$RecursiveDeleteSource = @"
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using System.Management.Automation.Runspaces;
-using System.Runtime.InteropServices;
-
-
-namespace CATEcsharp
-{
-	public class runtime
-	{
-		public static void RecursiveDeleteContentsOf(DirectoryInfo baseDir, int ProfileNumber)
-		{
-			if (!baseDir.Exists)
-				return;
-
-			Parallel.ForEach(baseDir.EnumerateDirectories(), (dir) => 
-				{
-				RecursiveDelete(dir, ProfileNumber);
-				});
-			
-			Parallel.ForEach(baseDir.EnumerateFiles(), (file) =>
-			{
-				try
-				{
-					file.IsReadOnly = false;
-					file.Delete();
-					nextProgressDot();
-					nextProgressString(ProgressDot);
-					ShowCATEProgress("Deleting in " + baseDir.FullName + " ... ", ProgressString, ProfileNumber);
-				}
-				catch
-				{
-				}
-			});
-		}
-	
-		public static void RecursiveDelete(DirectoryInfo baseDir, int ProfileNumber)
-		{
-			if (!baseDir.Exists)
-				return;
-
-			Parallel.ForEach(baseDir.EnumerateDirectories(), (dir) => 
-				{
-				RecursiveDelete(dir, ProfileNumber);
-				});
-
-			Parallel.ForEach(baseDir.EnumerateFiles(), (file) =>
-			{
-				try
-				{
-					file.IsReadOnly = false;
-					file.Delete();
-					nextProgressDot();
-					nextProgressString(ProgressDot);
-					ShowCATEProgress("Deleting in " + baseDir.FullName + " ... ", ProgressString, ProfileNumber);
-				}
-				catch
-				{
-				}
-			});
-	
-			try
-			{
-				baseDir.Delete();
-				nextProgressString("/");
-				ShowCATEProgress("Deleting in " + baseDir.FullName + " ... ", ProgressString, ProfileNumber);
-			}
-			catch
-			{
-			}
-		}
-		
-		public static void RecursiveDeleteFilesOnly(DirectoryInfo baseDir, string Wildcard, int ProfileNumber)
-		{
-			if (!baseDir.Exists)
-				return;
-
-			Parallel.ForEach(baseDir.EnumerateDirectories(), (dir) => 
-			{
-				RecursiveDeleteFilesOnly(dir, Wildcard, ProfileNumber);
-			});
-
-			Parallel.ForEach(baseDir.EnumerateFiles(Wildcard), (file) =>
-			{
-				try
-				{
-					file.IsReadOnly = false;
-					file.Delete();
-					nextProgressDot();
-					nextProgressString(ProgressDot);
-					ShowCATEProgress("Deleting in " + baseDir.FullName + " ... ", ProgressString, ProfileNumber);
-				}
-				catch
-				{
-				}
-			});
-		}
-		
-		// ProgressString will gradually look something like this:  .....//..././...//.///.
-		// maximum 60 characters long, updated by deleting the first and adding to the end.
-		
-		public static string ProgressString;
-	
-		public static void nextProgressString(string ProgressChar)
-		{
-			ProgressString += ProgressChar;
-			if (ProgressString.Length > 60)
-				ProgressString = ProgressString.Remove(0,1);  // Remove the first character.
-		}
-		
-		// ProgressDot alternates between . (period, 46) and ? (middle dot, 183), so animation stays
-		// visible when it's just many files.
-		
-		public static string ProgressDot;
-		public static int DotCount = 1;
-		
-		public static void nextProgressDot()
-		{
-		DotCount++;
-		if (DotCount % 3 == 0)
-			{
-			ProgressDot = ((char)183).ToString();	// Middle dot
-			DotCount = 1;
-			}
-		else
-			ProgressDot = ((char)46).ToString();	// Period
-		}
-	
-		private static void ShowCATEProgress(string reportStatus, string currentOp, int profileNumber)
-		{
-			string statusText;
-		
-			if (profileNumber != 0)
-				statusText = "Working on profile #" + profileNumber.ToString() + ". " + reportStatus;
-			else
-				statusText = reportStatus;
-		
-			var RptCmd = @"Write-Progress -Activity ""Clean All Temp Etc""";
-			RptCmd += @" -Status """ + statusText + @""" -PercentComplete -1";
-			RptCmd += @" -CurrentOperation """ + currentOp + @"""";
-			// Console.Write(RptCmd + "\r\n");
-			var runspace = Runspace.DefaultRunspace;
-			var pipeline = runspace.CreateNestedPipeline(RptCmd, false);
-			pipeline.Invoke();
-		}
+    try {
+		Write-Progress -Activity "Clean All Temp Etc" -Status $reportStatus -PercentComplete -1 -CurrentOperation $currentOp
 	}
+	catch {
+		Write-Host "Clean All Temp Etc: $reportStatus $currentOp"
+	}
+	
+	# Write-Progress is not compatible with some remote shell methods.
 }
-"@
-# Add the c# code to the powershell type definitions
-Add-Type -TypeDefinition $RecursiveDeleteSource -Language CSharp
 
-# Example code for a delete, working:
-# [CATEcsharp.runtime]::RecursiveDeleteContentsOf('C:\test', 0)
+# Rewriting the delete primitives, as effectively as possible, without inline C#.
+#
+# For decent speed, need to use parallelism of some sort.
+# C# had it, but gets security-flagged.
+# Powershell 7 is getting it.  But that's a long ways off being available by default.
+#
+# Using ROBOCOPY's multitasking instead.  ROBOCOPY does not, reportedly, suffer from
+# the maximum line length situation and others which requires -Literalpath in some coding.
 
-function CATE-Recursive-Delete {
-	param( [string]$strFolderPath, [int]$ProfileNumber=0  )
-	
-	ShowCATEProgress $CATEStatus $strFolderPath
-	try {
-		[CATEcsharp.runtime]::RecursiveDelete($strFolderPath, $ProfileNumber)
+$randomFolderName = -join ((65..90) + (97..122) | Get-Random -Count 10 | % {[char]$_})
+$envUserProfile = $env:UserProfile
+$blankFolder = $envUserProfile + '\' + $randomFolderName
+New-Item $blankFolder -Force -ItemType Container | Out-Null
+If ( !(Test-Path $blankFolder -PathType Container -ErrorAction SilentlyContinue) )
+		{ 
+		Write-Host 'Error: Cannot create reference folder for delete primitive'
+		Exit 
 		}
-	catch {
-		}
-	}
-	
-function CATE-Recursive-Delete-Folder-Contents {
-	param( [string]$strFolderPath, [int]$ProfileNumber=0  )
-	
-	ShowCATEProgress $CATEStatus $strFolderPath
-	try {
-		[CATEcsharp.runtime]::RecursiveDeleteContentsOf($strFolderPath, $ProfileNumber)
-		}
-	catch {
-		}
-	}
-	
-function CATE-Recursive-Delete-Files-Only {
-    param( [string]$strFolderPath, [string]$WildCard, [int]$ProfileNumber=0  )
-
-    ShowCATEProgress $CATEStatus $strFolderPath
-	try {
-		[CATEcsharp.runtime]::RecursiveDeleteFilesOnly($strFolderPath, $WildCard)
-		}
-	catch {
-		}
-    }
 		
-# Next we loop through all of the paths for all user profiles
+# CATE-Delete is a functional recursive primitive,
+# useful for absolute deletes of items and trees, and 
+# also callable for more selective uses
+
+# There is a lot of question about \\? path syntax.
+# It appears to not work at all before Windows 10, in Powershell.
+# -LiteralPath does not refer to this.  Not using \\? syntax for now.
+
+# CATE-DELETE has to ignore symbolic links and junctions and the like
+# if it's asked to touch them.  Hence, Test-ReparsePoint() below.
+
+function Test-ReparsePoint([string]$literalPath) {
+	$file = Get-Item $literalPath -Force -ErrorAction SilentlyContinue
+	return [bool]($file.Attributes -band [IO.FileAttributes]::ReparsePoint)
+	}
+
+function CATE-Delete {
+	param( [string]$deletePath )
+	
+	# If the folder isn't there or we can't touch it, we're done
+	try {
+		$retval = Test-Path -LiteralPath $deletePath -PathType Container -ErrorAction SilentlyContinue
+		}
+	catch
+		{
+		"Cannot access path: $deletePath"
+		Return
+		}
+	
+	# If $deletePath is a ReparsePoint, if it is a link or a junction,
+	# exit CATE-Delete silently
+	If (Test-ReparsePoint($deletePath))
+		{ Return }
+	
+	ShowCATEProgress $CATEStatus $deletePath
+
+	# First try to remove simply, which includes non-containers
+	# Do this using literal paths because it works more often
+	#
+	Remove-Item -LiteralPath $deletePath -Force -Recurse *> $null
+	
+	# If it's gone, we're done.
+	If ( !(Test-Path -LiteralPath $deletePath -PathType Container -ErrorAction SilentlyContinue) )
+		{ Return }
+	
+	# If it's not, delete all contents with ROBOCOPY, 10 threads.
+	#
+	ROBOCOPY $blankFolder $deletePath /MIR /R:1 /W:1 /MT:10 *> $null
+	
+	# If there's anything left inside it, call this whole function recursively, 
+	# on all of the contents.
+	Try {
+		Get-ChildItem -Recurse -LiteralPath $deletePath -Name -Force -ErrorAction SilentlyContinue | ForEach-Object {
+			CATE-Delete ($deletePath + '\' + $_)
+			}
+		}
+	Catch
+		{
+		"Cannot recurse path: $deletePath"
+		Return
+		}
+	}
+
+function CATE-Delete-Folder-Contents {
+	param( [string]$deletePath )
+	
+	# If the folder isn't there or we can't touch it, we're done
+	try {
+		$retval = Test-Path -LiteralPath $deletePath -PathType Container -ErrorAction SilentlyContinue
+		}
+	catch
+		{
+		"Cannot access path: $deletePath"
+		Return
+		}
+	
+	# If $deletePath is a ReparsePoint, if it is a link or a junction,
+	# exit CATE-Delete silently
+	If (Test-ReparsePoint($deletePath))
+		{ Return }
+		
+	ShowCATEProgress $CATEStatus $deletePath
+		
+	# First try to wipe the inside of the folder simply.
+	# ROBOCOPY is current default method, for parallelism.
+	ROBOCOPY $blankFolder $deletePath /MIR /R:1 /W:1 /MT:10 *> $null
+	
+	# Now try to delete everything left inside, using CATE-Delete.
+	Get-ChildItem -LiteralPath $deletePath -Name -Force -ErrorAction SilentlyContinue | ForEach-Object {
+		CATE-Delete ($deletePath + '\' + $_)
+		}
+	}
+
+function CATE-Delete-Files-Only {
+	param( [string]$deletePath, [string]$wildCard )
+	
+	# If the folder isn't there or we can't touch it, we're done
+	try {
+		$retval = Test-Path -LiteralPath $deletePath -PathType Container -ErrorAction SilentlyContinue
+		}
+	catch
+		{
+		"Cannot access path: $deletePath"
+		Return
+		}
+	
+	# If $deletePath is a ReparsePoint, if it is a link or a junction,
+	# exit CATE-Delete silently
+	If (Test-ReparsePoint($deletePath))
+		{ Return }
+
+	ShowCATEProgress $CATEStatus ($deletePath + '\' + $wildCard)
+	
+	ROBOCOPY $blankFolder $deletePath $wildCard /MIR /R:1 /W:1 /MT:10 *> $null
+	}
+	
+function Replace-Numbered-Temp-Folders {
+	param( [string]$topPath )
+	
+	New-Item -Path ($topPath + '\1') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\2') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\3') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\4') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\5') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\6') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\7') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\8') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	New-Item -Path ($topPath + '\9') -ItemType directory -Force -ErrorAction SilentlyContinue | Out-Null
+	}
+		
+# Loop through all of the paths for all user profiles
 # as recorded in the registry, and delete temp files.
 
 # Outer loop enumerates all user profiles
@@ -474,81 +437,95 @@ $ProfileCount = $ProfileList.Count
 $ProfileNumber = 1
 $ProfileList | ForEach-Object {
     $profileItem = Get-ItemProperty $_.pspath
-    $CATEStatus = "Working on (profile " + $ProfileNumber + "/" + $ProfileCount + ") " + $profileItem.ProfileImagePath + " ..."
+    $CATEStatus = ('Working on (profile ' + $ProfileNumber + '/' + $ProfileCount + ') ' + $profileItem.ProfileImagePath + ' ...')
     $ProfileNumber += 1
 
     # This loop enumerates all non-Firefox folder subpaths within profiles to be cleaned
     ForEach ($folderSubpath in $foldersToClean) {
-        $ToClean = $profileItem.ProfileImagePath + $folderSubpath
-        If (Test-Path $ToClean) {
+        $ToClean = ($profileItem.ProfileImagePath + $folderSubpath)
+        If (Test-Path $ToClean -PathType Container -ErrorAction SilentlyContinue) {
             # If the actual path exists, clean it
-            CATE-Recursive-Delete-Folder-Contents $ToClean $ProfileNumber
+            CATE-Delete-Folder-Contents $ToClean
             }
         }
 		
 	# These loops handle Firefox and multiple FF profiles if they exist
-	$ffProfilePath = $profileItem.ProfileImagePath + '\AppData\Local\Mozilla\Firefox\Profiles\'
-	If (Test-Path $ffProfilePath) {
-		Get-ChildItem -Path $ffProfilePath | ForEach-Object {
+	$ffProfilePath = ($profileItem.ProfileImagePath + '\AppData\Local\Mozilla\Firefox\Profiles\')
+	If (Test-Path $ffProfilePath -PathType Container -ErrorAction SilentlyContinue) {
+		Get-ChildItem -LiteralPath $ffProfilePath -Force -ErrorAction SilentlyContinue | ForEach-Object {
 			$ffProfilePath = Get-ItemProperty $_.pspath
 		
 			ForEach ($subPath in $ffFoldersToClean) {
 				$ToClean = "$ffProfilePath\$subPath"
-				CATE-Recursive-Delete-Folder-Contents $ToClean $ProfileNumber
+				CATE-Delete-Folder-Contents $ToClean
 				}
 			}
 		}
-	$ffProfilePath = $profileItem.ProfileImagePath + '\AppData\Roaming\Mozilla\Firefox\Profiles\'
-	If (Test-Path $ffProfilePath) {
-		Get-ChildItem -Path $ffProfilePath | ForEach-Object {
+	$ffProfilePath = ($profileItem.ProfileImagePath + '\AppData\Roaming\Mozilla\Firefox\Profiles\')
+	If (Test-Path $ffProfilePath -PathType Container -ErrorAction SilentlyContinue) {
+		Get-ChildItem -LiteralPath $ffProfilePath -Force -ErrorAction SilentlyContinue | ForEach-Object {
 			$ffProfilePath = Get-ItemProperty $_.pspath
 		
 			ForEach ($subPath in $ffFoldersToClean) {
 				$ToClean = "$ffProfilePath\$subPath"
-				CATE-Recursive-Delete-Folder-Contents $ToClean $ProfileNumber
+				CATE-Delete-Folder-Contents $ToClean
 				}
 			}
 		}
 
     # A subpath to be eliminated altogether, also present in the $foldersToClean list above
-    CATE-Recursive-Delete ($profileItem.ProfileImagePath + '\AppData\Local\AskPartnerNetwork') $ProfileNumber
+    CATE-Delete ($profileItem.ProfileImagePath + '\AppData\Local\AskPartnerNetwork')
+	
+	# Recreate Windows TEMP folder subpaths, prevents issues in a number of oddball situations
+	Replace-Numbered-Temp-Folders ($profileItem.ProfileImagePath + '\AppData\Local\Temp') -Force -ErrorAction SilentlyContinue | Out-Null
     }
 
 # Now empty certain folders
 
 $CATEStatus = "Working on other folders ..."
 
-CATE-Recursive-Delete-Folder-Contents $envTEMP
+CATE-Delete-Folder-Contents $envTEMP
+Replace-Numbered-Temp-Folders ($envTEMP) -Force -ErrorAction SilentlyContinue | Out-Null
 
-CATE-Recursive-Delete-Folder-Contents $envTMP
+CATE-Delete-Folder-Contents $envTMP
+Replace-Numbered-Temp-Folders ($envTMP) -Force -ErrorAction SilentlyContinue | Out-Null
 
-CATE-Recursive-Delete-Folder-Contents ($envSystemRoot + "\Temp")
+CATE-Delete-Folder-Contents ($envSystemRoot + "\Temp")
+Replace-Numbered-Temp-Folders ($envSystemRoot + "\Temp") -Force -ErrorAction SilentlyContinue | Out-Null
 
-CATE-Recursive-Delete-Folder-Contents ($envSystemRoot + "\system32\wbem\logs")
+CATE-Delete-Folder-Contents ($envSystemDrive + "\$GetCurrent")
 
-CATE-Recursive-Delete-Folder-Contents ($envSystemRoot + "\system32\Debug")
+CATE-Delete-Folder-Contents ($envSystemRoot + "\system32\wbem\logs")
 
-CATE-Recursive-Delete-Folder-Contents ($envSystemRoot + "\PCHEALTH\ERRORREP\UserDumps")
+CATE-Delete-Folder-Contents ($envSystemRoot + "\system32\Debug")
 
-CATE-Recursive-Delete-Folder-Contents ($envProgramData + "\Microsoft\Windows\WER\ReportQueue")
+CATE-Delete-Folder-Contents ($envSystemRoot + "\PCHEALTH\ERRORREP\UserDumps")
+
+CATE-Delete-Folder-Contents ($envSystemRoot + "\minidump")
+
+CATE-Delete-Folder-Contents ($envSystemRoot + "\Downloaded Program Files")
+
+CATE-Delete-Folder-Contents ($envSystemRoot + "\LiveKernelReports")
+
+CATE-Delete-Folder-Contents ($envProgramData + "\Microsoft\Windows\WER\ReportQueue")
 
 # And then delete log files by wildcard, recursing through folders
 
-CATE-Recursive-Delete-Files-Only ($envSystemRoot + '\system32\Logfiles') '*.log'
+CATE-Delete-Files-Only ($envSystemRoot + '\system32\Logfiles') '*.log'
 
-CATE-Recursive-Delete-Files-Only ($envSystemRoot + '\system32\Logfiles') '*.EVM'
+CATE-Delete-Files-Only ($envSystemRoot + '\system32\Logfiles') '*.EVM'
 
-CATE-Recursive-Delete-Files-Only ($envSystemRoot + '\system32\Logfiles') '*.EVM.*'
+CATE-Delete-Files-Only ($envSystemRoot + '\system32\Logfiles') '*.EVM.*'
 
-CATE-Recursive-Delete-Files-Only ($envSystemRoot + '\system32\Logfiles') '*.etl'
+CATE-Delete-Files-Only ($envSystemRoot + '\system32\Logfiles') '*.etl'
 
-CATE-Recursive-Delete-Files-Only ($envSystemRoot + '\Logs') '*.log'
+CATE-Delete-Files-Only ($envSystemRoot + '\Logs') '*.log'
 
-CATE-Recursive-Delete-Files-Only ($envSystemRoot + '\Logs') '*.etl'
+CATE-Delete-Files-Only ($envSystemRoot + '\Logs') '*.etl'
 
-CATE-Recursive-Delete-Files-Only ($envSystemRoot + '\inf') '*.log'
+CATE-Delete-Files-Only ($envSystemRoot + '\inf') '*.log'
 
-CATE-Recursive-Delete-Files-Only ($envSystemRoot + '\Prefetch') '*.pf'
+CATE-Delete-Files-Only ($envSystemRoot + '\Prefetch') '*.pf'
 
 ""
 ""
@@ -564,14 +541,18 @@ Write-Output $strOut
 
 $freedSpace = $finalFreeSpace - $initialFreeSpace
 $strOut = RptDriveSpace ( $freedSpace )
-$strOut = "Freed " + $strOut + " megabytes."
+$strOut = "Difference: " + $strOut + " megabytes."
 Write-Output ""
 Write-Output $strOut
 Write-Output ""
 
+Remove-Item $blankFolder -Force -Recurse -ErrorAction SilentlyContinue
 Set-Location $originalLocation
 
-Start-Sleep 7
+Write-Progress "Done!" -Completed
+Write-Progress "Done!" -Completed
+
+exit
 
 # The 3-Clause BSD License
 
@@ -650,8 +631,8 @@ Start-Sleep 7
 # SIG # Begin signature block
 # MIIQIQYJKoZIhvcNAQcCoIIQEjCCEA4CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUTRfsTgcU9LqQCiz3HnmCXkP1
-# /uGgggupMIIDDDCCAfSgAwIBAgIQGsDSayfiep9MU0Gn9qSESTANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU/Nr/RnjOdi2uudzAeAjYr1bg
+# 1VqgggupMIIDDDCCAfSgAwIBAgIQGsDSayfiep9MU0Gn9qSESTANBgkqhkiG9w0B
 # AQsFADAeMRwwGgYDVQQDDBNDQlQgUG93ZXJTaGVsbCBDb2RlMB4XDTIwMDgyNjE0
 # Mjc1MloXDTI1MDgyNjE0Mzc1MlowHjEcMBoGA1UEAwwTQ0JUIFBvd2VyU2hlbGwg
 # Q29kZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAN2yXYLb9UAxirdD
@@ -716,23 +697,23 @@ Start-Sleep 7
 # aXSsxR08f5Lgw7wc2AR1MYID4jCCA94CAQEwMjAeMRwwGgYDVQQDDBNDQlQgUG93
 # ZXJTaGVsbCBDb2RlAhAawNJrJ+J6n0xTQaf2pIRJMAkGBSsOAwIaBQCgeDAYBgor
 # BgEEAYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEE
-# MBwGCisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQa
-# MggRBckBSghtG1Plx/34PTmzNzANBgkqhkiG9w0BAQEFAASCAQBNdfxMS+bSC/kv
-# 4H6doCjFteD+arUYDv1+2NiDq8Rklw3Dai2i9IXJjhvbRurthtwPo27y4fe6xB9u
-# 3ZHZ/JTTzfZ/KAyTI7AW+kmIuZ1lIKFFXoEKYAw/qApplWijvjfBgX8cwxMn5KyN
-# JKAg/sBvn7OBtLp/KlS+JGAgChVDi+jUmAPPMIzLEycKNJkB9GwSDt6ZlZyqh9+J
-# laUvecXaY1XUAyeAdacU4jr6XKzzBy9UQd/j5JQD4X7M/kO0JkkrujxWRm46erLj
-# fJkmECMAOYaSAOW90iCbvtgU2BqhCEuV1f185hKJ6755zjLNW2GFbmQxMRYTdaGL
-# WFXPNUWwoYICCzCCAgcGCSqGSIb3DQEJBjGCAfgwggH0AgEBMHIwXjELMAkGA1UE
+# MBwGCisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQX
+# IWDd1KdzBqy8KN4/YBjHRZfVvDANBgkqhkiG9w0BAQEFAASCAQDBTdblTRtef6sp
+# W3EZJ1DJ1QeWHz7tgowD1UnpCNvMRYz8V7pXb9vpw3WbuvcWrEqHCO6ceUc2ox5X
+# nz7o5mMcsnYQDFqHZuythTrpXQGFX4xNsQNB6bdzJT5M1AIjQfa7BL+l/qGTA622
+# bU0VgWFdL0EW4KxZlpHNAJfj+aaWji9Yxpo8p3MXf78rFGjnoU6Fl6KeuB6p0aT+
+# W8EBiZVejTXSI48Pxkp3sKr1JwVtoOX1JemugXcw0Q3Oln+HdixTeNvSEUPNjCBA
+# C/JKJr+MdfbrBc9XjgqRt01c9xbY85aDa4p+QxgEHHkDk05wB9S8Oe0Z8tZnC81j
+# cvku8tYBoYICCzCCAgcGCSqGSIb3DQEJBjGCAfgwggH0AgEBMHIwXjELMAkGA1UE
 # BhMCVVMxHTAbBgNVBAoTFFN5bWFudGVjIENvcnBvcmF0aW9uMTAwLgYDVQQDEydT
 # eW1hbnRlYyBUaW1lIFN0YW1waW5nIFNlcnZpY2VzIENBIC0gRzICEA7P9DjI/r81
 # bgTYapgbGlAwCQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEw
-# HAYJKoZIhvcNAQkFMQ8XDTIwMDgyNjE0Mzc1NlowIwYJKoZIhvcNAQkEMRYEFM2o
-# 5i7UP4C29tScrE95/FEK7h9gMA0GCSqGSIb3DQEBAQUABIIBABwUpbj3+Xlp/GMq
-# Cg7o0Az+wsPyohJPJYzDkaLX3uwK5RxpvyLQAHwMp/bJ9DACVxz8rraeiDjQewYt
-# +4FXfN5ouEx0NW76WfXe33P98sRR0efxTvkZLTbVOTsIqAVc4Pf8j5cxMaKknvv+
-# FXYHmbsQuX4TZcvwCnVi3w8M9tvafBob2RX16xQjR18/ARSoy8Ty+AkvB+u6T8Kv
-# fxPbl2Q2QjUddJlIXG8j4v0PpgPe1L84Z9zfwtOvYsbAsj6LvPBz1dG97N6YWSMQ
-# gA49nHjMsoefDXVgIwhtOOSW83SHPkn42s5EaHDObJdf5+bw44XK3KilmtfGKQdH
-# NM99ysQ=
+# HAYJKoZIhvcNAQkFMQ8XDTIwMDgyNjE0Mzc1NlowIwYJKoZIhvcNAQkEMRYEFGU/
+# BmgE+/c9F4OjC17wHXBftwNkMA0GCSqGSIb3DQEBAQUABIIBAFxqLIv4/gOd7gDc
+# lXtQhIWd+TmhaL98K0grCkv5e+RFKHZmUgX5XNL5koI4EQVbKBvZ8Bhx+Go2CT59
+# KTy6GvekCL8I2uQfdyBpiTIPbqWf0uPa5Ss0Bt+g5g9jFU1Rgeebah/PiMkSYe8N
+# KQ6ouhQ/sNOBratWZ6Tb7nEMKAcZLsaKpdIMPJLp3UEI9YiTUGHeS8hi+HxFWRLK
+# ifPdlThhj9J33OxwPs2Q/+VXzzS1v9l0EsKoPVCibYme+6eLM0MBWfEh2u7mpfoe
+# HD0szdVsMg8nYN6VWIRZ29+JRm/nqRmkWf1yj2nS8f9mP2e70GIB4RmnYD+PNOrb
+# iPdfVTk=
 # SIG # End signature block
