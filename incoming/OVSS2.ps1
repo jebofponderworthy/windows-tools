@@ -195,7 +195,7 @@ ForEach ($DataLine in $VSSVolumesData) {
         }
     }
 
-"Adjusting general VSS settings..."
+"Adjusting general VSS settings:"
 ""
 
 <# For pasting:
