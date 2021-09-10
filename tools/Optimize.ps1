@@ -13,6 +13,8 @@ else {
 	
 Set-ExecutionPolicy Bypass -Scope Process -Force
 
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls -bor [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls12;
+
 Import-Module BitsTransfer
 
 $ps_script_list = @(

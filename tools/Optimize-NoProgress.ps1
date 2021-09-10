@@ -17,6 +17,8 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 # e.g., within certain scripting environments
 $ProgressPreference = 'SilentlyContinue'
 
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls -bor [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls12;
+
 Import-Module BitsTransfer
 
 $ps_script_list = @(
