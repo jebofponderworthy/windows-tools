@@ -198,20 +198,13 @@ ForEach ($DataLine in $VSSVolumesData) {
 "General VSS settings:"
 ""
 
-<# For pasting:
-
-$New-MaxShadowCopies = 32
-$New-MinDiffAreaFileSize = 3200
-
-CD HKLM:\System\CurrentControlSet\Services\VSS\Settings
-New-ItemProperty -Path . -Name "MaxShadowCopies" -Value $New-MaxShadowCopies
-
-CD HKLM:\System\CurrentControlSet\Services\VolSnap
-New-ItemProperty -Path . -Name "MinDiffAreaFileSize" -Value $New-MinDiffAreaFileSize
-
-Restart-Service -Force -Name "VSS"
-
-#>
+# Currently using these as constants.  
+# Default MaxShadowCopies is reported as 64, 
+# default MinDiffAreaFileSize is extremely small.
+#
+# The thought is by adjusting these, VSS will fail less, 
+# hopefully keeping a shorter queue with more prerequisite resources per 
+# execution.
 
 $NewMaxShadowCopies = 32
 $NewMinDiffAreaFileSize = 3200
