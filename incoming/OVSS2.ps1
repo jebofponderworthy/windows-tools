@@ -195,7 +195,7 @@ ForEach ($DataLine in $VSSVolumesData) {
         }
     }
 
-"Adjusting general VSS settings:"
+"General VSS settings:"
 ""
 
 <# For pasting:
@@ -216,31 +216,65 @@ Restart-Service -Force -Name "VSS"
 $NewMaxShadowCopies = 32
 $NewMinDiffAreaFileSize = 3200
 
-CD HKLM:\System\CurrentControlSet\Services\VSS\Settings
-If ((Get-Item .).Property -contains "MaxShadowCopies") {
-	$PValue = (Get-ItemProperty -Path . -Name "MaxShadowCopies")."MaxShadowCopies"
-	"MaxShadowCopies was: $PValue"
-	Set-ItemProperty -Path . -Name "MaxShadowCopies" -Value $NewMaxShadowCopies | Out-Null
-	"MaxShadowCopies is : $NewMaxShadowCopies"
-}
-else {
-	New-ItemProperty -Path . -Name "MaxShadowCopies" -Value $NewMaxShadowCopies | Out-Null
-	"MaxShadowCopies is : $NewMaxShadowCopies"
-}
+function setupDWORD {
+    param( [string]$regPath, [string]$nameForDWORD, [long]$valueForDWORD )
 
-""
+    ##############
+    # Error out if cannot touch the registry area at all
+    If ( !(Test-Path $regPath) ) {
+        Try {
+            New-Item $regPath -Force -ErrorAction SilentlyContinue
+            }
+        Catch {
+            Write-Error ("Could not visit or create registry path " + $regPath)
+            Return
+            }
+        }
 
-CD HKLM:\System\CurrentControlSet\Services\VolSnap
-If ((Get-Item .).Property -contains "MinDiffAreaFileSize") {
-	$PValue = (Get-ItemProperty -Path . -Name "MinDiffAreaFileSize")."MinDiffAreaFileSize"
-	"MinDiffAreaFileSize was: $PValue"
-	Set-ItemProperty -Path . -Name "MinDiffAreaFileSize" -Value $NewMinDiffAreaFileSize | Out-Null
-	"MinDiffAreaFileSize is : $NewMinDiffAreaFileSize"
-}
-else {
-	New-ItemProperty -Path . -Name "MinDiffAreaFileSize" -Value $NewMinDiffAreaFileSize | Out-Null
-	"MinDiffAreaFileSize is: $NewMinDiffAreaFileSize"
-}
+    #############
+    # If an existing registry entry exists, store its value to report later
+    Try {
+        $oldValueProperty = Get-ItemProperty -Path $regPath -Name $nameForDWORD -ErrorAction SilentlyContinue
+        $oldValue = $oldValueProperty.$nameforDWORD
+        }
+    Catch {
+        $oldValue = ""
+        }
+
+    #############
+    # Report the changes to make
+    Write-Output ("DWORD to write: " + $nameForDWORD)
+    Write-Output ("at registry path " + $regPath)
+    If ($oldValue -ne "") {
+        Write-Output ("Original value is " + $oldValue)
+        }
+    else {
+        Write-Output "No original present."
+        }
+    Write-Output ("New value is " + $valueforDWORD)
+
+    ############
+    # Report no changes to make, set new registry entry, or error out
+	If ($oldValue -eq $valueforDWORD) {
+		Write-Output "No change to make."
+		""
+		Return
+		}
+    Try {
+        New-ItemProperty -Path $regPath -Name $nameForDWORD -Value $valueForDWORD -PropertyType DWORD -Force -ErrorAction SilentlyContinue > $null
+        }
+    Catch {
+        Write-Error "Failed!"
+        ""
+        Return
+        }
+
+    "Succeeded!"
+    ""
+    }
+
+setupDWORD "HKLM:\System\CurrentControlSet\Services\VSS\Settings" "MaxShadowCopies" $NewMaxShadowCopies
+setupDWORD "HKLM:\System\CurrentControlSet\Services\VolSnap" "MinDiffAreaFileSize" $NewMinDiffAreaFileSize
 
 ""
 
