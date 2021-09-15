@@ -216,6 +216,8 @@ Restart-Service -Force -Name "VSS"
 $NewMaxShadowCopies = 32
 $NewMinDiffAreaFileSize = 3200
 
+# http://www.tomsitpro.com/articles/powershell_registry-powershell_command_line,2-152.html
+
 function setupDWORD {
     param( [string]$regPath, [string]$nameForDWORD, [long]$valueForDWORD )
 
