@@ -205,6 +205,11 @@ ForEach ($DataLine in $VSSVolumesData) {
 # The thought is by adjusting these, VSS will fail less, 
 # hopefully keeping a shorter queue with more prerequisite resources per 
 # execution.
+#
+# Default of MinDiffAreaFileSize is 300 according to this page:
+# https://www.ibm.com/docs/en/tsmhfw/7.1.0?topic=SSATMW_7.1.0/com.ibm.itsm.tshoot.doc/r_pdg_vsstuningrecomnd.html
+# A common error is it "could not grow in time".  Larger does seem better, as a preallocation.
+
 
 $NewMaxShadowCopies = 32
 $NewMinDiffAreaFileSize = 3200
