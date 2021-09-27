@@ -1,6 +1,9 @@
-############################################
-# Active Directory / Office 365 Hard Match #
-############################################
+########################################################
+# Active Directory / Office 365 Hard Match - Secondary #
+#                                                      #
+# Use this one only after the other has run once, this #
+# one lacks some of the preparatory steps.
+########################################################
 
 $ADUPN = 'jong@capitalcityoil.com'
 $AzureUPN = 'jong@capitalcityoil.com'
@@ -41,26 +44,26 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unrestricted -Force > $null
 
 'Preparing Powershell environment...'
 
-ShowProgress("Preparing Powershell environment...","Setting up to use Powershell Gallery...")
+# ShowProgress("Preparing Powershell environment...","Setting up to use Powershell Gallery...")
 
-ShowProgress("Preparing Powershell environment:","Setting up to use page provider NuGet...")
-Install-PackageProvider -Name NuGet -Force | Out-Null
+# ShowProgress("Preparing Powershell environment:","Setting up to use page provider NuGet...")
+# Install-PackageProvider -Name NuGet -Force | Out-Null
 
 # This appears to set PSGallery nicely when need be
-Register-PSRepository -Default -InstallationPolicy Trusted 2> $null
-Set-PSRepository -InstallationPolicy Trusted -Name PSGallery
+# Register-PSRepository -Default -InstallationPolicy Trusted 2> $null
+# Set-PSRepository -InstallationPolicy Trusted -Name PSGallery
 
-ShowProgress("Preparing Powershell environment...","Checking/preparing module NuGet...")
-PrepareModule("NuGet")
-ShowProgress("Preparing Powershell environment...","Checking/preparing module AzureAD...")
-PrepareModule("AzureAD")
+# ShowProgress("Preparing Powershell environment...","Checking/preparing module NuGet...")
+# PrepareModule("NuGet")
+# ShowProgress("Preparing Powershell environment...","Checking/preparing module AzureAD...")
+# PrepareModule("AzureAD")
 
 ''
 'Setting up hard match...'
 ''
 
-'Connect to AzureAD:'
-Connect-AzureAD
+# 'Connect to AzureAD:'
+# Connect-AzureAD
 
 ''
 'Turn off AZ/AD Sync...'
@@ -91,8 +94,14 @@ $AzureUser = Get-AzureADUser -SearchString $AzureUPN
 $AzureUser.ImmutableID
 
 ''
-'Finally, turn on AZ/AD Sync again...'
+'Turn on AZ/AD Sync again...'
 
 Set-ADSyncScheduler -SyncCycleEnabled $true
+
+'And initiate delta sync...'
+
+Import-Module ADSync
+Start-ADSyncSyncCycle -PolicyType Delta
+
 
 'Done!'

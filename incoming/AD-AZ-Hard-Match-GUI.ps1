@@ -2,18 +2,6 @@
 # Active Directory / Office 365 Hard Match #
 ############################################
 
-$ADUPN = 'jong@capitalcityoil.com'
-$AzureUPN = 'jong@capitalcityoil.com'
-
-'############################################'
-'# Active Directory / Office 365 Hard Match #'
-'############################################'
-''
-
-'Initiating prep for hard match.'
-"Active Directory : $ADUPN"
-"Azure AD :         $AzureUPN"
-''
 
 # Sets TLS version.  Necessary for some platforms.
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -55,11 +43,8 @@ PrepareModule("NuGet")
 ShowProgress("Preparing Powershell environment...","Checking/preparing module AzureAD...")
 PrepareModule("AzureAD")
 
-''
-'Setting up hard match...'
-''
+'Connect to AzureAD...'
 
-'Connect to AzureAD:'
 Connect-AzureAD
 
 ''
@@ -68,27 +53,46 @@ Connect-AzureAD
 
 Set-ADSyncScheduler -SyncCycleEnabled $false
 
-"Now get original Azure ImmutableID for $AzureUPN ..."
-$AzureUser = Get-AzureADUser -SearchString $AzureUPN
-$OriginalAzureImmutableID = $AzureUser.ImmutableID
-"Extracted Azure ImmutableID: $OriginalAzureImmutableID"
-""
-""
-"And now extract AD GUID for $ADUPN ..."
-ldifde -f export.txt -r "(Userprincipalname=$ADUPN)" -l *
-$ADGUID = (-split (type export.txt | select-string "ObjectGUID"))[1]
+# $ADUPN = 'active_directory_user@companynetwork.com'
+# $AzureUPN = 'azure_user@companynetwork.com'
 
-''
-"Extracted AD GUID: $ADGUID"
-""
-""
-'Set AD GUID as Azure ImmutableID...'
-Set-AzureADuser -ObjectID $AzureUser.ObjectID -ImmutableID $ADGUID
 
-''
-'New Azure ImmutableID retrieved as confirmation:'
-$AzureUser = Get-AzureADUser -SearchString $AzureUPN
-$AzureUser.ImmutableID
+# 'Initiating prep for hard match.'
+# "Active Directory : $ADUPN"
+# "Azure AD :         $AzureUPN"
+# ''
+
+Function Do-HardMatch {
+	param( [string]$ADUPN, [string]$AzureUPN )
+	# Active Directory UPN, $ADUPN.  In ADUC, user properties, Profile tab, 
+	# the username plus the domain listed.  The domain has to be Internet-routable,
+	# this does *not* have to be the primary email address of the user.
+	#
+	# Azure AD UPN, $AzureUPN.  This is the Office 365 login, *not* necessarily
+	# the primary email address of the user.
+
+	"Get original Azure ImmutableID for $AzureUPN ..."
+	$AzureUser = Get-AzureADUser -SearchString $AzureUPN
+	$OriginalAzureImmutableID = $AzureUser.ImmutableID
+	"Extracted Azure ImmutableID: $OriginalAzureImmutableID"
+	""
+	""
+	"And now extract AD GUID for $ADUPN ..."
+	ldifde -f export.txt -r "(Userprincipalname=$ADUPN)" -l *
+	$ADGUID = (-split (type export.txt | select-string "ObjectGUID"))[1]
+
+	''
+	"Extracted AD GUID: $ADGUID"
+	""
+	""
+	'Set AD GUID into Azure as ImmutableID...'
+	Set-AzureADuser -ObjectID $AzureUser.ObjectID -ImmutableID $ADGUID
+
+	''
+	'New Azure ImmutableID retrieved as confirmation:'
+	$AzureUser = Get-AzureADUser -SearchString $AzureUPN
+	$AzureUser.ImmutableID
+}
 
 ''
 'Finally, turn on AZ/AD Sync again...'
