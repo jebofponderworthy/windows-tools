@@ -529,10 +529,13 @@ CATE-Delete-Files-Only ($envSystemRoot + '\Prefetch') '*.pf'
 
 Write-Output "Compacting the Windows Search database..."
 
-Stop-Service wsearch
-& esentutl.exe /d ("$env:AllUsersProfile" + "\Microsoft\Search\Data\Applications\Windows\Windows.edb")
-start-process -FilePath sc.exe -ArgumentList 'config wsearch start=delayed-auto'
-Start-Service wsearch
+Write-Output "Stopping service..."
+Stop-Service wsearch -ErrorAction SilentlyContinue *> $null
+Write-Output "Compacting..."
+& esentutl.exe /d ("$env:AllUsersProfile" + "\Microsoft\Search\Data\Applications\Windows\Windows.edb") *> $null
+start-process -FilePath sc.exe -ArgumentList 'config wsearch start=delayed-auto' -ErrorAction SilentlyContinue *> $null
+Write-Output "Restarting service..."
+Start-Service wsearch -ErrorAction SilentlyContinue *> $null
 
 ""
 ""
