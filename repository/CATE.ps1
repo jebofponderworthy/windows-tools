@@ -543,6 +543,18 @@ if (Test-Path -Path $wsdb -PathType Leaf) {
 	Start-Service wsearch -ErrorAction SilentlyContinue *> $null
 }
 
+Write-Output "Compacting the Windows Update database..."
+
+Write-Output "Stopping services..."
+Stop-Service wuauserv *> $null
+Stop-Service bits *> $null
+Write-Output "Compacting..."
+& esentutl.exe /d ("$env:WINDIR" + '\SoftwareDistribution\DataStore\DataStore.edb')
+Write-Output "Restarting services..."
+Start-Service wuauserv *> $null
+Start-Service bits *> $null
+
+
 ""
 ""
 
