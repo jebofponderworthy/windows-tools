@@ -527,15 +527,21 @@ CATE-Delete-Files-Only ($envSystemRoot + '\inf') '*.log'
 
 CATE-Delete-Files-Only ($envSystemRoot + '\Prefetch') '*.pf'
 
-Write-Output "Compacting the Windows Search database..."
+# Compact the Windows Search database, if found
 
-Write-Output "Stopping service..."
-Stop-Service wsearch -ErrorAction SilentlyContinue *> $null
-Write-Output "Compacting..."
-& esentutl.exe /d ("$env:AllUsersProfile" + "\Microsoft\Search\Data\Applications\Windows\Windows.edb") *> $null
-start-process -FilePath sc.exe -ArgumentList 'config wsearch start=delayed-auto' -ErrorAction SilentlyContinue *> $null
-Write-Output "Restarting service..."
-Start-Service wsearch -ErrorAction SilentlyContinue *> $null
+$wsdb = "$env:AllUsersProfile" + "\Microsoft\Search\Data\Applications\Windows\Windows.edb"
+if (Test-Path -Path $wsdb -PathType Leaf) {
+	Write-Output "Compacting the Windows Search database..."
+
+	Write-Output "Stopping service..."
+	Stop-Service wsearch -ErrorAction SilentlyContinue *> $null
+	Write-Output "Compacting..."
+	& esentutl.exe /d $wsdb
+	Write-Output "Setting service for delayed start..."
+	start-process -FilePath sc.exe -ArgumentList 'config wsearch start=delayed-auto' -ErrorAction SilentlyContinue *> $null
+	Write-Output "Restarting service..."
+	Start-Service wsearch -ErrorAction SilentlyContinue *> $null
+}
 
 ""
 ""
