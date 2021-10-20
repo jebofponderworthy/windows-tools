@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 5.71
+.VERSION 5.7
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -493,11 +493,7 @@ Replace-Numbered-Temp-Folders ($envTMP) -Force -ErrorAction SilentlyContinue | O
 CATE-Delete-Folder-Contents ($envSystemRoot + "\Temp")
 Replace-Numbered-Temp-Folders ($envSystemRoot + "\Temp") -Force -ErrorAction SilentlyContinue | Out-Null
 
-CATE-Delete ($envSystemDrive + '\$GetCurrent')
-
-CATE-Delete ($envSystemDrive + '\$SysReset')
-
-CATE-Delete ($envSystemDrive + '\$WinREAgent')
+CATE-Delete-Folder-Contents ($envSystemDrive + "\$GetCurrent")
 
 CATE-Delete-Folder-Contents ($envSystemRoot + "\system32\wbem\logs")
 
@@ -530,6 +526,34 @@ CATE-Delete-Files-Only ($envSystemRoot + '\Logs') '*.etl'
 CATE-Delete-Files-Only ($envSystemRoot + '\inf') '*.log'
 
 CATE-Delete-Files-Only ($envSystemRoot + '\Prefetch') '*.pf'
+
+# Compact the Windows Search database, if found
+
+$wsdb = "$env:AllUsersProfile" + "\Microsoft\Search\Data\Applications\Windows\Windows.edb"
+if (Test-Path -Path $wsdb -PathType Leaf) {
+	Write-Output "Compacting the Windows Search database..."
+
+	Write-Output "Stopping service..."
+	Stop-Service wsearch -ErrorAction SilentlyContinue *> $null
+	Write-Output "Compacting..."
+	& esentutl.exe /d $wsdb
+	Write-Output "Setting service for delayed start..."
+	start-process -FilePath sc.exe -ArgumentList 'config wsearch start=delayed-auto' -ErrorAction SilentlyContinue *> $null
+	Write-Output "Restarting service..."
+	Start-Service wsearch -ErrorAction SilentlyContinue *> $null
+}
+
+Write-Output "Compacting the Windows Update database..."
+
+Write-Output "Stopping services..."
+Stop-Service wuauserv *> $null
+Stop-Service bits *> $null
+Write-Output "Compacting..."
+& esentutl.exe /d ("$env:WINDIR" + '\SoftwareDistribution\DataStore\DataStore.edb')
+Write-Output "Restarting services..."
+Start-Service wuauserv *> $null
+Start-Service bits *> $null
+
 
 ""
 ""
