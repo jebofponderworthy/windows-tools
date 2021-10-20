@@ -159,9 +159,6 @@ Param()
 
 # Self-elevate if not already elevated.
 
-#exit due to malfunction on one machine, tried to clear C:\
-exit
-
 "*************************"
 "   Clean All Temp Etc.   "
 "*************************"
