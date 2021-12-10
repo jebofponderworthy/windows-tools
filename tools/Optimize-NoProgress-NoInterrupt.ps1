@@ -27,7 +27,6 @@ $ps_script_list = @(
     'TweakDrives.ps1',
 	'TweakSMB.ps1',
     'OWTAS.ps1',
-	'TOSC.ps1',
     'OVSS.ps1',
     'CATE.ps1'
     )
