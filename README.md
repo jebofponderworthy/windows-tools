@@ -59,6 +59,8 @@ The tool is designed for Windows 10/2019 down through XP/2003. It is self-elevat
 
 ## TOSC: Turn Off Share Caching
 
+This tool is no longer run automatically by any of the OPTIMIZE items.  Newer Microsoft operating systems handle share caching much better.  But it is still available in the Tools area.
+
 By default in Windows since XP/2003, if a folder is shared to the network via SMB, so-called "caching" is turned on.  This actually means that the Offline Files service on *other* machines accessing the share, are allowed to retrieve and store copies of files and folders on the machine acting as server.  Turning this off for all shares gives a speed bump for the server machine, and also improves reliability overall, dependence on Offline Files can lead to all sorts of issues including data loss when the server is not available or suddenly becomes available et cetera.  [TOSC](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/TOSC.ps1) does this very well, for all file shares extant on the machine on which it is run.
 
 ## OVSS:  Optimize VSS
