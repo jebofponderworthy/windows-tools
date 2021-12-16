@@ -6,15 +6,7 @@ PowerShell 3.0 and later are supported, on Windows 7/2008R2 and later; the excep
 
 ## OPTIMIZE.CMD:  download, verify by hash, and run the full general set of tools
 
-[OPTIMIZE is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/OPTIMIZE.CMD) which, if run as administrator, will download and run Optimize.ps1, when in turn will run mma-appx-etc first, then TweakMemTCP, then RunDevNodeClean, then wt_removeGhosts, then TweakNTFS, then OWTAS, then TOSC, then OVSS, then CATE, then TweakHardware.  The result is a distinct performance hike on any current Windows machine.
-
-Do not use this if you want Offline Files caching to be active, RUNMOST does everything except the Offline Files cache disabling.
-
-## OPTIMIZE-KEEP-SHARE-CACHING.CMD:  download, verify by hash, and run most of the tools
-
-[OPTIMIZE-KEEP-SHARE-CACHING is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/OPTIMIZE-KEEP-SHARE-CACHING.CMD) which, if run as administrator, will download and run Optimize.ps1, when in turn will run mma-appx-etc first, then TweakMemTCP, then RunDevNodeClean, then wt_removeGhosts, then TweakNTFS, then OWTAS, then OVSS, then CATE, then TweakHardware.  The result is a distinct performance hike on any current Windows machine.
-
-*Do* use this if you want Offline Files caching to be active.  OPTIMIZE-KEEP-SHARE-CACHING.CMD does not run TOSC.ps1.
+[OPTIMIZE is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/OPTIMIZE.CMD) which, if run as administrator, will download and run Optimize.ps1, when in turn will run mma-appx-etc first, then TweakMemTCP, then RunDevNodeClean, then wt_removeGhosts, then TweakNTFS, then OWTAS, then OVSS, then CATE, then TweakHardware.  The result is a distinct performance hike on any current Windows machine.
 
 ## GETREDISTS.CMD:  Get and update Microsoft VC++ redistributables using GetRedists.ps1
 
@@ -58,6 +50,8 @@ OWTAS is available as [VBS](https://github.com/jebofponderworthy/windows-tools/r
 The tool is designed for Windows 10/2019 down through XP/2003. It is self-elevating if run non-administratively.
 
 ## TOSC: Turn Off Share Caching
+
+This tool is no longer run automatically by any of the OPTIMIZE items.  Newer Microsoft operating systems handle share caching much better.  But it is still available in the Tools area.
 
 By default in Windows since XP/2003, if a folder is shared to the network via SMB, so-called "caching" is turned on.  This actually means that the Offline Files service on *other* machines accessing the share, are allowed to retrieve and store copies of files and folders on the machine acting as server.  Turning this off for all shares gives a speed bump for the server machine, and also improves reliability overall, dependence on Offline Files can lead to all sorts of issues including data loss when the server is not available or suddenly becomes available et cetera.  [TOSC](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/TOSC.ps1) does this very well, for all file shares extant on the machine on which it is run.
 
