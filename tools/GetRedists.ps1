@@ -150,9 +150,10 @@ Function PrepareModule {
 	param( [string]$ModuleName )
 
 	If (Get-Module -ListAvailable -Name $ModuleName)
-		{ Update-Module $ModuleName }
+		{ Update-Module $ModuleName -Force }
 	Else
-		{ Install-Module $ModuleName }
+		{ Install-Module $ModuleName -Force }
+	Import-Module $ModuleName -Force
 	}
 
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unrestricted -Force > $null

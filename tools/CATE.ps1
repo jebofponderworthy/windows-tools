@@ -548,7 +548,7 @@ function Background-Run-For-Five-Minutes-Max {
 	Start-Job -ScriptBlock $MyScript -Name $JobGUID
 }
 
-# Compact the Windows Search database, if found
+# Compact the Windows Search database, if found.
 
 Write-Output "Setting up background job to compact the Windows Search database, will run 5 minutes max..."
 
