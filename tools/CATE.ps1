@@ -527,6 +527,14 @@ CATE-Delete-Files-Only ($envSystemRoot + '\inf') '*.log'
 
 CATE-Delete-Files-Only ($envSystemRoot + '\Prefetch') '*.pf'
 
+# Clear the Group Policy client-side cache
+
+Remove-Item "$env:windir\system32\GroupPolicy" -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
+Remove-Item "HKLM:\Software\Policies\Microsoft" -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
+Remove-Item "HKCU:\Software\Policies\Microsoft" -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
+Remove-Item "HKCU:\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects" -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
+Remove-Item "HKCU:\\Software\Microsoft\Windows\CurrentVersion\Policies" -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
+
 function Background-Run-For-Five-Minutes-Max {
 	param( $MyScript )
 	
