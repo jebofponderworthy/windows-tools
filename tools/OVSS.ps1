@@ -270,8 +270,8 @@ Restart-Service -Force -Name "VSS"
 
 #>
 
-$NewMaxShadowCopies = 32
-$NewMinDiffAreaFileSize = 3200
+$NewMaxShadowCopies = 8
+$NewMinDiffAreaFileSize = 128
 
 setupDWORD 'HKLM:\System\CurrentControlSet\Services\VSS\Settings' 'MaxShadowCopies' $NewMaxShadowCopies
 setupDWORD 'HKLM:\System\CurrentControlSet\Services\VolSnap' 'MinDiffAreaFileSize' $NewMinDiffAreaFileSize

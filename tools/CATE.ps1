@@ -529,7 +529,7 @@ CATE-Delete-Files-Only ($envSystemRoot + '\Prefetch') '*.pf'
 
 # Clear the Group Policy client-side cache
 
-Remove-Item "$env:windir\system32\GroupPolicy" -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
+CATE-Delete-Folder-Contents ($envSystemRoot + '\system32\GroupPolicy')
 Remove-Item "HKLM:\Software\Policies\Microsoft" -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
 Remove-Item "HKCU:\Software\Policies\Microsoft" -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
 Remove-Item "HKCU:\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects" -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
