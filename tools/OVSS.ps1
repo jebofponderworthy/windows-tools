@@ -255,20 +255,7 @@ function setupDWORD {
     ""
     }
 
-<# For pasting:
-
-$New-MaxShadowCopies = 32
-$New-MinDiffAreaFileSize = 3200
-
-CD HKLM:\System\CurrentControlSet\Services\VSS\Settings
-New-ItemProperty -Path . -Name "MaxShadowCopies" -Value $New-MaxShadowCopies
-
-CD HKLM:\System\CurrentControlSet\Services\VolSnap
-New-ItemProperty -Path . -Name "MinDiffAreaFileSize" -Value $New-MinDiffAreaFileSize
-
-Restart-Service -Force -Name "VSS"
-
-#>
+# VSS buildup preventative
 
 $NewMaxShadowCopies = 8
 $NewMinDiffAreaFileSize = 128
