@@ -67,7 +67,7 @@ to work well on all.
 <#
 
 .DESCRIPTION 
-TweakMemTCP - enhances performance by adding threads. Optimizes critical and delayed worker threads and service work items.
+Tweaks memory and TCP parameters, for performance.
 
 #>
 
@@ -198,7 +198,7 @@ if ( 		($WinVersionStr -Like "*Windows Server 2008 R2*") 	`
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PoolUsageMaximum" 	0x00000050
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SessionPoolSize" 	0x00000030
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SessionViewSize" 	0x00000044
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "IrpStackSize" 0x00000018
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "IRPStackSize" 0x00000020
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "Size" 		0x00000003
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "TcpTimedWaitDelay" 		0x0000001e
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "StrictTimeWaitSeqCheck" 	0x00000001
