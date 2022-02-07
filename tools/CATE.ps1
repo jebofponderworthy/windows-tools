@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 5.9
+.VERSION 6.1
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -478,7 +478,7 @@ $ProfileList | ForEach-Object {
 	
 	# Recreate Windows TEMP folder subpaths, prevents issues in a number of oddball situations
 	Replace-Numbered-Temp-Folders ($profileItem.ProfileImagePath + '\AppData\Local\Temp') -Force -ErrorAction SilentlyContinue | Out-Null
-    }
+}
 
 # Now empty certain folders
 

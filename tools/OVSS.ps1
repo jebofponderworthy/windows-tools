@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 4.0
+.VERSION 4.1
 
 .GUID ced41cc3-0763-4229-be97-4aac877c39e2
 
@@ -27,7 +27,7 @@
 
 .RELEASENOTES
 OVSS
-Removes all orphan shadows, and then preallocates 20%
+Removes all orphan shadows, and then preallocates 40%
 of each drive volume for VSS, as docs for different tools
 advise.
 
@@ -116,20 +116,13 @@ Param()
 # HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\VSS\Settings
 # DWORD MaxShadowCopies
 # Microsoft-reported default is 64.  Minimum 1, maximum 512.
-# Factually observed default appears much larger than 64.
-# Setting to 32.
+# Current numbers seem to be yielding very good results.
 #
 # HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\VolSnap
 # DWORD MinDiffAreaFileSize
 # No known default exists.  Must not be larger than MaxSize as set
 # by VSSADMIN.
-# Would like to set to 15% of minimum drive size, given that MaxSize seems to default
-# at either unlimited or 20% depending on reference taken.  But 
-# this is a system-wide setting for all drives at once!
-# Also has to be a multiple of 32, as in 32 megabytes.
-# We're not seeing drives smaller than 100G at this writing, so will use
-# 10% of that, which is 10G, 10000M, nearest multiple of 32 is 32*312=9984.
-# Hopefully not a problem for small flash drives.
+# Current numbers seem to be yielding very good results.
 #
 # The best references for this thus far appear to be:
 # https://docs.microsoft.com/en-us/windows/win32/backup/registry-keys-for-backup-and-restore
