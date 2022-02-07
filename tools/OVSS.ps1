@@ -29,7 +29,8 @@
 OVSS
 Removes all orphan shadows, and then preallocates 40%
 of each drive volume for VSS, as docs for different tools
-advise.
+advise.  Also other items, including buildup preventative
+for System Volume Information.
 
 .PRIVATEDATA
 
