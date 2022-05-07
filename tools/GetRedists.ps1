@@ -87,7 +87,7 @@ Param()
 
 #######################################################################
 # GetRedists                                                          #
-# v4.0                                                                #
+# v5.0                                                                #
 #######################################################################
 
 #
@@ -133,8 +133,8 @@ else {
     ""
 }
 
-# Sets TLS version.  Necessary for some platforms.
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+# Sets TLS version.  Necessary for some situations.
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 
 $reportStatus = ''
 $currentOp = ''
@@ -146,33 +146,29 @@ function ShowProgress {
 
 }
 
-Function PrepareModule {
-	param( [string]$ModuleName )
-
-	If (Get-Module -ListAvailable -Name $ModuleName)
-		{ Update-Module $ModuleName -Force }
-	Else
-		{ Install-Module $ModuleName -Force }
-	Import-Module $ModuleName -Force
-	}
+'Preparing Powershell environment...'
 
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unrestricted -Force > $null
 
-'Preparing Powershell environment...'
-
 ShowProgress("Preparing Powershell environment...","Setting up to use Powershell Gallery...")
 
-ShowProgress("Preparing Powershell environment:","Setting up to use page provider NuGet...")
-Install-PackageProvider -Name NuGet -Force | Out-Null
+# Make sure Powershell Gallery is registered
+If (-not (Get-PSRepository -Name PSGallery)) {
+	Register-PSRepository -Default |& Out-Null
+}
 
-# This appears to set PSGallery nicely when need be
-Register-PSRepository -Default -InstallationPolicy Trusted 2> $null
-Set-PSRepository -InstallationPolicy Trusted -Name PSGallery
+ShowProgress("Preparing Powershell environment...","Checking and preparing module VcRedist...")
 
-ShowProgress("Preparing Powershell environment...","Checking/preparing module NuGet...")
-PrepareModule("NuGet")
-ShowProgress("Preparing Powershell environment...","Checking/preparing module VcRedist...")
-PrepareModule("VcRedist")
+# Install or update module VcRedist
+If (Get-InstalledModule -Name VcRedist) {
+	Update-Module -Name VcRedist -Force
+}
+Else {
+	Install-Module -Name VcRedist -AllowClobber -Scope CurrentUser
+}
+
+# Import VcRedist to this session
+Import-Module -Name VcRedist
 
 if ($False -eq (Test-Path C:\VcRedist -PathType Container)) {
 	New-Item C:\VcRedist -ItemType Directory | Out-Null 
@@ -241,7 +237,7 @@ ShowProgress("Installing all needed redistributables from repo folder...","")
 ""
 "Installing..."
 ""
-Install-VcRedist -Verbose -VcList $RedistsToGet -Path C:\VcRedist
+Install-VcRedist -Verbose -VcList $RedistsToGet -Path C:\VcRedist | ft
 
 # The old brute force get-them-all code
 #
