@@ -175,7 +175,7 @@ If (Get-InstalledModule -Name VcRedist) {
 	Update-Module -Name VcRedist -Force
 }
 Else {
-	Install-Module -Name VcRedist -AllowClobber -Scope CurrentUser
+	Install-Module -Name VcRedist -AllowClobber -Scope CurrentUser -Force
 }
 
 # Import VcRedist to this session
