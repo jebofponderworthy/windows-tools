@@ -157,6 +157,17 @@ If (-not (Get-PSRepository -Name PSGallery)) {
 	Register-PSRepository -Default |& Out-Null
 }
 
+ShowProgress("Preparing Powershell environment...","Checking and preparing package provider NuGet...")
+
+# Get latest version of package provider
+$NuGetLatest = (Get-PackageProvider -ListAvailable -Name NuGet).Version
+# Get version of currently installed package provider
+$NuGetInstalled = (Get-PackageProvider -Name NuGet -Force).Version
+# If not the same, install new
+If ($NuGetLatest.Name -ne $NuGetInstalled.Name) {
+	Install-PackageProvider -Name NuGet -Force
+}
+
 ShowProgress("Preparing Powershell environment...","Checking and preparing module VcRedist...")
 
 # Install or update module VcRedist
@@ -173,6 +184,8 @@ Import-Module -Name VcRedist
 if ($False -eq (Test-Path C:\VcRedist -PathType Container)) {
 	New-Item C:\VcRedist -ItemType Directory | Out-Null 
 	}
+	
+''
 
 'Getting list of currently installed redistributables...'
 	
