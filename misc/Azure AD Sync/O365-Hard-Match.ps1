@@ -2,8 +2,8 @@
 # Active Directory / Office 365 Hard Match #
 ############################################
 
-$ADUPN = 'jong@capitalcityoil.com'
-$AzureUPN = 'jong@capitalcityoil.com'
+$ADUPN = 'ad_username@domain.com'
+$AzureUPN = 'azure_username@domain.com'
 
 '############################################'
 '# Active Directory / Office 365 Hard Match #'
