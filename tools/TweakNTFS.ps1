@@ -153,6 +153,67 @@ Get-PhysicalDisk | ForEach-Object {
 & fsutil behavior set DisableLastAccess 1 | Out-Null
 & fsutil behavior set DisableDeleteNotify 0 | Out-Null
 
+
+function setupDWORD {
+    param( [string]$regPath, [string]$nameForDWORD, [long]$valueForDWORD )
+
+    ##############
+    # Error out if cannot touch the registry area at all
+    If ( !(Test-Path $regPath) ) {
+        Try {
+            New-Item $regPath -Force -ErrorAction SilentlyContinue
+            }
+        Catch {
+            Write-Error ("Could not visit or create registry path " + $regPath)
+            Return
+            }
+		Finally {
+			$oldValue = ""
+			}
+        }
+
+    #############
+    # If an existing registry entry exists, store its value to report later
+    Try {
+        $oldValueProperty = Get-ItemProperty -Path $regPath -Name $nameForDWORD -ErrorAction SilentlyContinue
+        $oldValue = $oldValueProperty.$nameforDWORD
+        }
+	Catch {}
+
+    #############
+    # Report the changes to make
+    Write-Output ("DWORD to write: " + $nameForDWORD)
+    Write-Output ("at registry path " + $regPath)
+    If ($oldValue -ne "") {
+        Write-Output ("Original value is " + $oldValue)
+        }
+    else {
+        Write-Output "No original present."
+        }
+    Write-Output ("New value is " + $valueforDWORD)
+
+    ############
+    # Report no changes to make, set new registry entry, or error out
+	If ($oldValue -eq $valueforDWORD) {
+		Write-Output "No change to make."
+		""
+		Return
+		}
+    Try {
+        New-ItemProperty -Path $regPath -Name $nameForDWORD -Value $valueForDWORD -PropertyType DWORD -Force -ErrorAction SilentlyContinue > $null
+        }
+    Catch {
+        Write-Error "Failed!"
+        ""
+        Return
+        }
+
+    "Succeeded!"
+    ""
+    }
+	
+setupDWORD 'HKLM:\System\CurrentControlSet\Control\FileSystem' 'NtfsMftZoneReservation' 3
+
 function Unzip {
 	param([string]$zipfile, [string]$outpath)
 
