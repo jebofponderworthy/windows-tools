@@ -203,6 +203,9 @@ Set-ItemProperty -Path . -Name "xbgm" -Value 4 -Force -ErrorAction SilentlyConti
 schtasks /Change /Disable /TN "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" | Out-Null
 taskkill /f /im compattelrunner.exe 2>&1 | Out-Null
 
+Stop-Service -Name "DiagTrack"
+Set-Service -Name DiagTrack -StartupType Disabled
+
 "Disable Microsoft Consumer Experiences..."
 
 CD HKLM:\SOFTWARE\Policies\Microsoft\Windows | Out-Null
