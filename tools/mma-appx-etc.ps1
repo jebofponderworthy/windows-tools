@@ -134,26 +134,36 @@ If (-Not $MMAgentSetup.PageCombining)
 
 # Will add deprovisioning:  Remove-AppxProvisionedPackage -Online -PackageName MyAppxPkg
 
-"1/10..."
-Get-AppxPackage "Microsoft.XboxApp" -allusers | Remove-AppxPackage -allusers  -ErrorAction SilentlyContinue | Out-Null
-"2/10..."
-Get-AppxPackage "Microsoft.XboxGameOverlay" -allusers | Remove-AppxPackage -allusers  -ErrorAction SilentlyContinue | Out-Null
-"3/10..."
-Get-AppxPackage "Microsoft.XboxIdentityProvider"  -allusers | Remove-AppxPackage -allusers  -ErrorAction SilentlyContinue | Out-Null
-"4/10..."
-Get-AppxPackage "Microsoft.Xbox.TCUI" -allusers | Remove-AppxPackage -allusers  -ErrorAction SilentlyContinue | Out-Null
-"5/10..."
-Get-AppxPackage "Microsoft.XboxSpeechToTextOverlay" -allusers | Remove-AppxPackage  -allusers  -ErrorAction SilentlyContinue | Out-Null
-"6/10..."
-Get-AppxPackage "Microsoft.WindowsCommunicationsApps" -allusers | Remove-AppxPackage -allusers  -ErrorAction SilentlyContinue | Out-Null
-"7/10..."
-Get-AppxPackage "Microsoft.BingNews" -allusers | Remove-AppxPackage  -allusers  -ErrorAction SilentlyContinue | Out-Null
-"8/10..."
-Get-AppxPackage "Microsoft.BingWeather" -allusers | Remove-AppxPackage -allusers  -ErrorAction SilentlyContinue | Out-Null
-"9/10..."
-Get-AppxPackage "Microsoft.Advertising.Xaml" -allusers | Remove-AppxPackage -allusers  -ErrorAction SilentlyContinue | Out-Null
-"10/10..."
-Get-AppxPackage "*Microsoft.Skype*" -allusers | Remove-AppxPackage -allusers  -ErrorAction SilentlyContinue | Out-Null
+function Remove-Package {
+	param( [string] $PackageString )
+	
+	Get-AppxPackage -allusers -PackageTypeFilter Main, Bundle, Resource | 
+	Where-Object {$_.PackageFullName -like $PackageString} | 
+	Remove-AppxPackage -Allusers
+}
+
+"1/11..."
+Remove-Package "Microsoft.XboxApp" | Out-Null
+"2/11..."
+Remove-Package "Microsoft.XboxGameOverlay" | Out-Null
+"3/11..."
+Remove-Package "Microsoft.XboxIdentityProvider" | Out-Null
+"4/11..."
+Remove-Package "Microsoft.Xbox.TCUI" | Out-Null
+"5/11..."
+Remove-Package "Microsoft.XboxSpeechToTextOverlay" | Out-Null
+"6/11..."
+Remove-Package "Microsoft.WindowsCommunicationsApps" | Out-Null
+"7/11..."
+Remove-Package "Microsoft.BingNews" | Out-Null
+"8/11..."
+Remove-Package "Microsoft.BingWeather" | Out-Null
+"9/11..."
+Remove-Package "Microsoft.Advertising.Xaml" | Out-Null
+"10/11..."
+Remove-Package "*Microsoft.Skype*" | Out-Null
+"11/11..."
+Remove-Package "*Disney*" | Out-Null
 
 # The rest do not apply to Windows 8 / Server 2012 platforms.
 if ( ($WinVersionStr -Like "*Windows Server 2012*") -Or ($WinVersionStr -Like "*Windows 8*") )
