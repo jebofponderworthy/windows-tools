@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 4.1
+.VERSION 4.2
 
 .GUID ced41cc3-0763-4229-be97-4aac877c39e2
 
@@ -103,9 +103,9 @@ Param()
 #
 # by Jonathan E. Brickman
 #
-# Removes all orphan shadows if possible, and then preallocates 40%
-# of each drive volume for VSS as many different tools'
-# docs advise.  
+# Removes all orphan shadows if possible, and then sets
+# preallocation of UNBOUNDED for each drive volume for VSS 
+# as has recently become advisable.
 #
 # Not using 
 #   vssadmin delete shadows /all
@@ -178,12 +178,12 @@ ForEach ($DataLine in $VSSVolumesData) {
 			# If exists, set to 1%, to delete old shadows
             & vssadmin resize shadowstorage $ForString $OnString /MaxSize=1% | Out-Null
 			# Then set to 40%, a recommended standard
-			& vssadmin resize shadowstorage $ForString $OnString /MaxSize=40% | Out-Null
+			& vssadmin resize shadowstorage $ForString $OnString /MaxSize=UNBOUNDED | Out-Null
             }
         Else {
 			# Set to 1%, then 40%, to delete old shadows
 			& vssadmin resize shadowstorage $ForString $OnString /MaxSize=1% | Out-Null
-            & vssadmin resize shadowstorage $ForString $OnString /MaxSize=40% | Out-Null
+            & vssadmin resize shadowstorage $ForString $OnString /MaxSize=UNBOUNDED | Out-Null
             }
         ""
         }
