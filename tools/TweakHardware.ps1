@@ -61,19 +61,13 @@ to work well on all.
 
 
 
-<#
-
-.DESCRIPTION 
-TweakMemTCP - enhances performance by adding threads. Optimizes critical and delayed worker threads and service work items.
-
-#>
 
 Param()
 
 
 ##############################################################
 # Tweak Hardware: NIC performance, disable USB power saving, #
-# and printer spooler maintenance                            #
+# and printer spooler cleanup                            #
 ##############################################################
 
 #
@@ -92,8 +86,8 @@ Param()
 ""
 ""
 "*****************************************************************************"
-" TweakHardware: Disable Fast Startup, "
-" Tweak NICs for performance, and disable USB power saving   "
+" TweakHardware: Tweak NICs for performance, disable USB power saving,   "
+" and printer spooler cleanup "
 "*****************************************************************************"
 ""
 ""

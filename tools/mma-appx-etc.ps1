@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 2.7
+.VERSION 2.8
 
 .GUID 5cc3176c-2e44-40d7-8ead-592e4e2e3665
 
@@ -86,6 +86,16 @@ Param()
 # https://opensource.org/licenses/BSD-3-Clause
 # and is reprised at the end of this file
 #
+
+""
+""
+"**************************************************************"
+"   Disable Fast Startup   "
+"**************************************************************"
+""
+""
+
+powercfg /hibernate off
 
 ""
 ""
