@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 1.4
+.VERSION 1.5
 
 .AUTHOR Jonathan E. Brickman
 
@@ -92,7 +92,8 @@ Param()
 ""
 ""
 "*****************************************************************************"
-"   TweakHardware: Tweak NICs for performance, and disable USB power saving   "
+" TweakHardware: Disable Fast Startup, "
+" Tweak NICs for performance, and disable USB power saving   "
 "*****************************************************************************"
 ""
 ""
@@ -112,6 +113,10 @@ else {
     }
 
 
+""
+
+"Disabling Fast Startup..."
+powercfg /hibernate off
 ""
 
 # Get-NetAdapterAdvancedProperty gets a full list, for all NICs on a given machine.
