@@ -152,21 +152,14 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unrestricted -Force > $null
 
 ShowProgress("Preparing Powershell environment...","Setting up to use Powershell Gallery...")
 
-# Make sure Powershell Gallery is registered
-If (-not (Get-PSRepository -Name PSGallery)) {
-	Register-PSRepository -Default |& Out-Null
+Install-PackageProvider -Name NuGet -Force -ErrorAction 'SilentlyContinue' > $null
+Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+If (Get-InstalledModule -Name PsWindowsUpdate -ErrorAction 'SilentlyContinue') {
+	Update-Module -Name PSWindowsUpdate -Force
+} Else {
+	Install-Module -Name PSWindowsUpdate -Force
 }
-
-ShowProgress("Preparing Powershell environment...","Checking and preparing package provider NuGet...")
-
-# Get latest version of package provider
-$NuGetLatest = (Get-PackageProvider -ListAvailable -Name NuGet).Version
-# Get version of currently installed package provider
-$NuGetInstalled = (Get-PackageProvider -Name NuGet -Force).Version
-# If not the same, install new
-If ($NuGetLatest.Name -ne $NuGetInstalled.Name) {
-	Install-PackageProvider -Name NuGet -Force
-}
+Import-Module PSWindowsUpdate
 
 ShowProgress("Preparing Powershell environment...","Checking and preparing module VcRedist...")
 
