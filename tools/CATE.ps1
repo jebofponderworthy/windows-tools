@@ -527,6 +527,11 @@ CATE-Delete-Files-Only ($envSystemRoot + '\inf') '*.log'
 
 CATE-Delete-Files-Only ($envSystemRoot + '\Prefetch') '*.pf'
 
+# A common monitoring log folder
+
+CATE-Delete-Files-Only ($envProgramData + '\SAAZOD\ApplicationLog\zSCCLog') '*.log'
+CATE-Delete-Files-Only ($envProgramData + '\SAAZOD\ApplicationLog\zSCCLog') '*.txt'
+
 # Clear the Group Policy client-side cache
 
 CATE-Delete-Folder-Contents ($envSystemRoot + '\system32\GroupPolicy')
