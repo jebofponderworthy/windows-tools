@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 6.11
+.VERSION 6.2
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -539,6 +539,12 @@ Remove-Item "HKLM:\Software\Policies\Microsoft" -Force -Recurse -ErrorAction Sil
 Remove-Item "HKCU:\Software\Policies\Microsoft" -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
 Remove-Item "HKCU:\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects" -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
 Remove-Item "HKCU:\\Software\Microsoft\Windows\CurrentVersion\Policies" -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
+
+# Clear the users' Teams caches, as possible without disruption
+Get-ChildItem "C:\Users\*\AppData\Roaming\Microsoft\Teams\*" -directory | 
+	Where name -in ('application cache','blob storage','databases','GPUcache','IndexedDB','Local Storage','tmp') | 
+	ForEach{Remove-Item $_.FullName -Recurse -Force -WhatIf}
+
 
 function Background-Run-For-Five-Minutes-Max {
 	param( $MyScript )

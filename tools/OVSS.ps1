@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 4.2
+.VERSION 4.3
 
 .GUID ced41cc3-0763-4229-be97-4aac877c39e2
 
@@ -256,6 +256,7 @@ $NewMinDiffAreaFileSize = 128
 
 setupDWORD 'HKLM:\System\CurrentControlSet\Services\VSS\Settings' 'MaxShadowCopies' $NewMaxShadowCopies
 setupDWORD 'HKLM:\System\CurrentControlSet\Services\VolSnap' 'MinDiffAreaFileSize' $NewMinDiffAreaFileSize
+setupDWORD 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows' 'DeleteStaleTaskCache' 1
 
 ""
 
