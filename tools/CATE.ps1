@@ -493,8 +493,6 @@ Replace-Numbered-Temp-Folders ($envTMP) -Force -ErrorAction SilentlyContinue | O
 CATE-Delete-Folder-Contents ($envSystemRoot + "\Temp")
 Replace-Numbered-Temp-Folders ($envSystemRoot + "\Temp") -Force -ErrorAction SilentlyContinue | Out-Null
 
-CATE-Delete ($envSystemDrive + '\$GetCurrent')
-
 CATE-Delete-Folder-Contents ($envSystemRoot + "\system32\wbem\logs")
 
 CATE-Delete-Folder-Contents ($envSystemRoot + "\system32\Debug")
