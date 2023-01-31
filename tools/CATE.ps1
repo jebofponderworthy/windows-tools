@@ -408,8 +408,13 @@ function CATE-Delete-Files-Only {
 	# exit CATE-Delete silently
 	If (Test-ReparsePoint($deletePath))
 		{ Return }
-
+		
 	ShowCATEProgress $CATEStatus ($deletePath + '\' + $wildCard)
+	$filepath = $deletePath
+	$filetype = $wildCard
+	$file_count = [System.IO.Directory]::GetFiles("$filepath", "$filetype").Count
+	"Deleting $file_count files in $filepath ..."
+	""
 	
 	ROBOCOPY $blankFolder $deletePath $wildCard /MIR /R:1 /W:1 /MT:10 *> $null
 	}
