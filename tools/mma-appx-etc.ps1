@@ -152,28 +152,30 @@ function Remove-Package {
 	Remove-AppxPackage -Allusers
 }
 
-"1/11..."
+"1/12..."
 Remove-Package "Microsoft.XboxApp" | Out-Null
-"2/11..."
+"2/12..."
 Remove-Package "Microsoft.XboxGameOverlay" | Out-Null
-"3/11..."
+"3/12..."
 Remove-Package "Microsoft.XboxIdentityProvider" | Out-Null
-"4/11..."
+"4/12..."
 Remove-Package "Microsoft.Xbox.TCUI" | Out-Null
-"5/11..."
+"5/12..."
 Remove-Package "Microsoft.XboxSpeechToTextOverlay" | Out-Null
-"6/11..."
+"6/12..."
 Remove-Package "Microsoft.WindowsCommunicationsApps" | Out-Null
-"7/11..."
+"7/12..."
 Remove-Package "Microsoft.BingNews" | Out-Null
-"8/11..."
+"8/12..."
 Remove-Package "Microsoft.BingWeather" | Out-Null
-"9/11..."
+"9/12..."
 Remove-Package "Microsoft.Advertising.Xaml" | Out-Null
-"10/11..."
+"10/12..."
 Remove-Package "*Microsoft.Skype*" | Out-Null
-"11/11..."
+"11/12..."
 Remove-Package "*Disney*" | Out-Null
+"12/12..."
+Remove-Package "Microsoft.People" | Out-Null
 
 # The rest do not apply to Windows 8 / Server 2012 platforms.
 if ( ($WinVersionStr -Like "*Windows Server 2012*") -Or ($WinVersionStr -Like "*Windows 8*") )
