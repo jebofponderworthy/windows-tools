@@ -176,6 +176,7 @@ Remove-Package "*Microsoft.Skype*" | Out-Null
 Remove-Package "*Disney*" | Out-Null
 "12/12..."
 Remove-Package "Microsoft.People" | Out-Null
+Remove-Package "Microsoft.WindowsFeedbackHub" | Out-Null
 
 # The rest do not apply to Windows 8 / Server 2012 platforms.
 if ( ($WinVersionStr -Like "*Windows Server 2012*") -Or ($WinVersionStr -Like "*Windows 8*") )
