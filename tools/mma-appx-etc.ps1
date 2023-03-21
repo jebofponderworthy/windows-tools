@@ -148,14 +148,14 @@ function Remove-Package {
 	param( [string] $PackageString )
 	
 	Get-AppxPackage -allusers -PackageTypeFilter Main, Bundle, Resource | 
-	Where-Object {$_.PackageFullName -like $PackageString} | 
+	Where-Object {$_.Name -EQ $PackageString} | 
 	Remove-AppxPackage -Allusers
 }
 
 "1/12..."
 Remove-Package "Microsoft.XboxApp" | Out-Null
 "2/12..."
-Remove-Package "Microsoft.XboxGameOverlay" | Out-Null
+Remove-Package "Microsoft.XboxGamingOverlay" | Out-Null
 "3/12..."
 Remove-Package "Microsoft.XboxIdentityProvider" | Out-Null
 "4/12..."
@@ -181,6 +181,13 @@ Remove-Package "Microsoft.WindowsFeedbackHub" | Out-Null
 # The rest do not apply to Windows 8 / Server 2012 platforms.
 if ( ($WinVersionStr -Like "*Windows Server 2012*") -Or ($WinVersionStr -Like "*Windows 8*") )
 	{ exit 0 }
+	
+"Disabling autostart of user applications at logon..."
+
+HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
+
+pushd HKLM:\Software\Microsoft\Windows NT\CurrentVersion\Winlogon | Out-Null
+New-ItemProperty -Path . -Name RestartApps -Value 0 -PropertyType "DWord" -Force | Out-Null
 
 "Disabling prelaunch/preload of Microsoft Edge browser..."
 
