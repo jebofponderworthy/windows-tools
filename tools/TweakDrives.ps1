@@ -152,6 +152,7 @@ Get-PhysicalDisk | ForEach-Object {
 & fsutil 8dot3name set 1 | Out-Null
 & fsutil behavior set DisableLastAccess 1 | Out-Null
 & fsutil behavior set DisableDeleteNotify 0 | Out-Null
+# DisableDeleteNotify set to zero, is the way to enable automatic TRIM in Windows.  It does not always appear to work, and the manual initiation above is therefore often needed.
 
 function Unzip {
 	param([string]$zipfile, [string]$outpath)
