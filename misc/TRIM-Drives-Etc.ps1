@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 3.7
+.VERSION 4.0
 
 .GUID 527423ef-dadd-45b1-a547-56d2fdb325d1
 
@@ -9,13 +9,11 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2023 Jonathan E. Brickman
+.COPYRIGHT (c) 2021 Jonathan E. Brickman
 
 .TAGS
 
 .LICENSEURI https://opensource.org/licenses/BSD-3-Clause
-
-.PROJECTURI https://github.com/jebofponderworthy/windows-tools
 
 .ICONURI
 
@@ -86,23 +84,20 @@ also defrags NTFS metafiles using Contig.
 <#
 
 .DESCRIPTION 
-TweakDrives - optimizes SSDs and NTFS volumes for performance and reliability
+TRIM-Drives-Etc - Does SSD TRIM and other operations for performance and reliability
 
 #>
 
 Param()
 
 
-##################################################
-# TweakDrives: Tweak All Drives and NTFS Volumes #
-#  for Performance And Reliability               #
-##################################################
+#######################################################
+# Trim-Drives-Etc: Does SSD TRIM and other operations #
+# for performance and reliability                     #
+#######################################################
 
 #
 # by Jonathan E. Brickman
-#
-# Tweaks all NTFS volumes on a system for
-# performance and reliability
 #
 # Copyright 2023 Jonathan E. Brickman
 # https://notes.ponderworthy.com/
@@ -113,9 +108,9 @@ Param()
 
 ""
 ""
-"*****************"
-"   TweakDrives   "
-"*****************"
+"*********************"
+"   TRIM-Drives-Etc   "
+"*********************"
 
 # Self-elevate if not already elevated.
 
@@ -133,7 +128,7 @@ else {
 
 # Do TRIM if possible for all volumes on SSDs...
 
-"Do TRIM and SlabConsolidate if possible for any volumes..."
+"Manually do TRIM and SlabConsolidate if possible for any volumes..."
 ""
 
 Get-PhysicalDisk | ForEach-Object {
@@ -145,7 +140,7 @@ Get-PhysicalDisk | ForEach-Object {
 		}
 	}
 
-"Tweaks for all drives..."
+"Reliability and performance adjustments for all drives..."
 ""
 
 # Using & instead of Invoke-Expression, this appears to be security-positive, hopefully less apt to be false-positived by security tools
@@ -160,89 +155,8 @@ Get-PhysicalDisk | ForEach-Object {
 # Does not always work, the above manual TRIMs are therefore sometimes vital.
 & fsutil behavior set DisableDeleteNotify 0 | Out-Null
 
-function Unzip {
-	param([string]$zipfile, [string]$outpath)
-
-	[System.IO.Compression.ZipFile]::ExtractToDirectory($zipfile, $outpath) > $null
-	}
-
-function Install-Contig {
-    
-	$StartupDir = $pwd
-
-	# First, set up temporary space and move there.
-
-	"Setting up to download Contig..."
-
-	$TempFolderName = -join ((65..90) + (97..122) | Get-Random -Count 10 | ForEach-Object {[char]$_})
-
-	$envTEMP = [Environment]::GetEnvironmentVariable("TEMP")
-	$TempPath = "$envTEMP\$TempFolderName"
-	mkdir $TempPath > $null
-
-	# Then download the zip file.
-
-	"Downloading the Contig zip file from Microsoft..."
-
-	Remove-Item "$TempPath\Contig.zip" -ErrorAction SilentlyContinue | Out-Null
-	[Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
-	$download_url = 'https://download.sysinternals.com/files/Contig.zip'
-	Invoke-WebRequest -Uri $download_url -Outfile "$TempPath\Contig.zip"
-	
-	# Now unpack the zip file.
-
-	"Unpacking..."
-
-	Add-Type -AssemblyName System.IO.Compression.FileSystem
-
-	$envWINDIR = [Environment]::GetEnvironmentVariable("WINDIR")
-	Remove-Item "$envWINDIR\Contig.exe" -ErrorAction SilentlyContinue | Out-Null
-	Remove-Item "$envWINDIR\Contig64.exe" -ErrorAction SilentlyContinue | Out-Null
-	Remove-Item "$envWINDIR\Eula.txt" -ErrorAction SilentlyContinue | Out-Null
-	Unzip "$TempPath\Contig.zip" "$envWINDIR" -Force
-
-    }
-	
-function Defrag-NTFS-Metafiles {
-	param([string]$DriveID)
-
-	""
-	"Defragmenting NTFS metafiles for " + $DriveID + " ..."
-	""
-	
-	if ([System.IntPtr]::Size -eq 4) {
-		# 32-bit OS
-		$cmdstr = "CONTIG"
-		} else {
-		$cmdstr = "CONTIG64"
-		}
-
-	'$Mft ...'
-	& $cmdstr -nobanner -accepteula $DriveID $Mft | Out-Null
-	'$LogFile ...'
-	& $cmdstr -nobanner -accepteula $DriveID $LogFile | Out-Null
-	'$Volume ...'
-	& $cmdstr -nobanner -accepteula $DriveID $Volume | Out-Null
-	'$AttrDef ...'
-	& $cmdstr -nobanner -accepteula $DriveID $AttrDef | Out-Null
-	'$Bitmap ...'
-	& $cmdstr -nobanner -accepteula $DriveID $Bitmap | Out-Null
-	'$Boot ...'
-	& $cmdstr -nobanner -accepteula $DriveID $Boot | Out-Null
-	'$BadClus ...'
-	& $cmdstr -nobanner -accepteula $DriveID $BadClus | Out-Null
-	'$Secure ...'
-	& $cmdstr -nobanner -accepteula $DriveID $Secure | Out-Null
-	'$Upcase ...'
-	& $cmdstr -nobanner -accepteula $DriveID $Upcase | Out-Null
-	'$Extend ...'
-	& $cmdstr -nobanner -accepteula $DriveID $Extend | Out-Null
-
-	}
-	
-"Get Contig to defragment NTFS metafiles..."
-
-Install-Contig
+# Sets up Self-Healing
+& fsutil behavior set Bugcheckoncorrupt 1 | Out-Null
 
 # Do NTFS reliability and performance settings for all volumes
 
