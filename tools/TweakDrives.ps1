@@ -254,13 +254,11 @@ Get-CimInstance -Query "Select * FROM Win32_LogicalDisk WHERE DriveType=3" | For
         "Tweaking " + $DriveID + " ..."
 		""
 		
-		"fsutil repair ..."
-		& fsutil repair set $DriveID 0x01 | Out-Null
+		"fsutil repair (Self-Healing NTFS)..."
+		& fsutil repair set $DriveID 1 | Out-Null
 		
 		$DriveIDslash = ($DriveID + '\')
 		
-		"fsutil repair set 1 ..."
-		fsutil repair set $DriveID 1 | Out-Null
 		"fsutil resource setautoreset true ..."
 		& fsutil resource setautoreset true $DriveIDslash | Out-Null
 		"fsutil resource setconsistent ..."

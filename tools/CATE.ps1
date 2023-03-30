@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 6.2
+.VERSION 6.4
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -532,8 +532,7 @@ CATE-Delete-Files-Only ($envSystemRoot + '\Prefetch') '*.pf'
 
 # A common monitoring log folder
 
-CATE-Delete-Files-Only ($envProgramData + '\SAAZOD\ApplicationLog\zSCCLog') '*.log'
-CATE-Delete-Files-Only ($envProgramData + '\SAAZOD\ApplicationLog\zSCCLog') '*.txt'
+CATE-Delete-Folder-Contents ($envProgramData + '\SAAZOD\ApplicationLog\zSCCLog')
 
 # Clear the Group Policy client-side cache
 
