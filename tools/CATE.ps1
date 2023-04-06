@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 6.4
+.VERSION 6.5
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -497,6 +497,8 @@ Replace-Numbered-Temp-Folders ($envTMP) -Force -ErrorAction SilentlyContinue | O
 
 CATE-Delete-Folder-Contents ($envSystemRoot + "\Temp")
 Replace-Numbered-Temp-Folders ($envSystemRoot + "\Temp") -Force -ErrorAction SilentlyContinue | Out-Null
+
+CATE-Delete-Folder-Contents ($envSystemRoot + "\Servicing\LCU")
 
 CATE-Delete-Folder-Contents ($envSystemRoot + "\system32\wbem\logs")
 
