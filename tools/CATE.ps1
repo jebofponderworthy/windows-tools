@@ -383,7 +383,7 @@ function CATE-Delete-Folder-Contents {
 	"Counting contents of $deletepath ..."
 	# $file_count = [System.IO.Directory]::GetFiles("$deletepath", "*").Count
 	$file_count = (Get-ChildItem -File -Recurse $deletepath | Measure-Object).Count
-	"Deleting $file_count items in $deletepath ..."
+	"Deleting $file_count items ..."
 	""
 		
 	# First try to wipe the inside of the folder simply.
@@ -420,7 +420,7 @@ function CATE-Delete-Files-Only {
 	$filetype = $wildCard
 	# $file_count = [System.IO.Directory]::GetFiles("$filepath", "$filetype").Count
 	$file_count = (Get-ChildItem -File "$filepath\$filetype" | Measure-Object).Count
-	"Deleting $file_count files in $filepath ..."
+	"Deleting $file_count files ..."
 	""
 	
 	ROBOCOPY $blankFolder $deletePath $wildCard /MIR /R:1 /W:1 /MT:10 *> $null
