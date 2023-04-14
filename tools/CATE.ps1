@@ -380,6 +380,11 @@ function CATE-Delete-Folder-Contents {
 		{ Return }
 		
 	ShowCATEProgress $CATEStatus $deletePath
+	"Counting contents of $deletepath ..."
+	# $file_count = [System.IO.Directory]::GetFiles("$deletepath", "*").Count
+	$file_count = (Get-ChildItem -File -Recurse $deletepath | Measure-Object).Count
+	"Deleting $file_count items in $deletepath ..."
+	""
 		
 	# First try to wipe the inside of the folder simply.
 	# ROBOCOPY is current default method, for parallelism.
@@ -410,9 +415,11 @@ function CATE-Delete-Files-Only {
 		{ Return }
 		
 	ShowCATEProgress $CATEStatus ($deletePath + '\' + $wildCard)
+	"Counting contents of $deletepath ..."
 	$filepath = $deletePath
 	$filetype = $wildCard
-	$file_count = [System.IO.Directory]::GetFiles("$filepath", "$filetype").Count
+	# $file_count = [System.IO.Directory]::GetFiles("$filepath", "$filetype").Count
+	$file_count = (Get-ChildItem -File "$filepath\$filetype" | Measure-Object).Count
 	"Deleting $file_count files in $filepath ..."
 	""
 	
