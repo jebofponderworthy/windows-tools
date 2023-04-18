@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 6.6
+.VERSION 6.65
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -382,7 +382,14 @@ function CATE-Delete-Folder-Contents {
 	ShowCATEProgress $CATEStatus $deletePath
 	"Counting contents of $deletepath ..."
 	# $file_count = [System.IO.Directory]::GetFiles("$deletepath", "*").Count
-	$file_count = (Get-ChildItem -File -Recurse $deletepath | Measure-Object).Count
+	try {
+		$file_count = (Get-ChildItem -File -Recurse $deletepath | Measure-Object).Count
+		}
+	catch
+		{
+		"Access denied: $deletepath"
+		return
+		}
 	"Deleting $file_count items ..."
 	""
 		
