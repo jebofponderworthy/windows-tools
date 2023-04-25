@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 6.67
+.VERSION 6.7
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -526,6 +526,8 @@ CATE-Delete-Folder-Contents ($envSystemRoot + "\PCHEALTH\ERRORREP\UserDumps")
 CATE-Delete-Folder-Contents ($envSystemRoot + "\minidump")
 
 CATE-Delete-Folder-Contents ($envSystemRoot + "\Downloaded Program Files")
+
+CATE-Delete-Folder-Contents ($envSystemRoot + "\SoftwareDistribution\Download")
 
 CATE-Delete-Folder-Contents ($envSystemRoot + "\LiveKernelReports")
 
