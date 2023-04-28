@@ -125,13 +125,12 @@ if (([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::
     {
     "Running elevated; good."
     ""
-    }
-else {
+    } else {
     "Not running as elevated.  Starting elevated shell."
-    Start-Process powershell -WorkingDirectory $PSScriptRoot -Verb runAs -ArgumentList "-noprofile -noexit -file $PSCommandPath"
+    Start-Process powershell -WorkingDirectory $PWD.Path -Verb runAs -ArgumentList "-noprofile -noexit -file $PSCommandPath"
     return "Done. This one will now exit."
     ""
-}
+    }
 
 # Do not show progress, this permits execution where otherwise cannot,
 # e.g., within certain scripting environments
