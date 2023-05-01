@@ -183,7 +183,7 @@ if ( 		($WinVersionStr -Like "*Windows Server 2008 R2*") 	`
 		-Or ($WinVersionStr -Like "*Windows 7*") 				`
 		-Or ($WinVersionStr -Like "*Windows 8*")				`
 		-Or ($WinVersionStr -Like "*Windows 10*")				`
-		-Or ($WinVersionStr -Like "*Windows 201*") ) 
+		-Or ($WinVersionStr -Like "*Windows 11*") ) 
 	{
 	Write-Output "Windows 7/2008R2 or later found.  Setting appropriately."
 	Write-Output ""
