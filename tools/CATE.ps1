@@ -522,8 +522,6 @@ CATE-Delete-Folder-Contents ($envSystemRoot + "\system32\Debug")
 
 CATE-Delete-Folder-Contents ($envSystemRoot + "\PCHEALTH\ERRORREP\UserDumps")
 
-CATE-Delete-Folder-Contents ($envSystemRoot + "\minidump")
-
 CATE-Delete-Folder-Contents ($envSystemRoot + "\Downloaded Program Files")
 
 CATE-Delete-Folder-Contents ($envSystemRoot + "\SoftwareDistribution\Download")
