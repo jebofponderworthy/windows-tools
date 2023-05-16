@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 6.7
+.VERSION 6.71
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -379,7 +379,6 @@ function CATE-Delete-Folder-Contents {
 		{ Return }
 		
 	ShowCATEProgress $CATEStatus $deletePath
-	""
 	"Counting contents of $deletepath ..."
 	# $file_count = [System.IO.Directory]::GetFiles("$deletepath", "*").Count
 	try {
@@ -400,6 +399,7 @@ function CATE-Delete-Folder-Contents {
 	Get-ChildItem -LiteralPath $deletePath -Name -Force -ErrorAction SilentlyContinue | ForEach-Object {
 		CATE-Delete ($deletePath + '\' + $_)
 		}
+	""
 	}
 
 function CATE-Delete-Files-Only {
@@ -421,7 +421,6 @@ function CATE-Delete-Files-Only {
 		{ Return }
 		
 	ShowCATEProgress $CATEStatus ($deletePath + '\' + $wildCard)
-	""
 	"Counting contents of $deletepath ..."
 	$filepath = $deletePath
 	$filetype = $wildCard
@@ -430,6 +429,7 @@ function CATE-Delete-Files-Only {
 	"Deleting $file_count files ..."
 	
 	ROBOCOPY $blankFolder $deletePath $wildCard /MIR /R:1 /W:1 /MT:10 *> $null
+	""
 	}
 	
 function Replace-Numbered-Temp-Folders {
