@@ -393,7 +393,7 @@ function CATE-Delete-Folder-Contents {
 		
 	# First try to wipe the inside of the folder simply.
 	# ROBOCOPY is current default method, for parallelism.
-	ROBOCOPY $blankFolder $deletePath /MIR /R:1 /W:1 /MT:10 *> $null
+	ROBOCOPY $blankFolder $deletePath /MIR /R:1 /W:1 /MT:10 /NFL /NDL /NJH /NJS /NC /NS /NP *> $null
 	
 	# Now try to delete everything left inside, using CATE-Delete.
 	Get-ChildItem -LiteralPath $deletePath -Name -Force -ErrorAction SilentlyContinue | ForEach-Object {
@@ -421,14 +421,14 @@ function CATE-Delete-Files-Only {
 		{ Return }
 		
 	ShowCATEProgress $CATEStatus ($deletePath + '\' + $wildCard)
-	"Counting contents of $deletepath ..."
+	"Counting $wildCard in $deletepath ..."
 	$filepath = $deletePath
 	$filetype = $wildCard
 	# $file_count = [System.IO.Directory]::GetFiles("$filepath", "$filetype").Count
 	$file_count = (Get-ChildItem -File "$filepath\$filetype" | Measure-Object).Count
 	"Deleting $file_count files ..."
 	
-	ROBOCOPY $blankFolder $deletePath $wildCard /MIR /R:1 /W:1 /MT:10 *> $null
+	ROBOCOPY $blankFolder $deletePath $wildCard /MIR /R:1 /W:1 /MT:10 /NFL /NDL /NJH /NJS /NC /NS /NP *> $null
 	""
 	}
 	
