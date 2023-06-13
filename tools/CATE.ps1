@@ -502,15 +502,15 @@ $ProfileList | ForEach-Object {
 
 $CATEStatus = "Working on other folders ..."
 
-"Clearing environment folder TEMP ..."
+"Clearing environment folder TEMP :"
 CATE-Delete-Folder-Contents $envTEMP
 Replace-Numbered-Temp-Folders ($envTEMP) -Force -ErrorAction SilentlyContinue | Out-Null
 
-"Clearing environment folder TMP ..."
+"Clearing environment folder TMP :"
 CATE-Delete-Folder-Contents $envTMP
 Replace-Numbered-Temp-Folders ($envTMP) -Force -ErrorAction SilentlyContinue | Out-Null
 
-"Clearing $envSystemRoot\Temp ..."
+"Clearing $envSystemRoot\Temp :"
 CATE-Delete-Folder-Contents ($envSystemRoot + "\Temp")
 Replace-Numbered-Temp-Folders ($envSystemRoot + "\Temp") -Force -ErrorAction SilentlyContinue | Out-Null
 
