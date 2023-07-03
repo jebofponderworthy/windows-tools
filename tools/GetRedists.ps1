@@ -163,10 +163,9 @@ Import-Module PSWindowsUpdate
 ShowProgress("Preparing Powershell environment...","Checking and preparing module VcRedist...")
 
 # Install or update module VcRedist
-If (Get-InstalledModule -Name VcRedist) {
+If (Get-InstalledModule -Name VcRedist -ErrorAction 'SilentlyContinue') {
 	Update-Module -Name VcRedist -Force
-}
-Else {
+} Else {
 	Install-Module -Name VcRedist -AllowClobber -Scope CurrentUser -Force
 }
 
