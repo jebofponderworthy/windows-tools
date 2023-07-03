@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 4.0
+.VERSION 4.1
 
 .GUID 03c695c0-bf45-4257-8156-89310e951140
 
@@ -9,7 +9,7 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2020 Jonathan E. Brickman
+.COPYRIGHT (c) 2023 Jonathan E. Brickman
 
 .TAGS
 
