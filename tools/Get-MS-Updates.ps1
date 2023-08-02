@@ -9,6 +9,7 @@ If (Get-InstalledModule -Name PsWindowsUpdate -ErrorAction 'SilentlyContinue') {
 }
 Import-Module PSWindowsUpdate
 
+"Checking for available updates..."
 powershell Get-WindowsUpdate
 
 powershell Install-WindowsUpdate -AcceptAll -AutoReboot

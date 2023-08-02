@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 6.71
+.VERSION 6.72
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -382,7 +382,7 @@ function CATE-Delete-Folder-Contents {
 	"Counting contents of $deletepath ..."
 	# $file_count = [System.IO.Directory]::GetFiles("$deletepath", "*").Count
 	try {
-		$file_count = (Get-ChildItem -File -Recurse $deletepath | Measure-Object).Count
+		$file_count = (Get-ChildItem -File -Recurse $deletepath -ErrorAction SilentlyContinue | Measure-Object).Count
 		}
 	catch
 		{
@@ -425,7 +425,7 @@ function CATE-Delete-Files-Only {
 	$filepath = $deletePath
 	$filetype = $wildCard
 	# $file_count = [System.IO.Directory]::GetFiles("$filepath", "$filetype").Count
-	$file_count = (Get-ChildItem -File "$filepath\$filetype" | Measure-Object).Count
+	$file_count = (Get-ChildItem -File "$filepath\$filetype" -ErrorAction SilentlyContinue | Measure-Object).Count
 	"Deleting $file_count files ..."
 	
 	ROBOCOPY $blankFolder $deletePath $wildCard /MIR /R:1 /W:1 /MT:10 /NFL /NDL /NJH /NJS /NC /NS /NP *> $null
