@@ -1,7 +1,7 @@
 ""
-"******************************************"
-"* Install Windows Updates Without Reboot *"
-"******************************************"
+"*****************************************************"
+"* Install All Updates from Microsoft Without Reboot *"
+"****************************************************"
 ""
 
 # First prepare Powershell environment.
@@ -90,6 +90,5 @@ Get-WUList | Format-Table
 "Install updates without automatic reboot..."
 ""
 
-$OmitCategory = "Drivers"	# This is really an array, i.e., it could be "Drivers","Office 2010" et cetera, these are *standard Microsoft categories*.
-$OmitTitle = "Preview"		# This is an array, and it may be of entire titles, am trying it as substrings
-Install-WindowsUpdate -MicrosoftUpdate -NotCategory $OmitCategory -NotTitle $OmitTitle -AcceptAll -AutoReboot:$false
+$OmitTitle = "Preview"
+Install-WindowsUpdate -NotTitle $OmitTitle -AcceptAll -AutoReboot:$false

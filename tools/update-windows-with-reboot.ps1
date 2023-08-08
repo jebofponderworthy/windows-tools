@@ -1,7 +1,7 @@
 ""
-"***************************************"
-"* Install Windows Updates With Reboot *"
-"***************************************"
+"**************************************************"
+"* Install All Updates from Microsoft With Reboot *"
+"*************************************************"
 ""
 
 # First prepare Powershell environment.
@@ -84,10 +84,10 @@ Get-WUList | Format-Table
 
 ""
 
-# Install without automatic reboot
+# Install with automatic reboot
 
 "Install updates with automatic reboot..."
 ""
 
-$DoNotInstall = "Drivers"	# This is really an array, i.e., it could be "Drivers","Update Rollups" et cetera
-Install-WindowsUpdate -MicrosoftUpdate -NotCategory $DoNotInstall -AcceptAll -AutoReboot
+$OmitTitle = "Preview"
+Install-WindowsUpdate -NotTitle $OmitTitle -AcceptAll -AutoReboot
