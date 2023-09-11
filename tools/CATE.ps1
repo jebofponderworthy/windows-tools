@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 6.72
+.VERSION 6.8
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -529,6 +529,8 @@ CATE-Delete-Folder-Contents ($envSystemRoot + "\SoftwareDistribution\Download")
 CATE-Delete-Folder-Contents ($envSystemRoot + "\LiveKernelReports")
 
 CATE-Delete-Folder-Contents ($envProgramData + "\Microsoft\Windows\WER\ReportQueue")
+
+CATE-Delete-Folder-Contents ($envProgramData + "\WRData")
 
 # And then delete log files by wildcard, recursing through folders
 
