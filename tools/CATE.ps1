@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 6.8
+.VERSION 7.1
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -589,26 +589,6 @@ function Background-Run-For-Five-Minutes-Max {
 	Start-Job -ScriptBlock $MyScript -Name $JobGUID
 }
 
-# Compact the Windows Search database, if found.
-
-Write-Output "Setting up background job to compact the Windows Search database, will run 5 minutes max..."
-
-$CompactWindowsSearchDatabase = {
-	$wsdb = "$env:AllUsersProfile" + "\Microsoft\Search\Data\Applications\Windows\Windows.edb"
-	if (Test-Path -Path $wsdb -PathType Leaf) {
-		Write-Output "Stopping service..."
-		Stop-Service wsearch -ErrorAction SilentlyContinue *> $null
-		Write-Output "Compacting..."
-		& esentutl.exe /d $wsdb
-		Write-Output "Setting service for delayed start..."
-		start-process -FilePath sc.exe -ArgumentList 'config wsearch start=delayed-auto' -ErrorAction SilentlyContinue *> $null
-		Write-Output "Restarting service..."
-		Start-Service wsearch -ErrorAction SilentlyContinue *> $null
-	}
-}
-	
-Background-Run-For-Five-Minutes-Max $CompactWindowsSearchDatabase
-
 # Compact the Windows Update database, if found
 
 Write-Output ''
@@ -616,7 +596,7 @@ Write-Output "Setting up background job to compact the Windows Update database, 
 Write-Output ''
 
 $CompactWindowsUpdateDatabase = {
-	$wudb = "$env:AllUsersProfile" + '\SoftwareDistribution\DataStore\DataStore.edb'
+	$wudb = $envSystemRoot + '\SoftwareDistribution\DataStore\DataStore.edb'
 	if (Test-Path -Path $wudb -PathType Leaf) {
 		Write-Output "Stopping services..."
 		Stop-Service wuauserv *> $null
