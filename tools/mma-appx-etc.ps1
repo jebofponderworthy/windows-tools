@@ -243,6 +243,14 @@ mkdir CloudContent -Force  -ErrorAction SilentlyContinue | Out-Null
 CD CloudContent
 New-ItemProperty -Path . -Name DisableWindowsConsumerFeatures -Value 1 -PropertyType "DWord" -Force -ErrorAction SilentlyContinue | Out-Null
 
+"Device Metadata bug fix..."
+
+CD "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" | Out-Null
+If ((Get-ItemProperty -Path . -Name "DeviceMetadataServiceURL").DeviceMetadataServiceURL -eq "http://go.microsoft.com/fwlink/?LinkID=252669&clcid=0x409")
+{
+	Set-ItemProperty -Path . -Name "DeviceMetadataServiceURL" -Value "http://dmd.metaservices.microsoft.com/dms/metadata.svc" -Force -ErrorAction SilentlyContinue | Out-Null
+}
+
 popd | Out-Null
 
 ""
