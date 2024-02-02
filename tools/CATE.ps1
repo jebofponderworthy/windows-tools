@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 7.1
+.VERSION 7.2
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -514,8 +514,6 @@ Replace-Numbered-Temp-Folders ($envTMP) -Force -ErrorAction SilentlyContinue | O
 CATE-Delete-Folder-Contents ($envSystemRoot + "\Temp")
 Replace-Numbered-Temp-Folders ($envSystemRoot + "\Temp") -Force -ErrorAction SilentlyContinue | Out-Null
 
-CATE-Delete-Folder-Contents ($envSystemRoot + "\Servicing\LCU")
-
 CATE-Delete-Folder-Contents ($envSystemRoot + "\system32\wbem\logs")
 
 CATE-Delete-Folder-Contents ($envSystemRoot + "\system32\Debug")
@@ -553,6 +551,68 @@ CATE-Delete-Files-Only ($envSystemRoot + '\Prefetch') '*.pf'
 # A common monitoring log folder
 
 CATE-Delete-Folder-Contents ($envProgramData + '\SAAZOD\ApplicationLog\zSCCLog')
+
+# A very special folder, needing a fast general count
+# Modified from this:
+# CATE-Delete-Folder-Contents ($envSystemRoot + "\Servicing\LCU")
+
+function CATE-Clear-LCU {
+	param( [string]$deletePath )
+	
+	# If the folder isn't there or we can't touch it, we're done
+	try {
+		$retval = Test-Path -LiteralPath $deletePath -PathType Container -ErrorAction SilentlyContinue
+		}
+	catch
+		{
+		"Cannot access path: $deletePath"
+		Return
+		}
+	
+	# If $deletePath is a ReparsePoint, if it is a link or a junction,
+	# exit CATE-Delete silently
+	If (Test-ReparsePoint($deletePath))
+		{ Return }
+		
+	ShowCATEProgress $CATEStatus $deletePath
+	"Counting folders under $deletepath and one more level down ..."
+	# $file_count = [System.IO.Directory]::GetFiles("$deletepath", "*").Count
+	try {
+		$folders_level1 = (Get-ChildItem -Path $deletepath -Directory -ErrorAction SilentlyContinue)
+		$foldercount = $folders_level1.Count
+		}
+	catch 
+		{
+		"Access denied: $deletepath"
+		return
+		}
+	try {
+		foreach ($folder in $folders_level1)
+			{
+				"Checking LCU subfolder $folder.Name ..."
+				$folders_level2 = (Get-ChildItem -Path ($deletepath + '\' + $folder.Name) -Directory -ErrorAction SilentlyContinue)
+				$foldercount = ($foldercount + $folders_level2.Count)
+			}
+		}
+	catch
+		{
+		return
+		}
+	"Deleting $foldercount folders total..."
+		
+	# First try to wipe the inside of the folder simply.
+	# ROBOCOPY is current default method, for parallelism.
+	ROBOCOPY $blankFolder $deletePath /MIR /R:1 /W:1 /MT:10 /NFL /NDL /NJH /NJS /NC /NS /NP *> $null
+	
+	# Now try to delete everything left inside, using CATE-Delete.
+	Get-ChildItem -LiteralPath $deletePath -Name -Force -ErrorAction SilentlyContinue | ForEach-Object {
+		CATE-Delete ($deletePath + '\' + $_)
+		}
+	""
+	}
+
+CATE-Clear-LCU ($envSystemRoot + "\Servicing\LCU")
+
 
 # Clear the Group Policy client-side cache
 
