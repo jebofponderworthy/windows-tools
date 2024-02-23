@@ -30,7 +30,7 @@ Over time, Windows accumulates 'ghost devices', devices which can show up in Dev
 
 ## TweakDrives: Tweak NTFS for Performance and Reliability
 
-FSUTIL is a Windows command with amazing abilities.  In [TweakNTFS](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/tools/TweakNTFS.ps1) we have it used programmatically within PowerShell to produce a fairly well-balanced approach, performance increase with reliability increase too, for all NTFS volumes currently mounted.  
+In [TweakDrives]([https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/tools/TweakNTFS.ps1](https://github.com/jebofponderworthy/windows-tools/blob/master/tools/TweakDrives.ps1), SSD TRIM is done if SSDs are detected, SysInternals' CONTIG is used to defrag NTFS metafiles, FSUTIL is used to produce a well-balanced NTFS, performance increase with reliability increase too, for all NTFS volumes currently mounted.  
 
 ## OWTAS: Optimize Service Work Items and Additional/Delayed Worker Threads
 
