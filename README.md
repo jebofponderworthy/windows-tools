@@ -2,8 +2,6 @@
 
 This is a toolset for improvement of performance of Windows desktop and server operating systems.  Much gratitude goes to Ponderworthy folks and friends for much input, a good bit of which can be read at [notes.ponderworthy.com](https://notes.ponderworthy.com).
 
-PowerShell 3.0 and later will run these, on Windows 7/2008R2 and later; the exception is GetRedists, which requires 5.1.  Please note that 7 and 2008R2 ship with PowerShell 2.0 by default.  Installing the [WMF](https://www.microsoft.com/en-us/download/details.aspx?id=54616) will update to 5.1.  
-
 ## OPTIMIZE.CMD:  download, verify by hash, and run the full general set of tools
 
 [OPTIMIZE is a .CMD](https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/RUN/OPTIMIZE.CMD) which, if run as administrator, will download and run Optimize.ps1, when in turn will run mma-appx-etc first, then TweakMemTCP, then RunDevNodeClean, then wt_removeGhosts, then TweakNTFS, then OWTAS, then OVSS, then CATE, then TweakHardware.  The result is a distinct performance hike on any current Windows machine.
