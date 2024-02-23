@@ -2,7 +2,7 @@
 
 This is a toolset for improvement of performance of Windows desktop and server operating systems.  Much gratitude goes to Ponderworthy folks and friends for much input, a good bit of which can be read at [notes.ponderworthy.com](https://notes.ponderworthy.com).
 
-PowerShell 3.0 and later are supported, on Windows 7/2008R2 and later; the exception is GetRedists, which requires 5.1.  Please note that 7 and 2008R2 ship with PowerShell 2.0 by default.  Installing the [WMF](https://www.microsoft.com/en-us/download/details.aspx?id=54616) will update to 5.1.  
+PowerShell 3.0 and later will run these, on Windows 7/2008R2 and later; the exception is GetRedists, which requires 5.1.  Please note that 7 and 2008R2 ship with PowerShell 2.0 by default.  Installing the [WMF](https://www.microsoft.com/en-us/download/details.aspx?id=54616) will update to 5.1.  
 
 ## OPTIMIZE.CMD:  download, verify by hash, and run the full general set of tools
 
