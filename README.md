@@ -32,6 +32,10 @@ Over time, Windows accumulates 'ghost devices', devices which can show up in Dev
 
 In [TweakDrives]([https://raw.githubusercontent.com/jebofponderworthy/windows-tools/master/tools/TweakNTFS.ps1](https://github.com/jebofponderworthy/windows-tools/blob/master/tools/TweakDrives.ps1), SSD TRIM is done if SSDs are detected, SysInternals' CONTIG is used to defrag NTFS metafiles, FSUTIL is used to produce a well-balanced NTFS, performance increase with reliability increase too, for all NTFS volumes currently mounted.  
 
+## TweakSMB: Tweak SMB file sharing for performance and reliability
+
+In [TweakSMB](https://github.com/jebofponderworthy/windows-tools/raw/master/tools/TweakSMB.ps1), Set-SmbClientConfiguration and Set-SmbServerConfiguration are used to improve SMB performance and reliability.
+
 ## OWTAS: Optimize Service Work Items and Additional/Delayed Worker Threads
 
 This tool sets a number of additional critical and delayed worker threads,
