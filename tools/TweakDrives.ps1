@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 3.7
+.VERSION 3.8
 
 .GUID 527423ef-dadd-45b1-a547-56d2fdb325d1
 
@@ -9,7 +9,7 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2023 Jonathan E. Brickman
+.COPYRIGHT (c) 2024 Jonathan E. Brickman
 
 .TAGS
 
@@ -150,6 +150,9 @@ Get-PhysicalDisk | ForEach-Object {
 
 # Make sure short filenames are enabled
 & fsutil 8dot3name set 1 | Out-Null
+
+# Use more RAM for disk caching
+& fsutil behavior set memoryusage 2 | Out-Null
 
 # Disable Last Access Time stamp in directories, for performance. Does not cause ill effects, widely tested.
 & fsutil behavior set DisableLastAccess 1 | Out-Null
