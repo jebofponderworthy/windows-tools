@@ -1,10 +1,11 @@
-#####################
-# Clear USN Journal #
-#####################
+########################################
+# Delete and Recreate NTFS USN Journal #
+########################################
 
-# This script clears the USN Journal of all lettered drives in Windows.
+# This script iterates through all lettered NTFS drives in Windows, 
+# and deletes and recreates the USN Journal of each one.
 # Considerable performance gain results if the image has been running
-# for years.
+# for a year or more.
 
 # There are slightly different commands between some OS versions.
 $OSVer = [System.Environment]::OSVersion.Version
@@ -29,7 +30,9 @@ If ($OSVer.Major -gt 10)
 Get-CimInstance -Query "Select * FROM Win32_LogicalDisk WHERE DriveType=3" | ForEach-Object {
 	$DriveID = $_.DeviceID
 
-	If ($DriveID -match "[A-Z]")
+	# Only does the operation on lettered, NTFS drives
+	If (($DriveID -match "[A-Z]") -and
+		((Get-WmiObject -Class Win32_Volume | Where-Object {$_.DriveLetter -eq $DriveID}).FileSystem -eq "NTFS"))
 	{
 		"Clearing USN Journal for " + $DriveID + " ..."
 		fsutil usn deletejournal /n $DriveID
