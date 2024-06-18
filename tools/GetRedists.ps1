@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 4.1
+.VERSION 4.2
 
 .GUID 03c695c0-bf45-4257-8156-89310e951140
 
@@ -9,7 +9,7 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2023 Jonathan E. Brickman
+.COPYRIGHT (c) 2024 Jonathan E. Brickman
 
 .TAGS
 
@@ -96,7 +96,7 @@ Param()
 # Retrieves and installs all of the Microsoft redistributable libraries
 # currently being supported, using the excellent VcRedist package.
 #
-# Copyright 2020 Jonathan E. Brickman
+# Copyright 2024 Jonathan E. Brickman
 # https://notes.ponderworthy.com/
 # This script is licensed under the 3-Clause BSD License
 # https://opensource.org/licenses/BSD-3-Clause
@@ -239,9 +239,9 @@ $ListOfDownloads = Get-VcRedist -Verbose -VcList $RedistsToGet -Path C:\VcRedist
 
 ShowProgress("Installing all needed redistributables from repo folder...","")
 ""
-"Installing..."
+"Installing and reporting current list..."
 ""
-Install-VcRedist -Verbose -VcList $RedistsToGet -Path C:\VcRedist | ft
+Install-VcRedist -Verbose -VcList $RedistsToGet | ft
 
 # The old brute force get-them-all code
 #
