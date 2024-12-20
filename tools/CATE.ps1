@@ -180,6 +180,8 @@ $envTEMP = [Environment]::GetEnvironmentVariable("TEMP", "Machine")
 $envTMP = [Environment]::GetEnvironmentVariable("TEMP", "Machine")
 $envSystemRoot = $env:SystemRoot
 $envProgramData = $env:ProgramData
+$envProgramFiles = $env:ProgramFiles
+$envProgramFilesx86 = ${env:ProgramFiles(x86)}
 $envSystemDrive = $env:SystemDrive
 
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
@@ -529,6 +531,8 @@ CATE-Delete-Folder-Contents ($envSystemRoot + "\LiveKernelReports")
 CATE-Delete-Folder-Contents ($envProgramData + "\Microsoft\Windows\WER\ReportQueue")
 
 CATE-Delete-Folder-Contents ($envProgramData + "\WRData")
+
+CATE-Delete-Folder-Contents ($envProgramFilesx86 + "\ITSPlatform\agentcore\download")
 
 # And then delete log files by wildcard, recursing through folders
 
