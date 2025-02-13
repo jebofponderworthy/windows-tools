@@ -196,12 +196,15 @@ if ( 		($WinVersionStr -Like "*Windows Server 2008 R2*") 	`
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" DnsPriority 6
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" NetbtPriority 7
 	
-	setupDWORD "HKLM\SOFTWARE\Policies\Microsoft\Windows\Psched" "NonBestEffortLimit" 0
+	setupDWORD "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Psched" "NonBestEffortLimit" 0
 	
 	setupDWORD "HKLM:\System\CurrentControlSet\Services\Tcpip\QoS" "Do not use NLA" 1
 	
-	setupDWORD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVewrsion\Multimedia\SystemProfile" "Network ThrottlingIndex" 0xffffffff
-	setupDWORD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVewrsion\Multimedia\SystemProfile" "SystemResponsiveness" 10
+	setupDWORD "HKLM:
+	
+	
+	\SOFTWARE\Microsoft\Windows NT\CurrentVewrsion\Multimedia\SystemProfile" "Network ThrottlingIndex" 0xffffffff
+	setupDWORD "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVewrsion\Multimedia\SystemProfile" "SystemResponsiveness" 10
 	
 	
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\ServicesTcpip\Parameters" "EnableTCPA" 0x1

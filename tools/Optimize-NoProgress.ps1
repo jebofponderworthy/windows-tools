@@ -22,7 +22,6 @@ Import-Module BitsTransfer
 
 $ps_script_list = @(
     'mma-appx-etc.ps1',
-    'TweakMemTCP.ps1',
     'RunDevNodeClean.ps1',
     'wt_removeGhosts.ps1',
     'TweakDrives.ps1',
@@ -31,6 +30,7 @@ $ps_script_list = @(
     'OVSS.ps1',
     'CATE.ps1',
 	'TweakHardware.ps1'
+    'TweakMemTCP.ps1'
     )
 
 $wco = (New-Object System.Net.WebClient)
