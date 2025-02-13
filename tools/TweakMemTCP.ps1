@@ -165,89 +165,66 @@ function setupDWORD {
     "Succeeded!"
     ""
     }
+	
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "LargeSystemCache" "1"
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SystemPages" "0"
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PagedPoolSize" "0x0b71b000"
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PoolUsageMaximum" "0x00000050"
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SessionPoolSize" "0x00000030"
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SessionViewSize" "0x00000044"
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "IRPStackSize" "0x00000020"
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "Size" "3"
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "TcpTimedWaitDelay" "30"
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "StrictTimeWaitSeqCheck" "1"
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "MaxUserPort" "65534"
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "DefaultTTL" "64"
+	
+setupDWORD "HKLM:\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPER1_0SERVER\explorer.exe" "MaxConnectionsPer1_0Server" "10"
+setupDWORD "HKLM:\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPER1_0SERVER\iexplore.exe" "MaxConnectionsPer1_0Server" "10"
+setupDWORD "HKLM:\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER\explorer.exe" "MaxConnectionsPerServer" "10"
+setupDWORD "HKLM:\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER\iexplore.exe" "MaxConnectionsPerServer" "10"	
+	
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" LocalPriority "4"
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" HostsPriority "5"
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" DnsPriority "6"
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" NetbtPriority "7"
+	
+setupDWORD "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Psched" "NonBestEffortLimit" "0"
+	
+setupDWORD "HKLM:\System\CurrentControlSet\Services\Tcpip\QoS" "Do not use NLA" "1"
+	
+setupDWORD "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVewrsion\Multimedia\SystemProfile" "Network ThrottlingIndex" "0xffffffff"
 
-if ( 		($WinVersionStr -Like "*Windows Server 2008 R2*") 	`
-		-Or ($WinVersionStr -Like "*Windows 7*") 				`
-		-Or ($WinVersionStr -Like "*Windows 8*")				`
-		-Or ($WinVersionStr -Like "*Windows 1*")				`
-		-Or ($WinVersionStr -Like "*Windows 202*") ) 
-	{
-	
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "LargeSystemCache" 1
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SystemPages" 0
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PagedPoolSize" "0x0b71b000"
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PoolUsageMaximum" "0x00000050"
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SessionPoolSize" "0x00000030"
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SessionViewSize" "0x00000044"
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "IRPStackSize" "0x00000020"
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "Size" 3
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "TcpTimedWaitDelay" 30
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "StrictTimeWaitSeqCheck" 1
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "MaxUserPort" 65534
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "DefaultTTL" 64
-	
-	setupDWORD "HKLM:\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPER1_0SERVER\explorer.exe" "MaxConnectionsPer1_0Server" 10
-	setupDWORD "HKLM:\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPER1_0SERVER\iexplore.exe" "MaxConnectionsPer1_0Server" 10	
-	setupDWORD "HKLM:\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER\explorer.exe" "MaxConnectionsPerServer" 10
-	setupDWORD "HKLM:\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER\iexplore.exe" "MaxConnectionsPerServer" 10	
-	
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" LocalPriority 4
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" HostsPriority 5
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" DnsPriority 6
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" NetbtPriority 7
-	
-	setupDWORD "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Psched" "NonBestEffortLimit" 0
-	
-	setupDWORD "HKLM:\System\CurrentControlSet\Services\Tcpip\QoS" "Do not use NLA" 1
-	
-	setupDWORD "HKLM:
+setupDWORD "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVewrsion\Multimedia\SystemProfile" "SystemResponsiveness" "10"
 	
 	
-	\SOFTWARE\Microsoft\Windows NT\CurrentVewrsion\Multimedia\SystemProfile" "Network ThrottlingIndex" 0xffffffff
-	setupDWORD "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVewrsion\Multimedia\SystemProfile" "SystemResponsiveness" 10
+setupDWORD "HKLM:\SYSTEM\CurrentControlSet\ServicesTcpip\Parameters" "EnableTCPA" 1
 	
+"Set-NetTCPSetting items etc..."
 	
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\ServicesTcpip\Parameters" "EnableTCPA" 0x1
+Set-NetTCPSetting -SettingName internet -AutoTuningLevelLocal normal -ErrorAction SilentlyContinue | Out-Null
+Set-NetTCPSetting -SettingName internet -ScalingHeuristics disabled -ErrorAction SilentlyContinue | Out-Null
+Set-NetOffloadGlobalSetting -ReceiveSegmentCoalescing disabled -ErrorAction SilentlyContinue | Out-Null
+Set-NetOffloadGlobalSetting -ReceiveSideScaling enabled -ErrorAction SilentlyContinue | Out-Null
+Disable-NetAdapterLso -Name * -ErrorAction SilentlyContinue | Out-Null
+Enable-NetAdapterChecksumOffload -Name * -ErrorAction SilentlyContinue | Out-Null
 	
-	"Set-NetTCPSetting items etc..."
+Set-NetTCPSetting -SettingName internet -EcnCapability enabled -ErrorAction SilentlyContinue | Out-Null
+Set-NetOffloadGlobalSetting -Chimney disabled -ErrorAction SilentlyContinue | Out-Null
+Set-NetTCPSetting -SettingName internet -Timestamps disabled -ErrorAction SilentlyContinue | Out-Null
+Set-NetTCPSetting -SettingName internet -MaxSynRetransmissions 2 -ErrorAction SilentlyContinue | Out-Null
+Set-NetTCPSetting -SettingName internet -NonSackRttResiliency disabled -ErrorAction SilentlyContinue | Out-Null
+Set-NetTCPSetting -SettingName internet -InitialRto 2000 -ErrorAction SilentlyContinue | Out-Null
+Set-NetTCPSetting -SettingName internet -MinRto 300 -ErrorAction SilentlyContinue | Out-Null
 	
-	Set-NetTCPSetting -SettingName internet -AutoTuningLevelLocal normal -ErrorAction SilentlyContinue | Out-Null
-	Set-NetTCPSetting -SettingName internet -ScalingHeuristics disabled -ErrorAction SilentlyContinue | Out-Null
-	Set-NetOffloadGlobalSetting -ReceiveSegmentCoalescing disabled -ErrorAction SilentlyContinue | Out-Null
-	Set-NetOffloadGlobalSetting -ReceiveSideScaling enabled -ErrorAction SilentlyContinue | Out-Null
-	Disable-NetAdapterLso -Name * -ErrorAction SilentlyContinue | Out-Null
-	Enable-NetAdapterChecksumOffload -Name * -ErrorAction SilentlyContinue | Out-Null
-	
-	Set-NetTCPSetting -SettingName internet -EcnCapability enabled -ErrorAction SilentlyContinue | Out-Null
-	Set-NetOffloadGlobalSetting -Chimney disabled -ErrorAction SilentlyContinue | Out-Null
-	Set-NetTCPSetting -SettingName internet -Timestamps disabled -ErrorAction SilentlyContinue | Out-Null
-	Set-NetTCPSetting -SettingName internet -MaxSynRetransmissions 2 -ErrorAction SilentlyContinue | Out-Null
-	Set-NetTCPSetting -SettingName internet -NonSackRttResiliency disabled -ErrorAction SilentlyContinue | Out-Null
-	Set-NetTCPSetting -SettingName internet -InitialRto 2000 -ErrorAction SilentlyContinue | Out-Null
-	Set-NetTCPSetting -SettingName internet -MinRto 300 -ErrorAction SilentlyContinue | Out-Null
-	
-	Get-NetAdapter | Set-NetIPInterface -NlMtuBytes 1500 -PolicyStore PersistentStore -ErrorAction SilentlyContinue | Out-Null
+Get-NetAdapter | Set-NetIPInterface -NlMtuBytes 1500 -PolicyStore PersistentStore -ErrorAction SilentlyContinue | Out-Null
 
-	netsh int tcp set supplemental internet congestionprovider=CUBIC
+netsh int tcp set supplemental internet congestionprovider=CUBIC
 
-	# HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\<<<GUIDs>>>
-	# TcpAckFrequency <delete value>
+# HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\<<<GUIDs>>>
+# TcpAckFrequency <delete value>
 
-	} else {
-		
-	Write-Output "Pre-Windows-7 found.  Using primordial settings."
-	Write-Output ""
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PagedPoolSize" 		0xffffffff
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PoolUsageMaximum" 	0x0000003c
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SessionPoolSize" 	0x00000030
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SessionViewSize" 	0x00000044
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "IrpStackSize" 0x00000018
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "Size" 		0x00000003
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "TcpTimedWaitDelay" 		0x0000001e
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "StrictTimeWaitSeqCheck" 	0x00000001
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "MaxUserPort" 			0x00007fff
-	}
-	
+
 # For StorageCraft ImageManager, if it exists
 # https://support.storagecraft.com/articles/en_US/Informational/Tuning-Guide-for-StorageCraft-Software-on-Servers
 If ( (Test-Path "C:\Program Files (x86)\StorageCraft\ImageManager") -Or (Test-Path "C:\Program Files\StorageCraft\ImageManager") )
