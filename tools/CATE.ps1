@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 7.3
+.VERSION 7.4
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -324,7 +324,6 @@ function CATE-Delete {
 		}
 	catch
 		{
-		"Cannot access path: $deletePath"
 		Return
 		}
 	
@@ -371,7 +370,6 @@ function CATE-Delete-Folder-Contents {
 		}
 	catch
 		{
-		"Cannot access path: $deletePath"
 		Return
 		}
 	
@@ -413,7 +411,6 @@ function CATE-Delete-Files-Only {
 		}
 	catch
 		{
-		"Cannot access path: $deletePath"
 		Return
 		}
 	
@@ -504,17 +501,19 @@ $ProfileList | ForEach-Object {
 
 $CATEStatus = "Working on other folders ..."
 
-"Clearing environment folder TEMP :"
 CATE-Delete-Folder-Contents $envTEMP
 Replace-Numbered-Temp-Folders ($envTEMP) -Force -ErrorAction SilentlyContinue | Out-Null
 
-"Clearing environment folder TMP :"
-CATE-Delete-Folder-Contents $envTMP
-Replace-Numbered-Temp-Folders ($envTMP) -Force -ErrorAction SilentlyContinue | Out-Null
+if (-Not ($envTMP = $envTEMP)) {
+	CATE-Delete-Folder-Contents $envTMP
+	Replace-Numbered-Temp-Folders ($envTMP) -Force -ErrorAction SilentlyContinue | Out-Null
+}
 
-"Clearing $envSystemRoot\Temp :"
-CATE-Delete-Folder-Contents ($envSystemRoot + "\Temp")
-Replace-Numbered-Temp-Folders ($envSystemRoot + "\Temp") -Force -ErrorAction SilentlyContinue | Out-Null
+$envSystemRootTemp = $envSystemRoot + "\Temp"
+if (-Not ($envSystemRootTemp = $envTemp)) {
+	CATE-Delete-Folder-Contents ($envSystemRootTemp)
+	Replace-Numbered-Temp-Folders ($envSystemRootTemp) -Force -ErrorAction SilentlyContinue | Out-Null
+}
 
 CATE-Delete-Folder-Contents ($envSystemRoot + "\system32\wbem\logs")
 
@@ -568,10 +567,7 @@ function CATE-Clear-LCU {
 		$retval = Test-Path -LiteralPath $deletePath -PathType Container -ErrorAction SilentlyContinue
 		}
 	catch
-		{
-		"Cannot access path: $deletePath"
-		Return
-		}
+		{ Return }
 	
 	# If $deletePath is a ReparsePoint, if it is a link or a junction,
 	# exit CATE-Delete silently

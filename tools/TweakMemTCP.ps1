@@ -1,13 +1,13 @@
 
 <#PSScriptInfo
 
-.VERSION 1.2
+.VERSION 2.0
 
 .AUTHOR Jonathan E. Brickman
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2020 Jonathan E. Brickman
+.COPYRIGHT (c) 2025 Jonathan E. Brickman
 
 .TAGS
 
@@ -22,19 +22,6 @@
 .REQUIREDSCRIPTS
 
 .EXTERNALSCRIPTDEPENDENCIES
-
-.RELEASENOTES
-OWTAS
-This tool sets a number of additional critical and delayed worker threads,
-plus service work items. The changes are autocalculated according to a
-combination of RAM and OS bit-width (32 vs. 64). Performance will increase,
-more so with more RAM.
-
-Documentation on these settings has ranged from sparse to none over many years.
-The early Microsoft documents used in the calculations appear completely gone,
-there are some new ones. The settings produced by OWTAS have undergone testing
-over the last ten years, on a wide variety of Wintelamd platforms, and appear 
-to work well on all.
 
 .PRIVATEDATA
 
@@ -83,7 +70,7 @@ Param()
 #
 # Tweaks memory and TCP parameters, for performance.
 #
-# Copyright 2020 Jonathan E. Brickman
+# Copyright 2025 Jonathan E. Brickman
 # https://notes.ponderworthy.com/
 # This script is licensed under the 3-Clause BSD License
 # https://opensource.org/licenses/BSD-3-Clause
@@ -182,41 +169,70 @@ function setupDWORD {
 if ( 		($WinVersionStr -Like "*Windows Server 2008 R2*") 	`
 		-Or ($WinVersionStr -Like "*Windows 7*") 				`
 		-Or ($WinVersionStr -Like "*Windows 8*")				`
-		-Or ($WinVersionStr -Like "*Windows 10*")				`
-		-Or ($WinVersionStr -Like "*Windows 201*") ) 
+		-Or ($WinVersionStr -Like "*Windows 1*")				`
+		-Or ($WinVersionStr -Like "*Windows 202*") ) 
 	{
-	Write-Output "Windows 7/2008R2 or later found.  Setting appropriately."
-	Write-Output ""
 	
-	# Original set
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "LargeSystemCache" 1
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SystemPages" 0
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PagedPoolSize" "0x0b71b000"
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PoolUsageMaximum" "0x00000050"
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SessionPoolSize" "0x00000030"
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SessionViewSize" "0x00000044"
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "IRPStackSize" "0x00000020"
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "Size" 3
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "TcpTimedWaitDelay" 30
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "StrictTimeWaitSeqCheck" 1
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "MaxUserPort" 65534
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "DefaultTTL" 64
 	
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "LargeSystemCache" 	0x1
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SystemPages" 		0x0
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PagedPoolSize" 		0x0b71b000
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PoolUsageMaximum" 	0x00000050
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SessionPoolSize" 	0x00000030
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "SessionViewSize" 	0x00000044
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "IRPStackSize" 0x00000020
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" "Size" 		0x00000003
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "TcpTimedWaitDelay" 		0x0000001e
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "StrictTimeWaitSeqCheck" 	0x00000001
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "MaxUserPort" 			0x00007fff
+	setupDWORD "HKLM:\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPER1_0SERVER\explorer.exe" "MaxConnectionsPer1_0Server" 10
+	setupDWORD "HKLM:\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPER1_0SERVER\iexplore.exe" "MaxConnectionsPer1_0Server" 10	
+	setupDWORD "HKLM:\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER\explorer.exe" "MaxConnectionsPerServer" 10
+	setupDWORD "HKLM:\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER\iexplore.exe" "MaxConnectionsPerServer" 10	
 	
-	# Newer set, TCP only
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" LocalPriority 4
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" HostsPriority 5
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" DnsPriority 6
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider" NetbtPriority 7
 	
-	Set-NetOffloadGlobalSetting -Chimney Disabled | Out-Null
-	netsh int tcp set global rss=disabled | Out-Null
-	netsh int ip set global taskoffload=disabled | Out-Null
-	netsh int tcp set global autotuninglevel=disabled | Out-Null
-	netsh int tcp set supplemental custom congestionprovider=none | Out-Null
-	netsh int tcp set global ecncapability=disabled | Out-Null
-	netsh int tcp set global timestamps=disabled | Out-Null
-	netsh int tcp set supplemental custom congestionprovider = ctcp | Out-Null
-	netsh int tcp set global ecncapability=enabled | Out-Null
-	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" "EnableTCPA" 0x1
-	}
-else {
-	Write-Output "Pre-Windows-7 found.  Setting appropriately."
+	setupDWORD "HKLM\SOFTWARE\Policies\Microsoft\Windows\Psched" "NonBestEffortLimit" 0
+	
+	setupDWORD "HKLM:\System\CurrentControlSet\Services\Tcpip\QoS" "Do not use NLA" 1
+	
+	setupDWORD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVewrsion\Multimedia\SystemProfile" "Network ThrottlingIndex" 0xffffffff
+	setupDWORD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVewrsion\Multimedia\SystemProfile" "SystemResponsiveness" 10
+	
+	
+	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\ServicesTcpip\Parameters" "EnableTCPA" 0x1
+	
+	"Set-NetTCPSetting items etc..."
+	
+	Set-NetTCPSetting -SettingName internet -AutoTuningLevelLocal normal -ErrorAction SilentlyContinue | Out-Null
+	Set-NetTCPSetting -SettingName internet -ScalingHeuristics disabled -ErrorAction SilentlyContinue | Out-Null
+	Set-NetOffloadGlobalSetting -ReceiveSegmentCoalescing disabled -ErrorAction SilentlyContinue | Out-Null
+	Set-NetOffloadGlobalSetting -ReceiveSideScaling enabled -ErrorAction SilentlyContinue | Out-Null
+	Disable-NetAdapterLso -Name * -ErrorAction SilentlyContinue | Out-Null
+	Enable-NetAdapterChecksumOffload -Name * -ErrorAction SilentlyContinue | Out-Null
+	
+	Set-NetTCPSetting -SettingName internet -EcnCapability enabled -ErrorAction SilentlyContinue | Out-Null
+	Set-NetOffloadGlobalSetting -Chimney disabled -ErrorAction SilentlyContinue | Out-Null
+	Set-NetTCPSetting -SettingName internet -Timestamps disabled -ErrorAction SilentlyContinue | Out-Null
+	Set-NetTCPSetting -SettingName internet -MaxSynRetransmissions 2 -ErrorAction SilentlyContinue | Out-Null
+	Set-NetTCPSetting -SettingName internet -NonSackRttResiliency disabled -ErrorAction SilentlyContinue | Out-Null
+	Set-NetTCPSetting -SettingName internet -InitialRto 2000 -ErrorAction SilentlyContinue | Out-Null
+	Set-NetTCPSetting -SettingName internet -MinRto 300 -ErrorAction SilentlyContinue | Out-Null
+	
+	Get-NetAdapter | Set-NetIPInterface -NlMtuBytes 1500 -PolicyStore PersistentStore -ErrorAction SilentlyContinue | Out-Null
+
+	netsh int tcp set supplemental internet congestionprovider=CUBIC
+
+	# HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\<<<GUIDs>>>
+	# TcpAckFrequency <delete value>
+
+	} else {
+		
+	Write-Output "Pre-Windows-7 found.  Using primordial settings."
 	Write-Output ""
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PagedPoolSize" 		0xffffffff
 	setupDWORD "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" "PoolUsageMaximum" 	0x0000003c
