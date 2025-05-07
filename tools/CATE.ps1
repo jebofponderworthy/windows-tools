@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 7.4
+.VERSION 7.5
 
 .GUID f842f577-3f42-4cb0-91e7-97b499260a21
 
@@ -9,7 +9,7 @@
 
 .COMPANYNAME Ponderworthy Music
 
-.COPYRIGHT (c) 2024 Jonathan E. Brickman
+.COPYRIGHT (c) 2025 Jonathan E. Brickman
 
 .TAGS 
 
@@ -236,7 +236,7 @@ Write-Output $strOut
 $CATEStatus = "Working..."
 
 # Now we set up an array containing folders to be checked for and
-# cleaned out if present, for every profile.
+# cleaned out if present, for every Windows user profile.
 
 $foldersToClean = @(
     "\Local Settings\Temp",
@@ -248,6 +248,8 @@ $foldersToClean = @(
     "\AppData\Local\Microsoft\Windows\INetCache\Content.Outlook",
     "\AppData\Local\Google\Chrome\User Data\Default\Cache",
 	"\AppData\Local\Google\Chrome\User Data\Default\Code Cache\js",
+	"\AppData\Local\Microsoft\Edge\User Data\Default\Cache\Cache_Data",
+	"\AppData\Local\Microsoft\Edge\User Data\Default\Service Worker\CacheStorage",
     "\AppData\Local\AskPartnerNetwork",
 	"\AppData\Local\Temp",
     "\Application Data\Local\Microsoft\Windows\WER",
